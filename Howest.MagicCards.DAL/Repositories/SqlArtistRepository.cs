@@ -9,8 +9,8 @@ namespace Howest.MagicCards.DAL.Repositories
 {
     public class SqlArtistRepository : IArtistRepository
     {
-        private readonly MtgContext _db;
-        public SqlArtistRepository(MtgContext mtgContext)
+        private readonly MtgV1Context _db;
+        public SqlArtistRepository(MtgV1Context mtgContext)
         {
             _db = mtgContext;
         }
