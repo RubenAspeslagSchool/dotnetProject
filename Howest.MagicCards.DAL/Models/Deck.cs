@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
 
 #nullable disable
 
@@ -17,12 +18,12 @@ namespace Howest.MagicCards.DAL.Models
 
         public virtual ICollection<CardDeck> CardDecks { get; set; }
 
-        internal void AddCard(Card card)
+        internal void AddCard(long cardId)
         {
             bool found = false;
             foreach (var deckCard in CardDecks) 
             {
-                if (deckCard.CardId == card.Id)
+                if (deckCard.CardId == cardId)
                 {
                     found = true;
                     deckCard.Amount++;
@@ -32,11 +33,36 @@ namespace Howest.MagicCards.DAL.Models
             if (!found)
             {
                 CardDecks.Add(new CardDeck() {
-                    CardId = card.Id,
+                    CardId = cardId,
                     DeckId = this.Id,
                     Amount = 1
                 });
             }
+        }
+
+        internal void AddCardDeck(CardDeck cardDeck)
+        {
+            CardDecks.Add(cardDeck);
+        }
+
+        internal void Clear()
+        {
+            CardDecks?.Clear();
+        }
+
+        internal Boolean RemoveCard(long cardId)
+        {
+            bool found = false;
+            foreach (var deckCard in CardDecks)
+            {
+                if (deckCard.CardId == cardId)
+                {
+                    found = true;
+                    deckCard.Amount--;
+                }
+            }
+            return found;
+         
         }
     }
 }

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.DAL.Repositories
 {
-    internal class JsonDeckReposetory : IDeckRepository
+    internal class JsonDeckReposetory : IDeckReposetory
     {
         public List<Deck> Decks { get; set; }
-        public DeckRepo()
+        public JsonDeckReposetory()
         {
             Decks = getDecks();
         }
@@ -19,11 +19,11 @@ namespace Howest.MagicCards.DAL.Repositories
         public List<Deck> getDecks()
         {
 
-            return  new JsonRepo().getDecks().ToList();
-       
+            return new JsonRepo().getDecks().ToList();
+
         }
 
-        public Deck getDeck(long id)
+        public Deck getDeck(int id)
         {
             foreach (var deck in Decks)
             {
@@ -40,9 +40,9 @@ namespace Howest.MagicCards.DAL.Repositories
             new JsonRepo().save(decks);
         }
 
-        public void saveDeck(long id, Deck deck)
+        public void saveDeck(int id, Deck deck)
         {
-            
+
             new JsonRepo().save(id, deck);
         }
 
@@ -54,7 +54,7 @@ namespace Howest.MagicCards.DAL.Repositories
             saveDecks(Decks);
         }
 
-        public void RemoveDeck(long id)
+        public void RemoveDeck(int id)
         {
             Decks.Remove(getDeck(id));
             saveDecks(Decks);
@@ -80,35 +80,19 @@ namespace Howest.MagicCards.DAL.Repositories
             return Decks.Count();
         }
 
-
-
-        public void AddCardToDeck(int deckId, Card card)
+        public void AddCardToDeck(int deckId, long cardId)
         {
             Deck deck = getDeck(deckId);
-            deck.AddCard(card);
+            deck.AddCard(cardId);
             saveDeck(deckId, deck);
         }
 
-        public void AddCardToDeck(int deckId, int cardId)
+        public bool RemoveCardFromDeck(int deckId, long cardId)
         {
             Deck deck = getDeck(deckId);
-            deck.AddCard(new CardRepo().GetCard(cardId));
+            bool found = deck.RemoveCard(cardId);
             saveDeck(deckId, deck);
-        }
-
-        public void RemoveCardFromDeck(int deckId, int cardId)
-        {
-            Deck deck = getDeck(deckId);
-            deck.RemoveCard(cardId);
-            saveDeck(deckId, deck);
-        }
-
-        public void RemoveCardFromDeck(int deckId, long cardId)
-        {
-            Deck deck = getDeck(deckId);
-            Card card = deck.GetCard(cardId);
-            deck.RemoveCard(card);
-            saveDeck(deckId, deck);
+            return found;
         }
 
         public void ClearDeck(int deckId)
@@ -124,13 +108,13 @@ namespace Howest.MagicCards.DAL.Repositories
             saveDecks(new List<Deck>());
         }
 
-        public void UbdateCardsOfDeck(int id, DeckCardsId cards)
+        public void UbdateCardsOfDeck(int id, Deck newDeck)
         {
             Deck deck = getDeck(id);
-            deck.Clear();
-            foreach (int card in cards.Cards)
+            //deck.Clear();
+            foreach (CardDeck cardDeck in newDeck.CardDecks)
             {
-                deck.AddCard(card);
+                deck.AddCardDeck(cardDeck);
             }
             saveDecks(Decks);
         }
