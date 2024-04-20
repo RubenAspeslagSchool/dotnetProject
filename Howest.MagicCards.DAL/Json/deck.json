@@ -1,0 +1,13 @@
+[
+  {
+    "Id": 0,
+    "Name": "MyDeck",
+    "CardDecks": [
+      {
+        "CardId": 1,
+        "DeckId": 0,
+        "Amount": 5,
+      }
+    ]
+  }
+]

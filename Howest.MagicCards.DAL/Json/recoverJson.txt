@@ -1,0 +1,16 @@
+this file is only used to coppy the content of this file tho the deck.json in case that json file broke
+
+
+[
+  {
+    "Id": 0,
+    "Name": "MyDeck",
+    "CardDecks": [
+      {
+        "CardId": 1,
+        "DeckId": 0,
+        "Amount": 5,
+      }
+    ]
+  }
+]
