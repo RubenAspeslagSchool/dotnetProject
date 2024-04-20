@@ -62,7 +62,6 @@ namespace Howest.MagicCards.DAL.Models
                 }
             }
             return found;
-         
         }
     }
 }

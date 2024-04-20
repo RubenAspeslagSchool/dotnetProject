@@ -12,7 +12,7 @@ namespace Howest.MagicCards.DAL.Json;
 
     public class JsonRepo
     {
-        private string jsonFilePath = "..\\Howest.Magic.DAL\\Json\\deck.json";
+        private string jsonFilePath = "..\\Howest.MagicCards.DAL\\Json\\deck.json";
 
         public JsonRepo()
         {

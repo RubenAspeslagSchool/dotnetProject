@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.DAL.Repositories
 {
-    internal class JsonDeckReposetory : IDeckReposetory
+    public class JsonDeckReposetory : IDeckReposetory
     {
         public List<Deck> Decks { get; set; }
         public JsonDeckReposetory()
@@ -118,8 +118,6 @@ namespace Howest.MagicCards.DAL.Repositories
             }
             saveDecks(Decks);
         }
-
-
     }
 }
 

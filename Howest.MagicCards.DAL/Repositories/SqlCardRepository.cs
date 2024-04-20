@@ -12,18 +12,18 @@ namespace Howest.MagicCards.DAL.Repositories
 {
     public class SqlCardRepository : ICardRepository
     {
-        private readonly MtgContext _db;
-        public SqlCardRepository(MtgContext mtgContext )
+        private readonly MtgV1Context _db;
+        public SqlCardRepository(MtgV1Context mtgContext )
         {
             _db = mtgContext;
         }
         public IQueryable<Card> GetAllCards()
         {
-            IQueryable<Card> allCards = _db.Cards
-                                            .Include(c => c.Rarity)
-                                            .Include(c => c.Artist)
-                                            .Include(c => c.Set)
-                                            .Select(c => c);
+            IQueryable<Card> allCards = _db.Cards; 
+                                            //.Include(c => c.Rarity)
+                                            //.Include(c => c.Artist)
+                                            //.Include(c => c.Set)
+                                            //.Select(c => c);
             return allCards;
         }
 

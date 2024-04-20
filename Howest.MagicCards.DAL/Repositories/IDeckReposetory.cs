@@ -2,7 +2,7 @@
 
 namespace Howest.MagicCards.DAL.Repositories
 {
-    internal interface IDeckReposetory
+    public interface IDeckReposetory
     {
         List<Deck> Decks { get; set; }
 
