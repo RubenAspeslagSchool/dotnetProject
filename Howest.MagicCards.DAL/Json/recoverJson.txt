@@ -4,7 +4,7 @@ this file is only used to coppy the content of this file tho the deck.json in ca
 [
   {
     "Id": 0,
-    "Name": "MyDeck",
+    "Name": "DeckName",
     "CardDecks": [
       {
         "CardId": 1,

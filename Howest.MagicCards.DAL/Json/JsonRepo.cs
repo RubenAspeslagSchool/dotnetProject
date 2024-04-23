@@ -28,8 +28,6 @@ namespace Howest.MagicCards.DAL.Json;
             }
         }
 
-        
-
         public IList<Deck> getDecks()
         {
             return LoadJson();
@@ -46,15 +44,20 @@ namespace Howest.MagicCards.DAL.Json;
             List<Deck> decks = getDecks().ToList();
             if (decks.Any(x => x.Id == id))
             {
-                foreach (var deck1 in decks)
+                foreach (Deck deck1 in decks)
                 {
                     if (deck1.Id == id)
                     {
+                        deck1.DeckName = deck.DeckName; 
                         deck1.CardDecks = deck.CardDecks;
                     }
+                   
                 }
             }
-            decks.Add(deck);    
+            else
+            {
+                decks.Add(deck);
+            }   
             save(decks);
         }
     }

@@ -50,6 +50,9 @@ namespace Howest.MagicCards.DAL.Repositories
 
         public void AddDeck(Deck deck)
         {
+            deck.Id = Decks.Count > 0 ? Decks.Max(d => d.Id) + 1 : 1;
+           
+            
             Decks.Add(deck);
             saveDecks(Decks);
         }

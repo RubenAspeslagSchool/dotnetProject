@@ -9,7 +9,6 @@ namespace Howest.MagicCards.DAL.Models
         public int DeckId { get; set; }
         public int Amount { get; set; }
 
-        public virtual Card Card { get; set; }
-        public virtual Deck Deck { get; set; }
+   
     }
 }

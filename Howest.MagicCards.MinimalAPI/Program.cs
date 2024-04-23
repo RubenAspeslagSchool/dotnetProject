@@ -52,7 +52,7 @@ app.MapPut("/decks/{id}", (IDeckReposetory repository, IMapper mapper, int id, [
         return Results.NotFound("Deck not found");
 
     // Update deck properties with DTO data
-    deck.DeckName = updatedDeckDTO.Name;
+    deck.DeckName = updatedDeckDTO.DeckName;
 
     // Save the updated deck
     repository.saveDeck(id, deck);
@@ -71,6 +71,9 @@ app.MapDelete("/decks/{id}", (IDeckReposetory repository, int id) =>
 
     return Results.Ok("Deck deleted successfully");
 });
+
+
+# region cards
 
 // Update a card within a deck by deck ID and card ID
 app.MapPut("/decks/{deckId}/cards/{cardId}", (IDeckReposetory repository, int deckId, long cardId, [FromBody] int amount) =>
@@ -99,6 +102,8 @@ app.MapDelete("/decks/{deckId}/cards/{cardId}", (IDeckReposetory repository, int
 
     return Results.Ok("Card removed from deck successfully");
 });
+
+#endregion 
 
 app.Run();
 
