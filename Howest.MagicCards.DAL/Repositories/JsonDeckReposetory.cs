@@ -118,6 +118,19 @@ namespace Howest.MagicCards.DAL.Repositories
             }
             saveDecks(Decks);
         }
+
+        public bool UpdateCardAmountInDeck(int deckId, long cardId, int amount)
+        {
+            Deck deck = getDeck(deckId);
+            var cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);
+            if (cardDeck != null)
+            {
+                cardDeck.Amount = amount;
+                saveDeck(deckId, deck);
+                return true;
+            }
+            return false;
+        }
     }
 }
 

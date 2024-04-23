@@ -20,5 +20,6 @@ namespace Howest.MagicCards.DAL.Repositories
         void saveDeck(int id, Deck deck);
         void saveDecks(List<Deck> decks);
         void UbdateCardsOfDeck(int id, Deck newDeck);
+        bool UpdateCardAmountInDeck(int deckId, long cardId, int amount);
     }
 }
