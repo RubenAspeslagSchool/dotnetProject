@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.Shared.DTO;
 
-namespace Howest.MagicCards.Shared.Maping
+namespace Howest.MagicCards.Shared.Mapping
 {
     public class DecksProfile : Profile 
     {
@@ -17,7 +17,7 @@ namespace Howest.MagicCards.Shared.Maping
                            .ForMember(deck => deck.CardDecks,
                                        opt => 
                                        opt.MapFrom(dto => new List<CardDeck>())
-                           ) ;
+                           );
 
             CreateMap<Deck, DeckReadDTO>()
                 .ForMember(dto => dto.CardDecks,

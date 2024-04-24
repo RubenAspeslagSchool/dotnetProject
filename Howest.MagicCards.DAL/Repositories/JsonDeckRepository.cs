@@ -8,19 +8,17 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.DAL.Repositories
 {
-    public class JsonDeckReposetory : IDeckReposetory
+    public class JsonDeckRepository : IDeckRepository
     {
         public List<Deck> Decks { get; set; }
-        public JsonDeckReposetory()
+        public JsonDeckRepository()
         {
             Decks = getDecks();
         }
 
         public List<Deck> getDecks()
         {
-
             return new JsonRepo().getDecks().ToList();
-
         }
 
         public Deck getDeck(int id)
@@ -41,18 +39,14 @@ namespace Howest.MagicCards.DAL.Repositories
         }
 
         public void saveDeck(int id, Deck deck)
-        {
-
+        { 
             new JsonRepo().save(id, deck);
         }
-
-
 
         public void AddDeck(Deck deck)
         {
             deck.Id = Decks.Count > 0 ? Decks.Max(d => d.Id) + 1 : 1;
-           
-            
+                       
             Decks.Add(deck);
             saveDecks(Decks);
         }
@@ -111,7 +105,7 @@ namespace Howest.MagicCards.DAL.Repositories
             saveDecks(new List<Deck>());
         }
 
-        public void UbdateCardsOfDeck(int id, Deck newDeck)
+        public void UpdateCardsOfDeck(int id, Deck newDeck)
         {
             Deck deck = getDeck(id);
             //deck.Clear();
