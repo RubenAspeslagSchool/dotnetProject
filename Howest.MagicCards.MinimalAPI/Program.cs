@@ -6,6 +6,7 @@ using Howest.MagicCards.Shared.DTO;
 using AutoMapper;
 using Howest.MagicCards.DAL.Repositories;
 using Type = System.Type;
+using Howest.MagicCards.MinimalAPI.Endpoinds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,45 +30,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", () => "Hello world");
 
-app.MapGet("/decks", (IDeckRepository repository, IMapper mapper) =>
-{
-    var decks = repository.getDecks();
-    var deckDTOs = mapper.Map<List<DeckReadDTO>>(decks);
-    return Results.Ok(deckDTOs);
-});
 
-app.MapPost("/decks", (IDeckRepository repository, IMapper mapper, [FromBody] DeckCreateDTO createDeckDTO) =>
-   repository.AddDeck(mapper.Map<Deck>(createDeckDTO))
- );
+app.MapGroup("/decks").MapDeckApi().WithTags("Deck");
 
-app.MapPut("/decks/{id}", (IDeckRepository repository, IMapper mapper, int id, [FromBody] DeckCreateDTO updatedDeckDTO) =>
-{
-    var deck = repository.getDeck(id);
-    if (deck == null)
-        return Results.NotFound("Deck not found");
-
-    // Update deck properties with DTO data
-    deck.DeckName = updatedDeckDTO.DeckName;
-
-    // Save the updated deck
-    repository.saveDeck(id, deck);
-
-    return Results.Ok("Deck updated successfully");
-});
-
-// Delete a deck by ID
-app.MapDelete("/decks/{id}", (IDeckRepository repository, int id) =>
-{
-    var deck = repository.getDeck(id);
-    if (deck == null)
-        return Results.NotFound("Deck not found");
-
-    repository.RemoveDeck(id);
-
-    return Results.Ok("Deck deleted successfully");
-});
 
 # region cards
 

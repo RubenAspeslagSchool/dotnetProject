@@ -1,1 +1,1 @@
-[{"Id":0,"DeckName":"MyDeck","CardDecks":[{"CardId":1,"DeckId":0,"Amount":5}]},{"Id":1,"DeckName":null,"CardDecks":[]},{"Id":2,"DeckName":null,"CardDecks":[]},{"Id":3,"DeckName":null,"CardDecks":[]},{"Id":4,"DeckName":"my first deck","CardDecks":[]}]
+[{"Id":0,"DeckName":"MyDeck","CardDecks":[{"CardId":1,"DeckId":0,"Amount":5}]},{"Id":1,"DeckName":"Deck2","CardDecks":[]}]
