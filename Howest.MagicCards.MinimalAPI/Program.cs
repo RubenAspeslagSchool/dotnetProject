@@ -32,10 +32,13 @@ app.UseHttpsRedirection();
 
 
 
-app.MapGroup("/decks").MapDeckApi().WithTags("Deck");
+app.MapGroup("/decks").
+    MapDeckApi()
+    .WithTags("Deck");
 
-
-app.MapGroup("/decks/{deckId}/cards").MapCardDeckApi().WithTags("DeckCards (cards of a deck)");
+app.MapGroup("/decks/{deckId}/cards")
+    .MapCardDeckApi()
+    .WithTags("DeckCards (cards of a deck)");
 
 app.Run();
 
