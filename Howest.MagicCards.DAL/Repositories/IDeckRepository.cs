@@ -2,7 +2,7 @@
 
 namespace Howest.MagicCards.DAL.Repositories
 {
-    public interface IDeckReposetory
+    public interface IDeckRepository
     {
         List<Deck> Decks { get; set; }
 
@@ -19,7 +19,7 @@ namespace Howest.MagicCards.DAL.Repositories
         void RemoveDeck(int id);
         void saveDeck(int id, Deck deck);
         void saveDecks(List<Deck> decks);
-        void UbdateCardsOfDeck(int id, Deck newDeck);
+        void UpdateCardsOfDeck(int id, Deck newDeck);
         bool UpdateCardAmountInDeck(int deckId, long cardId, int amount);
     }
 }

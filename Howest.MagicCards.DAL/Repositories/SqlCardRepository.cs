@@ -13,10 +13,11 @@ namespace Howest.MagicCards.DAL.Repositories
     public class SqlCardRepository : ICardRepository
     {
         private readonly MtgV1Context _db;
-        public SqlCardRepository(MtgV1Context mtgContext )
+        public SqlCardRepository(MtgV1Context mtgContext)
         {
             _db = mtgContext;
         }
+
         public IQueryable<Card> GetAllCards()
         {
             IQueryable<Card> allCards = _db.Cards; 

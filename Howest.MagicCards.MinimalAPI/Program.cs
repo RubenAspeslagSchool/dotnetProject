@@ -13,9 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IDeckReposetory, JsonDeckReposetory>();
+builder.Services.AddScoped<IDeckRepository, JsonDeckRepository>();
 builder.Services.AddAutoMapper(new Type[] { 
-    typeof(Howest.MagicCards.Shared.Maping.DecksProfile) 
+    typeof(Howest.MagicCards.Shared.Mapping.DecksProfile) 
 });
 
 var app = builder.Build();
@@ -31,21 +31,18 @@ app.UseHttpsRedirection();
 
 app.MapGet("/", () => "Hello world");
 
-app.MapGet("/decks", (IDeckReposetory repository, IMapper mapper) =>
+app.MapGet("/decks", (IDeckRepository repository, IMapper mapper) =>
 {
     var decks = repository.getDecks();
     var deckDTOs = mapper.Map<List<DeckReadDTO>>(decks);
     return Results.Ok(deckDTOs);
 });
 
-app.MapPost("/decks", (IDeckReposetory repository, IMapper mapper, [FromBody] DeckCreateDTO createDeckDTO) =>
+app.MapPost("/decks", (IDeckRepository repository, IMapper mapper, [FromBody] DeckCreateDTO createDeckDTO) =>
    repository.AddDeck(mapper.Map<Deck>(createDeckDTO))
-    ) ;
+ );
 
-
-
-
-app.MapPut("/decks/{id}", (IDeckReposetory repository, IMapper mapper, int id, [FromBody] DeckCreateDTO updatedDeckDTO) =>
+app.MapPut("/decks/{id}", (IDeckRepository repository, IMapper mapper, int id, [FromBody] DeckCreateDTO updatedDeckDTO) =>
 {
     var deck = repository.getDeck(id);
     if (deck == null)
@@ -61,7 +58,7 @@ app.MapPut("/decks/{id}", (IDeckReposetory repository, IMapper mapper, int id, [
 });
 
 // Delete a deck by ID
-app.MapDelete("/decks/{id}", (IDeckReposetory repository, int id) =>
+app.MapDelete("/decks/{id}", (IDeckRepository repository, int id) =>
 {
     var deck = repository.getDeck(id);
     if (deck == null)
@@ -72,11 +69,10 @@ app.MapDelete("/decks/{id}", (IDeckReposetory repository, int id) =>
     return Results.Ok("Deck deleted successfully");
 });
 
-
 # region cards
 
 // Update a card within a deck by deck ID and card ID
-app.MapPut("/decks/{deckId}/cards/{cardId}", (IDeckReposetory repository, int deckId, long cardId, [FromBody] int amount) =>
+app.MapPut("/decks/{deckId}/cards/{cardId}", (IDeckRepository repository, int deckId, long cardId, [FromBody] int amount) =>
 {
     var deck = repository.getDeck(deckId);
     if (deck == null)
@@ -90,7 +86,7 @@ app.MapPut("/decks/{deckId}/cards/{cardId}", (IDeckReposetory repository, int de
 });
 
 // Delete a card from a deck by deck ID and card ID
-app.MapDelete("/decks/{deckId}/cards/{cardId}", (IDeckReposetory repository, int deckId, long cardId) =>
+app.MapDelete("/decks/{deckId}/cards/{cardId}", (IDeckRepository repository, int deckId, long cardId) =>
 {
     var deck = repository.getDeck(deckId);
     if (deck == null)

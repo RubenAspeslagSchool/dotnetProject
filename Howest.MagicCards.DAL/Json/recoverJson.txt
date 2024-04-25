@@ -1,4 +1,4 @@
-this file is only used to coppy the content of this file tho the deck.json in case that json file broke
+this file is only used to copy the content of this file tho the deck.json in case that json file broke
 
 
 [
