@@ -7,19 +7,18 @@ namespace Howest.MagicCards.MinimalAPI.Endpoinds
     {
         public static RouteGroupBuilder MapCardDeckApi(this RouteGroupBuilder group)
         {
-            // Update a card within a deck by deck ID and card ID
-            group.MapPut("/{cardId}", (IDeckRepository repository, int deckId, long cardId, [FromBody] int amount) =>
+            // add a card to a deck by deck ID and card ID
+            group.MapPost("/cardId", (IDeckRepository repository, int deckId, long cardId) => 
             {
                 var deck = repository.getDeck(deckId);
                 if (deck == null)
                     return Results.NotFound("Deck not found");
 
-                bool cardUpdated = repository.UpdateCardAmountInDeck(deckId, cardId, amount);
-                if (!cardUpdated)
-                    return Results.NotFound("Card not found in deck");
+                repository.AddCardToDeck(deckId, cardId);
 
-                return Results.Ok("Card updated successfully");
+                return Results.Ok("card added to deck successfully");
             });
+
 
             // Delete a card from a deck by deck ID and card ID
             group.MapDelete("/{cardId}", (IDeckRepository repository, int deckId, long cardId) =>
@@ -34,6 +33,22 @@ namespace Howest.MagicCards.MinimalAPI.Endpoinds
 
                 return Results.Ok("Card removed from deck successfully");
             });
+            
+
+            // Update a card within a deck by deck ID and card ID
+            group.MapPut("/{cardId}", (IDeckRepository repository, int deckId, long cardId, [FromBody] int amount) =>
+            {
+                var deck = repository.getDeck(deckId);
+                if (deck == null)
+                    return Results.NotFound("Deck not found");
+
+                bool cardUpdated = repository.UpdateCardAmountInDeck(deckId, cardId, amount);
+                if (!cardUpdated)
+                    return Results.NotFound("Card not found in deck");
+
+                return Results.Ok("Card updated successfully");
+            });
+
             return group;
         }
     }
