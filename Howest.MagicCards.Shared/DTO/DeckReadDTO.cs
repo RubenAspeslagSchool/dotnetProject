@@ -9,7 +9,7 @@ namespace Howest.MagicCards.Shared.DTO
 {
     public record DeckReadDTO
     {
-        public int Id { get; init; }
+        public long Id { get; init; }
         public string DeckName { get; init; }
         public virtual ICollection<CardDeckReadDTO> CardDecks { get; init; }
     }

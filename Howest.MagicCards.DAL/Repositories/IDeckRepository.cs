@@ -6,20 +6,20 @@ namespace Howest.MagicCards.DAL.Repositories
     {
         List<Deck> Decks { get; set; }
 
-        void AddCardToDeck(int deckId, long cardId);
+        void AddCardToDeck(long deckId, long cardId);
         void AddDeck(Deck deck);
         void Clear();
         void ClearAllDecks();
-        void ClearDeck(int deckId);
+        void ClearDeck(long deckId);
         long CreateDeck(string name);
-        Deck getDeck(int id);
-        int getDeckCount();
+        Deck getDeck(long id);
+        int GetDeckCount();
         List<Deck> getDecks();
-        bool RemoveCardFromDeck(int deckId, long cardId);
-        void RemoveDeck(int id);
-        void saveDeck(int id, Deck deck);
+        bool RemoveCardFromDeck(long deckId, long cardId);
+        void RemoveDeck(long id);
+        void saveDeck(long id, Deck deck);
         void saveDecks(List<Deck> decks);
-        void UpdateCardsOfDeck(int id, Deck newDeck);
-        bool UpdateCardAmountInDeck(int deckId, long cardId, int amount);
+        void UpdateCardsOfDeck(long id, Deck newDeck);
+        bool UpdateCardAmountInDeck(long deckId, long cardId, int amount);
     }
 }

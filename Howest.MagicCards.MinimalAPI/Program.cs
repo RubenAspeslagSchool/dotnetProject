@@ -6,7 +6,7 @@ using Howest.MagicCards.Shared.DTO;
 using AutoMapper;
 using Howest.MagicCards.DAL.Repositories;
 using Type = System.Type;
-using Howest.MagicCards.MinimalAPI.Endpoinds;
+using Howest.MagicCards.MinimalAPI.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +30,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-
-app.MapGroup("/decks").
-    MapDeckApi()
+app.MapGroup("/decks")
+    .MapDeckApi()
     .WithTags("Deck");
 
 app.MapGroup("/decks/{deckId}/cards")

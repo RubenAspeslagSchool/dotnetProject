@@ -1,27 +1,42 @@
-﻿using Howest.MagicCards.DAL.Repositories;
+﻿using AutoMapper;
+using Howest.MagicCards.DAL.Models;
+using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Howest.MagicCards.MinimalAPI.Endpoinds
+namespace Howest.MagicCards.MinimalAPI.Endpoints
 {
     public static class DeckCardsRoutesBuilder
     {
         public static RouteGroupBuilder MapCardDeckApi(this RouteGroupBuilder group)
         {
-            // add a card to a deck by deck ID and card ID
-            group.MapPost("/cardId", (IDeckRepository repository, int deckId, long cardId) => 
+            group.MapGet("/", (IMapper mapper,  IDeckRepository repository, long deckId) =>
             {
                 var deck = repository.getDeck(deckId);
                 if (deck == null)
                     return Results.NotFound("Deck not found");
 
-                repository.AddCardToDeck(deckId, cardId);
+
+                ICollection<CardDeckReadDTO> cardDTO = mapper.Map<ICollection<CardDeckReadDTO>>(deck.CardDecks); ;
+
+                return Results.Ok(cardDTO);
+            });
+
+            // add a card to a deck by deck ID and card ID
+            group.MapPost("/", (IDeckRepository repository, long deckId, [FromBody] AddCardDTO card) => 
+            {
+                var deck = repository.getDeck(deckId);
+                if (deck == null)
+                    return Results.NotFound("Deck not found");
+
+                repository.AddCardToDeck(deckId, card.CardId);
 
                 return Results.Ok("card added to deck successfully");
             });
 
 
             // Delete a card from a deck by deck ID and card ID
-            group.MapDelete("/{cardId}", (IDeckRepository repository, int deckId, long cardId) =>
+            group.MapDelete("/{cardId}", (IDeckRepository repository, long deckId, long cardId) =>
             {
                 var deck = repository.getDeck(deckId);
                 if (deck == null)
@@ -36,7 +51,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoinds
             
 
             // Update a card within a deck by deck ID and card ID
-            group.MapPut("/{cardId}", (IDeckRepository repository, int deckId, long cardId, [FromBody] int amount) =>
+            group.MapPatch("/{cardId}", (IDeckRepository repository, long deckId, long cardId, [FromBody] int amount) =>
             {
                 var deck = repository.getDeck(deckId);
                 if (deck == null)

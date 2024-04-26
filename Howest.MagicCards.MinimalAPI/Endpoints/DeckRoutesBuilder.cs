@@ -4,13 +4,12 @@ using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Howest.MagicCards.MinimalAPI.Endpoinds
+namespace Howest.MagicCards.MinimalAPI.Endpoints
 {
     public static class DeckRoutesBuilder
     {
         public static RouteGroupBuilder MapDeckApi(this RouteGroupBuilder group)
         {
-
             group.MapGet("/", (IDeckRepository repository, IMapper mapper) =>
             {
                 var decks = repository.getDecks();
@@ -22,7 +21,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoinds
                repository.AddDeck(mapper.Map<Deck>(createDeckDTO))
              );
 
-            group.MapPut("/{id}", (IDeckRepository repository, IMapper mapper, int id, [FromBody] DeckCreateDTO updatedDeckDTO) =>
+            group.MapPatch("/{id}", (IDeckRepository repository, IMapper mapper, int id, [FromBody] DeckCreateDTO updatedDeckDTO) =>
             {
                 var deck = repository.getDeck(id);
                 if (deck == null)

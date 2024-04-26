@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.DTO
 {
-    public record CardDeckReadDTO
+    public record AddCardDTO
     {
-        public long CardId { get; init; }
-        public long DeckId { get; init; }
-        public int Amount { get; init; }
+        public long CardId { get; set; }
     }
 }

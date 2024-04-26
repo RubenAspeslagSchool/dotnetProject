@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+// todo: check if everything needs to be public
 namespace Howest.MagicCards.DAL.Repositories
 {
     public class JsonDeckRepository : IDeckRepository
@@ -18,10 +18,10 @@ namespace Howest.MagicCards.DAL.Repositories
 
         public List<Deck> getDecks()
         {
-            return new JsonRepo().getDecks().ToList();
+            return new JsonRepository().getDecks().ToList();
         }
 
-        public Deck getDeck(int id)
+        public Deck getDeck(long id)
         {
             foreach (var deck in Decks)
             {
@@ -35,14 +35,15 @@ namespace Howest.MagicCards.DAL.Repositories
 
         public void saveDecks(List<Deck> decks)
         {
-            new JsonRepo().save(decks);
+            new JsonRepository().save(decks);
         }
 
-        public void saveDeck(int id, Deck deck)
+        public void saveDeck(long id, Deck deck)
         { 
-            new JsonRepo().save(id, deck);
+            new JsonRepository().save(id, deck);
         }
 
+        //todo:  get deck id function
         public void AddDeck(Deck deck)
         {
             deck.Id = Decks.Count > 0 ? Decks.Max(d => d.Id) + 1 : 1;
@@ -51,7 +52,7 @@ namespace Howest.MagicCards.DAL.Repositories
             saveDecks(Decks);
         }
 
-        public void RemoveDeck(int id)
+        public void RemoveDeck(long id)
         {
             Decks.Remove(getDeck(id));
             saveDecks(Decks);
@@ -65,26 +66,26 @@ namespace Howest.MagicCards.DAL.Repositories
 
         public long CreateDeck(string name)
         {
-            int id = getDeckCount();
+            long id = GetDeckCount();
             Deck deck = new Deck() { Id = id, DeckName = name };
             this.AddDeck(deck);
             saveDeck(id, deck);
             return id;
         }
 
-        public int getDeckCount()
+        public int GetDeckCount()
         {
             return Decks.Count();
         }
 
-        public void AddCardToDeck(int deckId, long cardId)
+        public void AddCardToDeck(long deckId, long cardId)
         {
             Deck deck = getDeck(deckId);
             deck.AddCard(cardId);
             saveDeck(deckId, deck);
         }
 
-        public bool RemoveCardFromDeck(int deckId, long cardId)
+        public bool RemoveCardFromDeck(long deckId, long cardId)
         {
             Deck deck = getDeck(deckId);
             bool found = deck.RemoveCard(cardId);
@@ -92,7 +93,7 @@ namespace Howest.MagicCards.DAL.Repositories
             return found;
         }
 
-        public void ClearDeck(int deckId)
+        public void ClearDeck(long deckId)
         {
             Deck deck = getDeck(deckId);
             deck.Clear();
@@ -104,8 +105,8 @@ namespace Howest.MagicCards.DAL.Repositories
             Clear();
             saveDecks(new List<Deck>());
         }
-
-        public void UpdateCardsOfDeck(int id, Deck newDeck)
+        // todo : use linq
+        public void UpdateCardsOfDeck(long id, Deck newDeck)
         {
             Deck deck = getDeck(id);
             //deck.Clear();
@@ -116,7 +117,7 @@ namespace Howest.MagicCards.DAL.Repositories
             saveDecks(Decks);
         }
 
-        public bool UpdateCardAmountInDeck(int deckId, long cardId, int amount)
+        public bool UpdateCardAmountInDeck(long deckId, long cardId, int amount)
         {
             Deck deck = getDeck(deckId);
             var cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);

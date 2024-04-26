@@ -23,6 +23,13 @@ namespace Howest.MagicCards.Shared.Mapping
                 .ForMember(dto => dto.CardDecks,
                     opt => opt.MapFrom(deck => deck.CardDecks.Select(cd => new CardDeckReadDTO { CardId = (long)cd.CardId, Amount = cd.Amount }))
                 );
+
+            CreateMap<CardDeck, CardDeckReadDTO>();
+           
+
+
+          
+
         }
     }
 }

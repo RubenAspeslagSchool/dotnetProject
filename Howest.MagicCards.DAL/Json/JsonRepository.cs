@@ -10,11 +10,11 @@ using Howest.MagicCards.DAL.Repositories;
 
 namespace Howest.MagicCards.DAL.Json;
 
-    public class JsonRepo
+    public class JsonRepository
     {
         private string jsonFilePath = "..\\Howest.MagicCards.DAL\\Json\\deck.json";
 
-        public JsonRepo()
+        public JsonRepository()
         {
        
         }
@@ -38,25 +38,19 @@ namespace Howest.MagicCards.DAL.Json;
             string json = System.Text.Json.JsonSerializer.Serialize(decks);
             File.WriteAllText(jsonFilePath, json);
         }
-
-    public void save(long id, Deck deck)
+    // TODO: , change function name 
+    public void save(long id, Deck newDeck)
     {
-            List<Deck> decks = getDecks().ToList();
-            if (decks.Any(x => x.Id == id))
-            {
-                foreach (Deck deck1 in decks)
-                {
-                    if (deck1.Id == id)
-                    {
-                        deck1.DeckName = deck.DeckName; 
-                        deck1.CardDecks = deck.CardDecks;
-                    }
-                   
-                }
-            }
+            List<Deck> decks = getDecks().ToList();   
+            Deck oldDeck = decks.FindLast(deck => deck.Id == id);
+             if (oldDeck is Deck && oldDeck is not null) 
+             {
+                oldDeck.DeckName = newDeck.DeckName;
+                oldDeck.CardDecks = newDeck.CardDecks;
+             }
             else
             {
-                decks.Add(deck);
+                decks.Add(newDeck);
             }   
             save(decks);
         }
