@@ -1,10 +1,12 @@
 ﻿using Howest.MagicCards.DAL.Json;
 using Howest.MagicCards.DAL.Models;
+using Howest.MagicCards.DAL.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 // todo: check if everything needs to be public
 namespace Howest.MagicCards.DAL.Repositories
 {
@@ -35,12 +37,12 @@ namespace Howest.MagicCards.DAL.Repositories
 
         public void saveDecks(List<Deck> decks)
         {
-            new JsonRepository().save(decks);
+            new JsonRepository().SaveDecks(decks);
         }
 
         public void saveDeck(long id, Deck deck)
         { 
-            new JsonRepository().save(id, deck);
+            new JsonRepository().SaveDeck(id, deck);
         }
 
         //todo:  get deck id function

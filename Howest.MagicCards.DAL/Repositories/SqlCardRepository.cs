@@ -20,12 +20,15 @@ namespace Howest.MagicCards.DAL.Repositories
 
         public IQueryable<Card> GetAllCards()
         {
-            IQueryable<Card> allCards = _db.Cards; 
-                                            //.Include(c => c.Rarity)
-                                            //.Include(c => c.Artist)
-                                            //.Include(c => c.Set)
-                                            //.Select(c => c);
-            return allCards;
+         IQueryable<Card> allCards = _db.Cards
+            .Include(c => c.Artist)
+            .Select(c => new
+            {
+                Card = c,
+                Rarity = _db.Rarities.FirstOrDefault(r => r.Code == c.RarityCode)
+            })
+            .Select(result => result.Card);
+           return allCards;
         }
 
         public IQueryable<Card> GetAllCardsByArtistId(int id) 

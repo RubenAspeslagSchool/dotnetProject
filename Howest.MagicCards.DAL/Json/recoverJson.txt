@@ -5,10 +5,10 @@ this file is only used to copy the content of this file tho the deck.json in cas
   {
     "Id": 0,
     "Name": "DeckName",
-    "CardDecks": [
+    "Cards": [
       {
         "CardId": 1,
-        "DeckId": 0,
+        
         "Amount": 5,
       }
     ]

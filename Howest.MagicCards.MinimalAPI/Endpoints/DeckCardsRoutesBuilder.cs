@@ -23,7 +23,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
             });
 
             // add a card to a deck by deck ID and card ID
-            group.MapPost("/", (IDeckRepository repository, long deckId, [FromBody] AddCardDTO card) => 
+            group.MapPost("/", (IDeckRepository repository, long deckId, [FromBody] CardAddDTO card) => 
             {
                 var deck = repository.getDeck(deckId);
                 if (deck == null)

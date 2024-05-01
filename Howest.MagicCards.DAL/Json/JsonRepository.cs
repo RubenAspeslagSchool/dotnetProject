@@ -33,16 +33,16 @@ namespace Howest.MagicCards.DAL.Json;
             return LoadJson();
         }
 
-        public void save(List<Deck> decks)
+        public void SaveDecks(List<Deck> decks)
         {
             string json = System.Text.Json.JsonSerializer.Serialize(decks);
             File.WriteAllText(jsonFilePath, json);
         }
-    // TODO: , change function name 
-    public void save(long id, Deck newDeck)
+    
+    public void SaveDeck(long deckId, Deck newDeck)
     {
             List<Deck> decks = getDecks().ToList();   
-            Deck oldDeck = decks.FindLast(deck => deck.Id == id);
+            Deck oldDeck = decks.FindLast(deck => deck.Id == deckId);
              if (oldDeck is Deck && oldDeck is not null) 
              {
                 oldDeck.DeckName = newDeck.DeckName;
@@ -52,7 +52,7 @@ namespace Howest.MagicCards.DAL.Json;
             {
                 decks.Add(newDeck);
             }   
-            save(decks);
+            SaveDecks(decks);
         }
     }
 
