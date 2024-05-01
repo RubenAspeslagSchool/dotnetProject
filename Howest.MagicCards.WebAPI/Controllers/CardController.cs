@@ -26,9 +26,11 @@ namespace Howest.MagicCards.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>
-            GetCards([FromQuery] CardFilter cardFilter,
-            [FromServices] IConfiguration config)
+        public ActionResult<PagedResponse<IEnumerable<CardReadDTO>>> GetCards
+            (
+                [FromQuery] CardFilter cardFilter,
+                [FromServices] IConfiguration config
+            )
         {
             cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
             if (_cardRepository.GetAllCards() is IQueryable<Card> allCards)
