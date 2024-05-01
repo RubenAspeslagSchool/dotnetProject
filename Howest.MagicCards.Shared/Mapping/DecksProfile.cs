@@ -25,11 +25,6 @@ namespace Howest.MagicCards.Shared.Mapping
                 );
 
             CreateMap<CardDeck, CardDeckReadDTO>();
-           
-
-
-          
-
         }
     }
 }
