@@ -10,14 +10,13 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
     {
         public static RouteGroupBuilder MapCardDeckApi(this RouteGroupBuilder group)
         {
-            group.MapGet("/", (IMapper mapper,  IDeckRepository repository, long deckId) =>
+            group.MapGet("/", (IMapper mapper, IDeckRepository repository, long deckId) =>
             {
                 var deck = repository.getDeck(deckId);
                 if (deck == null)
                     return Results.NotFound("Deck not found");
 
-
-                ICollection<CardDeckReadDTO> cardDTO = mapper.Map<ICollection<CardDeckReadDTO>>(deck.CardDecks); ;
+                ICollection<CardDeckReadDTO> cardDTO = mapper.Map<ICollection<CardDeckReadDTO>>(deck.CardDecks);
 
                 return Results.Ok(cardDTO);
             });
@@ -33,7 +32,6 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
 
                 return Results.Ok("card added to deck successfully");
             });
-
 
             // Delete a card from a deck by deck ID and card ID
             group.MapDelete("/{cardId}", (IDeckRepository repository, long deckId, long cardId) =>

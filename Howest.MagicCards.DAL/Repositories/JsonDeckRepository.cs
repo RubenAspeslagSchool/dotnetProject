@@ -11,6 +11,7 @@ namespace Howest.MagicCards.DAL.Repositories
     public class JsonDeckRepository : IDeckRepository
     {
         public List<Deck> Decks { get; set; }
+
         public JsonDeckRepository()
         {
             Decks = getDecks();
