@@ -1,4 +1,5 @@
 ﻿using Howest.MagicCards.DAL.Models;
+using Howest.MagicCards.Shared.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,13 @@ namespace Howest.MagicCards.Shared.Extensions
 {
     public static class CardExtensions
     {
-
-
-        public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, string artistName, string setName, string rarityName, string cardText, string cardName)
+        public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, CardFilter cardFilter)
         {
-            return cards.Where(card => card.Artist.FullName.StartsWith(artistName)
-                                && card.Set.Name.StartsWith(setName)
-                                && card.Rarity.Name.StartsWith(rarityName)
-                                && card.Text.Contains(cardText)
-                                && card.Name.StartsWith(cardName));
+            return cards.Where(card => card.Artist.FullName.StartsWith( cardFilter.ArtistName)
+                                && card.Set.Name.StartsWith(cardFilter.SetName)
+                                && card.Rarity.Name.StartsWith(cardFilter.RarityName)
+                                && card.Text.Contains(cardFilter.CardText)
+                                && card.Name.StartsWith(cardFilter.CardName));
         }
     }
 }

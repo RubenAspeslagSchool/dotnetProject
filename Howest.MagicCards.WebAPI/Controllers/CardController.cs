@@ -11,8 +11,8 @@ using AutoMapper.QueryableExtensions;
 
 namespace Howest.MagicCards.WebAPI.Controllers
 {
-    [ApiVersion("1.0")]
-    [ApiVersion("2.0")]
+    [ApiVersion("1.1")]
+    [ApiVersion("1.5")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class CardController : ControllerBase
@@ -37,7 +37,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
             {
                 allCards = allCards
                                 .ToFilteredList(cardFilter.ArtistName,
-                                    cardFilter.SetName,
+                                    
                                     cardFilter.RarityName,
                                     cardFilter.CardText,
                                     cardFilter.CardName);
