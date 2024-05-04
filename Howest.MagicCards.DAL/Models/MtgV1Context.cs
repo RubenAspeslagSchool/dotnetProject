@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Howest.MagicCards.DAL.Models;
 
 public partial class MtgV1Context : DbContext
 {
+    private readonly IConfiguration Configuration;
     public MtgV1Context()
     {
     }
 
-    public MtgV1Context(DbContextOptions<MtgV1Context> options)
+    public MtgV1Context(DbContextOptions<MtgV1Context> options, IConfiguration configuration)
         : base(options)
     {
+        Configuration = configuration;
     }
 
     public virtual DbSet<Artist> Artists { get; set; }
@@ -36,9 +39,13 @@ public partial class MtgV1Context : DbContext
     public virtual DbSet<Type> Types { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=mtg_v1;Trusted_Connection=True;TrustServerCertificate=True;");
-
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            string connectionString = Configuration.GetConnectionString("MtgDb");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Artist>(entity =>

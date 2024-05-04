@@ -46,10 +46,15 @@ namespace Howest.MagicCards.DAL.Repositories
             new JsonRepository().SaveDeck(id, deck);
         }
 
-        //todo:  get deck id function
+        
+
+        public long GenerateNewId()
+        {
+            return Decks.Count > 0 ? Decks.Max(d => d.Id) + 1 : 1;
+        }
         public void AddDeck(Deck deck)
         {
-            deck.Id = Decks.Count > 0 ? Decks.Max(d => d.Id) + 1 : 1;
+            deck.Id = GenerateNewId();
                        
             Decks.Add(deck);
             saveDecks(Decks);
@@ -108,15 +113,18 @@ namespace Howest.MagicCards.DAL.Repositories
             Clear();
             saveDecks(new List<Deck>());
         }
-        // todo : use linq
+        
         public void UpdateCardsOfDeck(long id, Deck newDeck)
         {
             Deck deck = getDeck(id);
             //deck.Clear();
-            foreach (CardDeck cardDeck in newDeck.CardDecks)
+
+            newDeck.CardDecks.ForEach(cardDeck =>
             {
                 deck.AddCardDeck(cardDeck);
-            }
+            });
+
+            
             saveDecks(Decks);
         }
 

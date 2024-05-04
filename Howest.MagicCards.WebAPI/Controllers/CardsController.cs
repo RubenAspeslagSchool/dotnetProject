@@ -13,30 +13,28 @@ using System.Collections.Generic;
 namespace Howest.MagicCards.WebAPI.Controllers;
 
 [ApiVersion("1.1")]
-[ApiVersion("1.5")]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
-public class CardController : ControllerBase
+public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepository;
     private readonly IMapper _mapper;
-    public CardController(ICardRepository cardRepository, IMapper mapper)
+    public CardsController(ICardRepository cardRepository, IMapper mapper)
     {
         _cardRepository = cardRepository;
         _mapper = mapper;
     }
 
     [HttpGet]
-    public ActionResult<PagedResponse<IEnumerable<CardReadDTO>>> GetCards
-        (
-            [FromQuery] CardFilter cardFilter,
-            [FromServices] IConfiguration config
-        )
+    public ActionResult<PagedResponse<IEnumerable<CardReadDTO>>> GetCards(
+        [FromQuery] CardFilter cardFilter,
+        [FromServices] IConfiguration config
+    )
     {
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
         if (_cardRepository.GetAllCards() is IQueryable<Card> allCards)
         {
-            allCards = allCards.ToFilteredList(cardFilter);
+            allCards = allCards.Filter(cardFilter);
 
             PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(
                  allCards.ToPagedList(cardFilter.PageNumber, cardFilter.PageSize)

@@ -1,4 +1,6 @@
-﻿namespace Howest.MagicCards.WebAPI.Wrappers
+﻿using System.Transactions;
+
+namespace Howest.MagicCards.WebAPI.Wrappers
 {
     public class PagedResponse<T> : Response<T>
     {
@@ -7,11 +9,11 @@
         public int TotalPages => (int) Math.Ceiling((double) TotalRecords / PageSize);
         public int TotalRecords { get; set; }
 
-        public PagedResponse(T data, int pageNumber, int pageSize)
+        public PagedResponse(T data, int pageNumber, int pageSize): base(data)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
-            Data = data;
+            
         }
 
     }

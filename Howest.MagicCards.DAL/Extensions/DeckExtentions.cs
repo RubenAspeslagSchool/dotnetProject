@@ -14,6 +14,10 @@ namespace Howest.MagicCards.DAL.Extensions
         public static void AddCard(this Deck deck, long cardId)
         {
             bool found = false;
+            deck.CardDecks.ForEach(deckCard => 
+            {
+                
+            });
             foreach (var deckCard in deck.CardDecks)
             {
                 if (deckCard.CardId == cardId)
@@ -47,14 +51,15 @@ namespace Howest.MagicCards.DAL.Extensions
         public static Boolean RemoveCard(this Deck deck, long cardId)
         {
             bool found = false;
-            foreach (var deckCard in deck.CardDecks)
+            deck.CardDecks.ForEach(deckCard =>
             {
                 if (deckCard.CardId == cardId)
                 {
                     found = true;
                     deckCard.Amount--;
                 }
-            }
+            });
+
             return found;
         }
     }

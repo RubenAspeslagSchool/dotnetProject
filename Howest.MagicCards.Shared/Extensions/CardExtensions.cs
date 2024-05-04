@@ -10,7 +10,7 @@ namespace Howest.MagicCards.Shared.Extensions
 {
     public static class CardExtensions
     {
-        public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, CardFilter cardFilter)
+        public static IQueryable<Card> Filter(this IQueryable<Card> cards, CardFilter cardFilter)
         {
             return cards.Where(card => card.Artist.FullName.StartsWith( cardFilter.ArtistName)
                                 && card.Set.Name.StartsWith(cardFilter.SetName)

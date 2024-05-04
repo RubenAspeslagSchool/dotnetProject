@@ -25,7 +25,8 @@ namespace Howest.MagicCards.DAL.Repositories
             .Select(c => new
             {
                 Card = c,
-                Rarity = _db.Rarities.FirstOrDefault(r => r.Code == c.RarityCode)
+                Rarity = _db.Rarities.FirstOrDefault(r => r.Code == c.RarityCode),
+                Set = _db.Sets.FirstOrDefault(s => s.Code == c.SetCode)
             })
             .Select(result => result.Card);
            return allCards;

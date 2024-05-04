@@ -53,6 +53,6 @@ namespace Howest.MagicCards.DAL.Json;
                 decks.Add(newDeck);
             }   
             SaveDecks(decks);
-        }
-    }
+     }
+}
 
