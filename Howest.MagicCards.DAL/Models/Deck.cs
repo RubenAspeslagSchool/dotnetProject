@@ -17,6 +17,5 @@ namespace Howest.MagicCards.DAL.Models
         public string DeckName { get; set; }
 
         public virtual List<CardDeck> CardDecks { get; set; }
-
     }
 }

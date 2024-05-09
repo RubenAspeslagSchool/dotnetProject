@@ -14,6 +14,5 @@ namespace Howest.MagicCards.Shared.Extensions
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize);
         }
-
     }
 }

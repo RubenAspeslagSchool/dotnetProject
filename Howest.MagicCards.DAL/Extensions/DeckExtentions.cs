@@ -9,8 +9,6 @@ namespace Howest.MagicCards.DAL.Extensions
 {
     public static class DeckExtentions
     {
-
-
         public static void AddCard(this Deck deck, long cardId)
         {
             bool found = false;
