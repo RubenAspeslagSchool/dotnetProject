@@ -46,12 +46,11 @@ namespace Howest.MagicCards.DAL.Repositories
             new JsonRepository().SaveDeck(id, deck);
         }
 
-        
-
         public long GenerateNewId()
         {
             return Decks.Count > 0 ? Decks.Max(d => d.Id) + 1 : 1;
         }
+
         public void AddDeck(Deck deck)
         {
             deck.Id = GenerateNewId();
@@ -123,8 +122,7 @@ namespace Howest.MagicCards.DAL.Repositories
             {
                 deck.AddCardDeck(cardDeck);
             });
-
-            
+    
             saveDecks(Decks);
         }
 
