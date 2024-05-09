@@ -35,7 +35,12 @@ public class CardsController : ControllerBase
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
         if (_cardRepository.GetAllCards() is IQueryable<Card> allCards)
         {
-            allCards = allCards.Filter(cardFilter);
+            allCards = allCards.Filter(
+                cardFilter.CardName, 
+                cardFilter.CardText, 
+                cardFilter.ArtistName, 
+                cardFilter.SetCode, 
+                cardFilter.RarityCode);
 
            // Console.WriteLine(allCards.Count());
 

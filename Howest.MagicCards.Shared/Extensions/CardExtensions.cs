@@ -10,15 +10,21 @@ namespace Howest.MagicCards.Shared.Extensions
 {
     public static class CardExtensions
     {
-        // TODO: use separate parameters for filter to avoid passing pagination pparameters to the method
-        public static IQueryable<Card> Filter(this IQueryable<Card> cards, CardFilter cardFilter)
+        public static IQueryable<Card> Filter(
+            this IQueryable<Card> cards,
+            string cardName,
+            string cardText,
+            String artistName,
+            String setCode,
+            String raretyCode
+            )
         {
-            // make sure filter is skipped when value is null
-            return cards.Where(card => card.Artist.FullName.StartsWith(cardFilter.ArtistName)
-                                && card.SetCode.Contains(cardFilter.SetCode)
-                                && card.RarityCode == cardFilter.RarityCode
-                                && card.Text.Contains(cardFilter.CardText)
-                                && card.Name.StartsWith(cardFilter.CardName));
+            return cards.Where(card => 
+                 (artistName == null || card.Artist.FullName.Contains(artistName))
+              && (setCode == null || card.SetCode.Contains(setCode))
+              && (raretyCode == null || card.RarityCode.Contains(raretyCode))
+              && (cardText == null || card.Text.Contains(cardText))
+              && (cardName == null || card.Name.StartsWith(cardName)));
         }
     }
 }

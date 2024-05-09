@@ -30,7 +30,5 @@ namespace Howest.MagicCards.DAL.Json;
             string json = System.Text.Json.JsonSerializer.Serialize(decks);
             File.WriteAllText(jsonFilePath, json);
         }
-    
-     
 }
 
