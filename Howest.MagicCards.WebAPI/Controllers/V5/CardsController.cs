@@ -10,9 +10,9 @@ using Howest.MagicCards.Shared.Mapping;
 using AutoMapper.QueryableExtensions;
 using System.Collections.Generic;
 
-namespace Howest.MagicCards.WebAPI.Controllers;
+namespace Howest.MagicCards.WebAPI.Controllers.V5;
 
-[ApiVersion("1.1")]
+[ApiVersion("1.5")]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 [ResponseCache(Duration = 20, Location =ResponseCacheLocation.Any)]
