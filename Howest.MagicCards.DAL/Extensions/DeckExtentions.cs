@@ -12,9 +12,9 @@ namespace Howest.MagicCards.DAL.Extensions
         public static void AddCard(this Deck deck, long cardId)
         {
             bool found = false;
-            deck.CardDecks.ForEach(deckCard => 
+            deck.CardDecks.ForEach(deckCard =>
             {
-                
+
             });
             foreach (var deckCard in deck.CardDecks)
             {
@@ -46,7 +46,7 @@ namespace Howest.MagicCards.DAL.Extensions
             deck.CardDecks?.Clear();
         }
 
-        public static Boolean RemoveCard(this Deck deck, long cardId)
+        public static void RemoveCard(this Deck deck, long cardId)
         {
             bool found = false;
             deck.CardDecks.ForEach(deckCard =>
@@ -58,7 +58,7 @@ namespace Howest.MagicCards.DAL.Extensions
                 }
             });
 
-            return found;
+            if (!found) { throw new Exception("Card not found"); }
         }
     }
 }

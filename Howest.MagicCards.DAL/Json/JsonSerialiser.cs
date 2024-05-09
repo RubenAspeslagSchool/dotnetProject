@@ -9,15 +9,14 @@ using System.Text.Json;
 using Howest.MagicCards.DAL.Repositories;
 
 namespace Howest.MagicCards.DAL.Json;
-    public class JsonRepository
+    public class JsonSerialiser
     {
         private string jsonFilePath = "..\\Howest.MagicCards.DAL\\Json\\deck.json";
-        public JsonRepository()
+        public JsonSerialiser()
         {
-       
         }
 
-        public IList<Deck> LoadJson()
+        public IList<Deck> getDecks()
         {
             using (StreamReader r = new StreamReader(jsonFilePath))
             {
@@ -25,32 +24,13 @@ namespace Howest.MagicCards.DAL.Json;
                 return JsonConvert.DeserializeObject<IList<Deck>>(json);
             }
         }
-
-        public IList<Deck> getDecks()
-        {
-            return LoadJson();
-        }
-
+      
         public void SaveDecks(List<Deck> decks)
         {
             string json = System.Text.Json.JsonSerializer.Serialize(decks);
             File.WriteAllText(jsonFilePath, json);
         }
     
-    public void SaveDeck(long deckId, Deck newDeck)
-    {
-            List<Deck> decks = getDecks().ToList();   
-            Deck oldDeck = decks.FindLast(deck => deck.Id == deckId);
-             if (oldDeck is Deck && oldDeck is not null) 
-             {
-                oldDeck.DeckName = newDeck.DeckName;
-                oldDeck.CardDecks = newDeck.CardDecks;
-             }
-            else
-            {
-                decks.Add(newDeck);
-            }   
-            SaveDecks(decks);
-     }
+     
 }
 

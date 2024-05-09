@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Type = System.Type;
 
-
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
 // Add services to the container.
@@ -39,7 +37,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    // swagerUI 
+    // TODO:  swagerUI 
 }
 
 app.UseHttpsRedirection();

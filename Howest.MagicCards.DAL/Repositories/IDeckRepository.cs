@@ -13,13 +13,11 @@ namespace Howest.MagicCards.DAL.Repositories
         void ClearDeck(long deckId);
         long CreateDeck(string name);
         Deck getDeck(long id);
-        int GetDeckCount();
         List<Deck> getDecks();
-        bool RemoveCardFromDeck(long deckId, long cardId);
+        void RemoveCardFromDeck(long deckId, long cardId);
         void RemoveDeck(long id);
-        void saveDeck(long id, Deck deck);
-        void saveDecks(List<Deck> decks);
-        void UpdateCardsOfDeck(long id, Deck newDeck);
+        void UbdateDeckName(long deckId, string newDeckName);
         bool UpdateCardAmountInDeck(long deckId, long cardId, int amount);
+        void UpdateCardsOfDeck(long id, Deck newDeck);
     }
 }

@@ -20,6 +20,7 @@ public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepository;
     private readonly IMapper _mapper;
+
     public CardsController(ICardRepository cardRepository, IMapper mapper)
     {
         _cardRepository = cardRepository;
@@ -46,7 +47,7 @@ public class CardsController : ControllerBase
                  cardFilter.PageNumber,
                  cardFilter.PageSize)
             {
-                TotalRecords = 0 // allCards.Count()
+                TotalRecords = allCards.Count()
             };
 
             return Ok(result);
