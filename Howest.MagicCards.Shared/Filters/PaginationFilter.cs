@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.Filters
@@ -12,7 +13,7 @@ namespace Howest.MagicCards.Shared.Filters
 
         private int _pageSize = _maxPageSize;
         private int _pageNumber = 1;
-
+        [JsonIgnore]
         public int MaxPageSize { get; set; } = _maxPageSize;
 
         public int PageNumber

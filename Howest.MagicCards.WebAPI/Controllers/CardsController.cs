@@ -36,6 +36,8 @@ public class CardsController : ControllerBase
         {
             allCards = allCards.Filter(cardFilter);
 
+           // Console.WriteLine(allCards.Count());
+
             PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(
                  allCards.ToPagedList(cardFilter.PageNumber, cardFilter.PageSize)
                      .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
@@ -43,7 +45,7 @@ public class CardsController : ControllerBase
                  cardFilter.PageNumber,
                  cardFilter.PageSize)
             {
-                TotalRecords = allCards.Count()
+                TotalRecords = 0 // allCards.Count()
             };
 
             return Ok(result);

@@ -12,9 +12,9 @@ namespace Howest.MagicCards.Shared.Extensions
     {
         public static IQueryable<Card> Filter(this IQueryable<Card> cards, CardFilter cardFilter)
         {
-            return cards.Where(card => card.Artist.FullName.StartsWith( cardFilter.ArtistName)
-                                && card.Set.Name.StartsWith(cardFilter.SetName)
-                                && card.Rarity.Name.StartsWith(cardFilter.RarityName)
+            return cards.Where(card => card.Artist.FullName.StartsWith(cardFilter.ArtistName)
+                                && card.SetCode.Contains(cardFilter.SetCode)
+                                && card.RarityCode == cardFilter.RarityCode
                                 && card.Text.Contains(cardFilter.CardText)
                                 && card.Name.StartsWith(cardFilter.CardName));
         }
