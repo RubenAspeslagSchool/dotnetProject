@@ -9,11 +9,9 @@ using System.Text.Json;
 using Howest.MagicCards.DAL.Repositories;
 
 namespace Howest.MagicCards.DAL.Json;
-
     public class JsonRepository
     {
         private string jsonFilePath = "..\\Howest.MagicCards.DAL\\Json\\deck.json";
-
         public JsonRepository()
         {
        

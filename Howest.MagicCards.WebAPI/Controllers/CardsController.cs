@@ -15,6 +15,7 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 [ApiVersion("1.1")]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
+[ResponseCache(Duration = 20, Location =ResponseCacheLocation.Any)]
 public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepository;
