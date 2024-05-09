@@ -10,12 +10,12 @@ using Howest.MagicCards.Shared.Mapping;
 using AutoMapper.QueryableExtensions;
 using System.Collections.Generic;
 
-namespace Howest.MagicCards.WebAPI.Controllers.V5;
+namespace Howest.MagicCards.WebAPI.Controllers.V1_5;
 
 [ApiVersion("1.5")]
-[Route("api/v{version:apiVersion}/[controller]")]
+[Route("api/V{version:apiVersion}/[controller]")]
 [ApiController]
-[ResponseCache(Duration = 20, Location =ResponseCacheLocation.Any)]
+[ResponseCache(Duration = 20, Location = ResponseCacheLocation.Any)]
 public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepository;
@@ -36,13 +36,13 @@ public class CardsController : ControllerBase
         if (_cardRepository.GetAllCards() is IQueryable<Card> allCards)
         {
             allCards = allCards.Filter(
-                cardFilter.CardName, 
-                cardFilter.CardText, 
-                cardFilter.ArtistName, 
-                cardFilter.SetCode, 
+                cardFilter.CardName,
+                cardFilter.CardText,
+                cardFilter.ArtistName,
+                cardFilter.SetCode,
                 cardFilter.RarityCode);
 
-           // Console.WriteLine(allCards.Count());
+            // Console.WriteLine(allCards.Count());
 
             PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(
                  allCards.ToPagedList(cardFilter.PageNumber, cardFilter.PageSize)

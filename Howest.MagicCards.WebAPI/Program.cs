@@ -3,6 +3,7 @@ using Howest.MagicCards.DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Type = System.Type;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,22 @@ ConfigurationManager config = builder.Configuration;
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1.1", new OpenApiInfo
+    {
+        Title = "magicCards webApi V1.1",
+        Version = "v1.1",
+        Description = "version 1.1"
+    });
+
+    c.SwaggerDoc("v1.5", new OpenApiInfo
+    {
+        Title = "magicCards webApi V1.5",
+        Version = "v1.5",
+        Description = "version 1.5"
+    });
+});
 builder.Services.AddDbContext<MtgV1Context>(options => options.UseSqlServer(config.GetConnectionString("MtgDb")));
 
 builder.Services.AddScoped<ICardRepository, SqlCardRepository>();
@@ -40,10 +56,30 @@ if (app.Environment.IsDevelopment())
     // TODO:  swagerUI 
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseResponseCaching();
 app.MapControllers();
+app.UseRouting();
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapControllerRoute(
+        name: "v1_1",
+        pattern: "api/V1.1/{controller=Cards}/{action=Index}/{id?}");
+    endpoints.MapControllerRoute(
+        name: "v1_5",
+        pattern: "api/V1.5/{controller=Cards}/{action=Index}/{id?}");
+});
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1.1/swagger.json", "V1.1");
+    c.SwaggerEndpoint("/swagger/v1.5/swagger.json", "V1.5");
+});
 
 app.Run();
