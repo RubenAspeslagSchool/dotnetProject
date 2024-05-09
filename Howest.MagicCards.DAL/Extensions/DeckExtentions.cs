@@ -14,16 +14,12 @@ namespace Howest.MagicCards.DAL.Extensions
             bool found = false;
             deck.CardDecks.ForEach(deckCard =>
             {
-
-            });
-            foreach (var deckCard in deck.CardDecks)
-            {
                 if (deckCard.CardId == cardId)
                 {
                     found = true;
                     deckCard.Amount++;
                 }
-            }
+            });
 
             if (!found)
             {
