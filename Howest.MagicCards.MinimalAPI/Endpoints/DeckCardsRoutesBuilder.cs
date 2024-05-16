@@ -53,7 +53,8 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
             });
             
 
-            // Update a card within a deck by deck ID and card ID
+            // Update a card within a deck by deck ID and card ID  
+            // TODO :  make DTO for amount 
             group.MapPatch("/{cardId}", (IDeckRepository repository, long deckId, long cardId, [FromBody] int amount) =>
             {
                 try

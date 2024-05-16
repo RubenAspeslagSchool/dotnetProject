@@ -39,9 +39,22 @@ builder.Services.AddApiVersioning(options =>
 {
     options.ReportApiVersions = true;
     options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+    // options.ApiVersionReader = new UrlSegmentApiVersionReader();
     options.DefaultApiVersion = new ApiVersion(1, 1);
 });
+
+builder.Services.AddVersionedApiExplorer(
+    options =>
+    {
+        // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+        // note: the specified format code will format the version as "'v'major[.minor][-status]"
+        options.GroupNameFormat = "'v'VVV";
+
+        // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+        // can also be used to control the format of the API version in route templates
+        options.SubstituteApiVersionInUrl = true;
+    }
+);
 
 builder.Services.AddResponseCaching();
 
@@ -52,8 +65,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
-    // TODO:  swagerUI 
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1.1/swagger.json", "Magiccards web API V1.1");
+        c.SwaggerEndpoint("/swagger/v1.5/swagger.json", "Magiccards web API V1.5");
+    });
 }
 
 

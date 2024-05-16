@@ -30,7 +30,6 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                 }
                 catch (Exception)
                 {
-
                     return Results.NotFound("Deck not found");
                 }
                 
