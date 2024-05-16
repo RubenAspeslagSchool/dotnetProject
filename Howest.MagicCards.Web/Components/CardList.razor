@@ -1,0 +1,35 @@
+﻿@using Howest.MagicCards.Web.Pages
+@using Howest.MagicCards.Shared.DTO
+@inherits CardListBase
+<ul class="cards">
+    @foreach (CardReadDTO card in Cards)
+    {
+        <li @onclick="@(() => OnCardClick.InvokeAsync(card))">
+            <h3>@card.Name</h3>
+
+            @if(String.IsNullOrEmpty(card.ImageUrl))
+            {
+                <p>No Image found</p>
+
+            } else
+            {
+                <img src="@card.ImageUrl" alt="Card Image"/>
+            }
+
+            <p>@card.Text</p>
+            <div class="rarity-section">
+                <h4>Rarity:</h4>
+                <p>@card.Rarity</p>
+            </div>
+            <div class="artist-section">
+                <h4>Artist:</h4>
+                <p>@card.Artist</p>
+            </div>
+            <div class="set-section">
+                <h4>Set:</h4>
+                <p>@card.Set</p>
+            </div>
+            
+        </li>
+    }
+</ul>

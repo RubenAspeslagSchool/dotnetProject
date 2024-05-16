@@ -1,0 +1,45 @@
+﻿body * {
+    margin: 0;
+}
+
+
+ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 1.5rem;
+    row-gap: 2rem;
+}
+
+li {
+    flex-basis: 15rem;
+    padding: 0.4rem;
+    border: solid 2px black;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem
+}
+
+h3 {
+    font-size: 1.2rem;
+    align-self: center;
+}
+
+h4 {
+    font-size: 1.1rem;
+}
+
+p {
+    font-size: 0.9rem;
+}
+
+li > div {
+    display: flex;
+    column-gap: 0.5rem;
+}
+
+img {
+    width: 12rem;
+    align-self: center;
+}

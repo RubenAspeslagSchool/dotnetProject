@@ -1,0 +1,73 @@
+﻿h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-basis: 30%;
+    column-gap: 1rem;
+}
+
+label {
+    white-space: nowrap;
+}
+
+article {
+    margin-top: 2rem;
+}
+
+.cards-info {
+    display: flex;
+}
+
+.cards-article {
+    flex: 0 1 80%;
+}
+
+.current-deck {
+    flex: 0 1 20%;
+}
+
+.title {
+    display: flex;
+}
+
+.title p {
+    margin-left: 1rem;
+    line-height: 1.8rem;
+    font-size: 1.5rem
+}
+
+ul {
+    width: 100%;
+    border: solid 1px black;
+    overflow-y: auto;
+}
+
+.old-decks p {
+    margin: 0;
+    text-align: center;
+    line-height: 2.2rem;
+}
+
+.old-decks ul {
+    padding-bottom: 1rem;
+    max-height: 15rem;
+}
+
+.current-deck ul {
+    max-height: 45rem;
+    min-height: 35rem;
+}
+
+li {
+    margin-top: 1rem;
+    list-style: none;
+    display: flex;
+    column-gap: 1.5rem;
+}
