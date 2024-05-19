@@ -7,7 +7,9 @@ using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.Shared.Filters;
 using Howest.MagicCards.Shared.Extensions;
 using AutoMapper.QueryableExtensions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +33,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
         [HttpGet]
         public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCards(
             [FromQuery] CardFilter cardFilter,
+            [FromQuery] string orderBy,
             [FromServices] IConfiguration config
         )
         {
@@ -44,8 +47,16 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
                     cardFilter.SetCode,
                     cardFilter.RarityCode);
 
-                // Apply default ordering before pagination
-                allCards = allCards.OrderBy(card => card.Id);
+                // Apply sorting
+                if (!string.IsNullOrWhiteSpace(orderBy))
+                {
+                    allCards = ApplySorting(allCards, orderBy);
+                }
+                else
+                {
+                    // Apply default ordering if no sorting parameter is provided
+                    allCards = allCards.OrderBy(card => card.Id);
+                }
 
                 var pagedCards = await allCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize);
 
@@ -75,6 +86,24 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
 
             var cardDetailDto = _mapper.Map<CardDetailDTO>(card);
             return Ok(cardDetailDto);
+        }
+
+        private IQueryable<Card> ApplySorting(IQueryable<Card> query, string orderBy)
+        {
+            switch (orderBy.ToLower())
+            {
+                case "name":
+                    return query.OrderBy(card => card.Name);
+                //case "rarity":
+                //    return query.OrderBy(card => card.Rarity);
+                //case "set":
+                //    return query.OrderBy(card => card.Set);
+                case "artist":
+                    return query.OrderBy(card => card.Artist);
+                // Add more cases for other sorting options as needed
+                default:
+                    return query;
+            }
         }
     }
 }
