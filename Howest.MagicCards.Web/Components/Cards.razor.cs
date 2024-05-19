@@ -45,7 +45,7 @@ namespace Howest.MagicCards.Web.Pages
 
         }
 
-        protected override async Task OnInitializedAsync()
+        protected async Task OnInitializedAsync()
         {
             _cardFilterViewModel = new CardFilterViewModel();
             _deckViewModel = new DeckViewModel();
@@ -76,7 +76,7 @@ namespace Howest.MagicCards.Web.Pages
         }
 
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected async Task OnAfterRenderAsync(bool firstRender)
         {
             ProtectedBrowserStorageResult<IList<DeckCardViewModel>> storageResult = await storage.GetAsync<IList<DeckCardViewModel>>("ViewedDeck");
             _cardsInDeck = storageResult.Success  ? storageResult.Value : new List<DeckCardViewModel>();
@@ -175,10 +175,10 @@ namespace Howest.MagicCards.Web.Pages
         private async Task AddDeck()
         {
             _deckViewModel.DeckCards = _cardsInDeck;
-            DeckWriteDTO deckWriteDTO = mapper.Map<DeckWriteDTO>(_deckViewModel);
+            DeckCreateDTO deckCreateDTO = mapper.Map<DeckCreateDTO>(_deckViewModel);
 
             HttpContent content =
-            new StringContent(JsonSerializer.Serialize(deckWriteDTO), Encoding.UTF8, "application/json");
+            new StringContent(JsonSerializer.Serialize(deckCreateDTO), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await _decksHttpClient.PostAsync("decks", content);
 
