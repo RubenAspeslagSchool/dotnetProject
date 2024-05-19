@@ -6,16 +6,16 @@ using Howest.MagicCards.WebAPI.Wrappers;
 using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.Shared.Filters;
 using Howest.MagicCards.Shared.Extensions;
-using Howest.MagicCards.Shared.Mapping;
 using AutoMapper.QueryableExtensions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Howest.MagicCards.WebAPI.Controllers.V1_1;
 
 [ApiVersion("1.1")]
 [Route("api/V{version:apiVersion}/[controller]")]
 [ApiController]
-
 public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepository;
@@ -28,13 +28,13 @@ public class CardsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<PagedResponse<IEnumerable<CardReadDTO>>> GetCards(
+    public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCards(
         [FromQuery] CardFilter cardFilter,
         [FromServices] IConfiguration config
     )
     {
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
-        if (_cardRepository.GetAllCards() is IQueryable<Card> allCards)
+        if (await _cardRepository.GetAllCardsAsync() is IQueryable<Card> allCards)
         {
             allCards = allCards.Filter(
                 cardFilter.CardName,
@@ -46,14 +46,11 @@ public class CardsController : ControllerBase
             // Apply default ordering before pagination
             allCards = allCards.OrderBy(card => card.Id);
 
-            PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(
-                 allCards.ToPagedList(cardFilter.PageNumber, cardFilter.PageSize)
-                     .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
-                     .ToList(),
-                 cardFilter.PageNumber,
-                 cardFilter.PageSize)
+            var pagedCards = await allCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize);
+            var cardReadDtos = pagedCards.AsQueryable().ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider);
+            var result = new PagedResponse<IEnumerable<CardReadDTO>>(cardReadDtos, cardFilter.PageNumber, cardFilter.PageSize)
             {
-                TotalRecords = allCards.Count()
+                TotalRecords = await allCards.CountAsync()
             };
 
             return Ok(result);
@@ -63,5 +60,4 @@ public class CardsController : ControllerBase
             return NotFound("No cards found");
         }
     }
-
 }

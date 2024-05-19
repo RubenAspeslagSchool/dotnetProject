@@ -39,5 +39,15 @@ namespace Howest.MagicCards.DAL.Repositories
                 .Include(c => c.SetCodeNavigation)
                 .FirstOrDefault(c => c.Id == id);
         }
+
+        public async Task<IQueryable<Card>> GetAllCardsAsync()
+        {
+            return await Task.FromResult(_db.Cards.AsQueryable());
+        }
+
+        public async Task<Card> GetCardByIdAsync(long id)
+        {
+            return await _db.Cards.FindAsync(id);
+        }
     }
 }
