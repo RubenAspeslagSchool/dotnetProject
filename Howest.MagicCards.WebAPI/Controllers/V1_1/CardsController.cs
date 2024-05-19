@@ -36,12 +36,15 @@ public class CardsController : ControllerBase
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
         if (_cardRepository.GetAllCards() is IQueryable<Card> allCards)
         {
-            allCards = allCards.Filter(cardFilter.CardName,
+            allCards = allCards.Filter(
+                cardFilter.CardName,
                 cardFilter.CardText,
                 cardFilter.ArtistName,
                 cardFilter.SetCode,
-                cardFilter.RarityCode); ;
+                cardFilter.RarityCode);
 
+            // Apply default ordering before pagination
+            allCards = allCards.OrderBy(card => card.Id);
 
             PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(
                  allCards.ToPagedList(cardFilter.PageNumber, cardFilter.PageSize)

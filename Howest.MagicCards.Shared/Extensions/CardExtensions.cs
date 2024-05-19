@@ -14,17 +14,21 @@ namespace Howest.MagicCards.Shared.Extensions
             this IQueryable<Card> cards,
             string cardName,
             string cardText,
-            String artistName,
-            String setCode,
-            String raretyCode
-            )
+            string artistName,
+            string setCode,
+            string rarityCode
+   )
         {
-            return cards.Where(card => 
+            var filteredCards = cards.Where(card =>
                  (artistName == null || card.Artist.FullName.Contains(artistName))
               && (setCode == null || card.SetCode.Contains(setCode))
-              && (raretyCode == null || card.RarityCode.Contains(raretyCode))
+              && (rarityCode == null || card.RarityCode.Contains(rarityCode))
               && (cardText == null || card.Text.Contains(cardText))
               && (cardName == null || card.Name.StartsWith(cardName)));
+
+            // Apply default ordering
+            return filteredCards.OrderBy(card => card.Id);
         }
+
     }
 }

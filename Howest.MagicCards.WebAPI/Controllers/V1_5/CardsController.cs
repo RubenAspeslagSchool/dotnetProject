@@ -42,7 +42,8 @@ public class CardsController : ControllerBase
                 cardFilter.SetCode,
                 cardFilter.RarityCode);
 
-            // Console.WriteLine(allCards.Count());
+            // Apply default ordering before pagination
+            allCards = allCards.OrderBy(card => card.Id);
 
             PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(
                  allCards.ToPagedList(cardFilter.PageNumber, cardFilter.PageSize)
@@ -51,7 +52,7 @@ public class CardsController : ControllerBase
                  cardFilter.PageNumber,
                  cardFilter.PageSize)
             {
-                TotalRecords = 0 // allCards.Count()
+                TotalRecords = allCards.Count()
             };
 
             return Ok(result);
