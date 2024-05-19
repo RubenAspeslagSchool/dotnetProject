@@ -117,7 +117,7 @@ namespace Howest.MagicCards.DAL.Repositories
             saveDecks(Decks);
         }
 
-        public bool UpdateCardAmountInDeck(long deckId, long cardId, int amount)
+        public void UpdateCardAmountInDeck(long deckId, long cardId, int amount)
         {
             Deck deck = getDeck(deckId);
             var cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);
@@ -125,9 +125,8 @@ namespace Howest.MagicCards.DAL.Repositories
             {
                 cardDeck.Amount = amount;
                 SaveDeck(deckId, deck);
-                return true;
             }
-            return false;
+            throw new Exception("Deck not found");
         }
 
         public void UbdateDeckName(long deckId, String newDeckName)

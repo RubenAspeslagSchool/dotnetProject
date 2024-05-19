@@ -19,7 +19,7 @@ namespace Howest.MagicCards.Shared.Mapping
 
                 .ForMember(dto => dto.Artist,
                             opt => opt.MapFrom(c => c.Artist.FullName));
-            
+            CreateMap<Card, CardDetailDTO>();
         }
     }
 }
