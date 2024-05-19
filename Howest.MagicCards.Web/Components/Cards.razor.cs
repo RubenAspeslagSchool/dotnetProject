@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Howest.MagicCards.Shared.DTO;
 using System.Text.Json;
-//using Howest.MagicCards.WebAPI.Wrappers;
-//using Howest.MagicCards.Shared.ViewModels;
+using Howest.MagicCards.WebAPI.Wrappers;
+using Howest.MagicCards.Shared.ViewModels;
 using AutoMapper;
 using System.Text;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -11,7 +11,7 @@ namespace Howest.MagicCards.Web.Pages
 {
     public partial class Cards
     {
-        /*
+        
 
         private IEnumerable<CardReadDTO>? _cards = null;
         private IEnumerable<RarirtyReadDTO>? _rarties = null;
@@ -198,6 +198,6 @@ namespace Howest.MagicCards.Web.Pages
                 _olderDecks = await GetAllDecks();
             }
         }
-        */
+        
     }
 }

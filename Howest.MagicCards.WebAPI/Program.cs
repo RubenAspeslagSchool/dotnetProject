@@ -41,6 +41,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<MtgV1Context>(options => options.UseSqlServer(config.GetConnectionString("MtgDb")));
 
 builder.Services.AddScoped<ICardRepository, SqlCardRepository>();
+builder.Services.AddScoped<IRarityRepository, SqlRarityRepository>();
 builder.Services.AddAutoMapper(new Type[] {
     typeof(Howest.MagicCards.Shared.Mapping.DecksProfile)
 });
