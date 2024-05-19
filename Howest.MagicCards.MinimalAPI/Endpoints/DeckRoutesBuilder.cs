@@ -18,7 +18,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
             });
 
             group.MapPost("/", (IDeckRepository repository, IMapper mapper, [FromBody] DeckCreateDTO createDeckDTO) =>
-               repository.AddDeck(mapper.Map<Deck>(createDeckDTO))
+               repository.CreateDeck(createDeckDTO.DeckName)
              );
 
             group.MapPatch("/{id}", (IDeckRepository repository, IMapper mapper, int id, [FromBody] DeckCreateDTO updatedDeckDTO) =>

@@ -42,7 +42,6 @@ public class CardsController : ControllerBase
                 cardFilter.SetCode,
                 cardFilter.RarityCode); ;
 
-            // Console.WriteLine(allCards.Count());
 
             PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(
                  allCards.ToPagedList(cardFilter.PageNumber, cardFilter.PageSize)

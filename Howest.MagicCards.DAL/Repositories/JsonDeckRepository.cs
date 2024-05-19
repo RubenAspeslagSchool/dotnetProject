@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-// todo: check if everything needs to be public
 namespace Howest.MagicCards.DAL.Repositories
 {
     public class JsonDeckRepository : IDeckRepository
@@ -51,7 +50,7 @@ namespace Howest.MagicCards.DAL.Repositories
             return Decks.Count > 0 ? Decks.Max(d => d.Id) + 1 : 1;
         }
 
-        public void AddDeck(Deck deck)
+        private void AddDeck(Deck deck)
         {
             Decks.Add(deck);
             saveDecks(Decks);
