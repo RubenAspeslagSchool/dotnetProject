@@ -21,19 +21,23 @@ namespace Howest.MagicCards.DAL.Repositories
         public IQueryable<Card> GetAllCards()
         {
             IQueryable<Card> allCards = _db.Cards.Include(c => c.Artist);
-            //.Select(c => new
-            //{
-            //    Card = c,
-            //   Rarity = _db.Rarities.FirstOrDefault(r => r.Code == c.RarityCode),
-            //    Set = _db.Sets.FirstOrDefault(s => s.Code == c.SetCode)
-            //})
-            //.Select(result => result.Card);
            return allCards;
         }
 
         public IQueryable<Card> GetAllCardsByArtistId(int id) 
         {
             return _db.Cards.Where(c => c.ArtistId == id).Select(c => c);
+        }
+
+        public Card GetCardById(long id)
+        {
+            return _db.Cards
+                .Include(c => c.Artist)
+                .Include(c => c.CardColors)
+                .Include(c => c.CardTypes)
+                .Include(c => c.RarityCodeNavigation)
+                .Include(c => c.SetCodeNavigation)
+                .FirstOrDefault(c => c.Id == id);
         }
     }
 }
