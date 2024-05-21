@@ -16,7 +16,6 @@ namespace Howest.MagicCards.Shared.Mapping
             CreateMap<Card, CardReadDTO>()
                 .ForMember(dto => dto.ImageUrl,
                             opt => opt.MapFrom(c => c.OriginalImageUrl))
-
                 .ForMember(dto => dto.Artist,
                             opt => opt.MapFrom(c => c.Artist.FullName));
             CreateMap<Card, CardDetailDTO>();

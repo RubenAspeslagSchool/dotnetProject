@@ -12,7 +12,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
         {
             group.MapGet("/", (IDeckRepository repository, IMapper mapper) =>
             {
-                List<Deck> decks = repository.getDecks();
+                List<Deck> decks = repository.GetDecks();
                 List<DeckReadDTO> deckDTOs = mapper.Map<List<DeckReadDTO>>(decks);
                 return Results.Ok(deckDTOs);
             });
@@ -31,8 +31,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                 catch (Exception)
                 {
                     return Results.NotFound("Deck not found");
-                }
-                
+                }                
             });
 
             group.MapDelete("/{id}", (IDeckRepository repository, int id) =>

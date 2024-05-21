@@ -12,11 +12,12 @@ namespace Howest.MagicCards.DAL.Json;
     public class JsonSerialiser
     {
         private string jsonFilePath = "..\\Howest.MagicCards.DAL\\Json\\deck.json";
+
         public JsonSerialiser()
         {
         }
 
-        public IList<Deck> getDecks()
+        public IList<Deck> GetDecks()
         {
             using (StreamReader r = new StreamReader(jsonFilePath))
             {
@@ -31,4 +32,3 @@ namespace Howest.MagicCards.DAL.Json;
             File.WriteAllText(jsonFilePath, json);
         }
 }
-

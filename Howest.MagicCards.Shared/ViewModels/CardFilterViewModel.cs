@@ -14,6 +14,5 @@ namespace Howest.MagicCards.Shared.ViewModels
         public string? CardName { get; set; }
         public string? CardText { get; set; }
         public int? PageNumber { get; set; } = 1;
-
     }
 }

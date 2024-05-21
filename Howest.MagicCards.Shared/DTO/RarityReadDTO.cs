@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.DTO
 {
-    public record RarirtyReadDTO
+    public record RarityReadDTO
     {
         public string RarityName { get; set; }
     }
