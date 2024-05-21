@@ -13,8 +13,6 @@ namespace Howest.MagicCards.WebAPI.Wrappers
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
-            
         }
-
     }
 }

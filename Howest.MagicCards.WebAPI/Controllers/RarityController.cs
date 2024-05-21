@@ -10,20 +10,20 @@ namespace Howest.MagicCards.WebAPI.Controllers
     [Route("api/V{version:apiVersion}/[controller]")]
     [ResponseCache(Duration = 20, Location = ResponseCacheLocation.Any)]
     [ApiController]
-    public class RarirtyController : ControllerBase
+    public class RarityController : ControllerBase
     {
         private readonly IRarityRepository _rarityRepository;
 
-        public RarirtyController(IRarityRepository rarityRepository)
+        public RarityController(IRarityRepository rarityRepository)
         {
             _rarityRepository = rarityRepository;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RarirtyReadDTO>> GetArtists()
+        public ActionResult<IEnumerable<RarityReadDTO>> GetArtists()
         {
             return (_rarityRepository.GetAllRarities() is IQueryable<Rarity> allRarities) ?
-                 Ok(allRarities.Select(r => new RarirtyReadDTO() { RarityName = r.Name}))
+                 Ok(allRarities.Select(r => new RarityReadDTO() { RarityName = r.Name}))
                  : NotFound("No artists found");
         }
     }

@@ -14,7 +14,7 @@ namespace Howest.MagicCards.Web.Pages
         
 
         private IEnumerable<CardReadDTO>? _cards = null;
-        private IEnumerable<RarirtyReadDTO>? _rarties = null;
+        private IEnumerable<RarityReadDTO>? _rarties = null;
         private IList<DeckCardViewModel> _cardsInDeck { get; set; } = new List<DeckCardViewModel>(); //IList because we add cards one for one to this list later on
         private IEnumerable<DeckReadDTO>? _olderDecks { get; set; }
 
@@ -102,7 +102,7 @@ namespace Howest.MagicCards.Web.Pages
 
         }
 
-        private async Task<IEnumerable<RarirtyReadDTO>> GetAllRarities()
+        private async Task<IEnumerable<RarityReadDTO>> GetAllRarities()
         {
             HttpResponseMessage response = await _cardsHttpClient.GetAsync($"rarities");
 
@@ -110,13 +110,13 @@ namespace Howest.MagicCards.Web.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                IEnumerable<RarirtyReadDTO>? result =
-                    JsonSerializer.Deserialize<IEnumerable<RarirtyReadDTO>>(apiResponse, _jsonOptions);
+                IEnumerable<RarityReadDTO>? result =
+                    JsonSerializer.Deserialize<IEnumerable<RarityReadDTO>>(apiResponse, _jsonOptions);
                 return result;
             } 
             else
             {
-                return new List<RarirtyReadDTO>();
+                return new List<RarityReadDTO>();
             }
         }
 

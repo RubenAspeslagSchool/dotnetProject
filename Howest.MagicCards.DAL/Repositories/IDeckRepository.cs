@@ -11,8 +11,8 @@ namespace Howest.MagicCards.DAL.Repositories
         void ClearAllDecks();
         void ClearDeck(long deckId);
         long CreateDeck(string name);
-        Deck getDeck(long id);
-        List<Deck> getDecks();
+        Deck GetDeck(long id);
+        List<Deck> GetDecks();
         void RemoveCardFromDeck(long deckId, long cardId);
         void RemoveDeck(long id);
         void UbdateDeckName(long deckId, string newDeckName);

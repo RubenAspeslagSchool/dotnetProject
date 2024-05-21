@@ -22,11 +22,11 @@
             <label for="card-rarity">Rarity:</label>
             <InputSelect id="card-rarity" @bind-Value="@_cardFilterViewModel.RarityName" class="form-control">
                 <option value="">Not Selected</option>
-                @if(_rarties is not null)
+                @if(_rarities is not null)
                 {
-                    foreach(RarirtyReadDTO rarirty in _rarties)
+                    foreach(RarityReadDTO rarity in _rarities)
                     {
-                        <option value="@rarirty.RarityName">@rarirty.RarityName</option>
+                        <option value="@rarity.RarityName">@rarity.RarityName</option>
                     }
                 }
             </InputSelect>
@@ -90,7 +90,6 @@
                         </li>
                     }
                 }
-
             </ul>
         </article>
     </article>
