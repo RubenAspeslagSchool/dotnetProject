@@ -13,13 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Howest.MagicCards.Shared", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Howest.MagicCards.DAL", "Howest.MagicCards.DAL\Howest.MagicCards.DAL.csproj", "{50EAC3C6-7408-42CF-8483-0FC8686B3FFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Howest.MagicCards.Web", "Howest.MagicCards.Web\Howest.MagicCards.Web.csproj", "{DD0BEB9D-A231-471C-9A01-5EA5CDD2852F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Howest.MagicCards.Web", "Howest.MagicCards.Web\Howest.MagicCards.Web.csproj", "{DD0BEB9D-A231-471C-9A01-5EA5CDD2852F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Howest.MagicCards.GraphQL", "Howest.MagicCards.GraphQL\Howest.MagicCards.GraphQL.csproj", "{1FA14278-2CEB-4BD1-97C5-9A6B7B42D30F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Howest.MagicCards.GraphQL", "Howest.MagicCards.GraphQL\Howest.MagicCards.GraphQL.csproj", "{1FA14278-2CEB-4BD1-97C5-9A6B7B42D30F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Howest.MagicCards.WebAPI", "Howest.MagicCards.WebAPI\Howest.MagicCards.WebAPI.csproj", "{72599B54-B03D-4294-9BA1-F862474524A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Howest.MagicCards.WebAPI", "Howest.MagicCards.WebAPI\Howest.MagicCards.WebAPI.csproj", "{72599B54-B03D-4294-9BA1-F862474524A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Howest.MagicCards.MinimalAPI", "Howest.MagicCards.MinimalAPI\Howest.MagicCards.MinimalAPI.csproj", "{EC36A584-225C-4850-BDE2-9C5819C7AEE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Howest.MagicCards.MinimalAPI", "Howest.MagicCards.MinimalAPI\Howest.MagicCards.MinimalAPI.csproj", "{EC36A584-225C-4850-BDE2-9C5819C7AEE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

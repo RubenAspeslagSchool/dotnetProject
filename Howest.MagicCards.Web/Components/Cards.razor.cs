@@ -9,13 +9,11 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace Howest.MagicCards.Web.Pages
 {
-    public partial class Cards
+    public partial class Cards : ComponentBase
     {
-        
-
         private IEnumerable<CardReadDTO>? _cards = null;
         private IEnumerable<RarirtyReadDTO>? _rarties = null;
-        private IList<DeckCardViewModel> _cardsInDeck { get; set; } = new List<DeckCardViewModel>(); //IList because we add cards one for one to this list later on
+        private IList<DeckCardViewModel> _cardsInDeck { get; set; } = new List<DeckCardViewModel>();
         private IEnumerable<DeckReadDTO>? _olderDecks { get; set; }
 
         private CardFilterViewModel _cardFilterViewModel;
@@ -34,18 +32,15 @@ namespace Howest.MagicCards.Web.Pages
         [Inject]
         public ProtectedLocalStorage storage { get; set; }
 
-
-
         public Cards()
         {
             _jsonOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
             };
-
         }
 
-        protected async Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
             _cardFilterViewModel = new CardFilterViewModel();
             _deckViewModel = new DeckViewModel();
@@ -59,29 +54,30 @@ namespace Howest.MagicCards.Web.Pages
 
         private async Task<IEnumerable<DeckReadDTO>?> GetAllDecks()
         {
-                HttpResponseMessage response = await _cardsHttpClient.GetAsync($"decks");
+            HttpResponseMessage response = await _cardsHttpClient.GetAsync($"decks");
 
-                string apiResponse = await response.Content.ReadAsStringAsync();
+            string apiResponse = await response.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    IEnumerable<DeckReadDTO>? result =
-                        JsonSerializer.Deserialize<IEnumerable<DeckReadDTO>>(apiResponse, _jsonOptions);
-                    return result;
-                }
-                else
-                {
-                    return new List<DeckReadDTO>();
-                }
+            if (response.IsSuccessStatusCode)
+            {
+                IEnumerable<DeckReadDTO>? result =
+                    JsonSerializer.Deserialize<IEnumerable<DeckReadDTO>>(apiResponse, _jsonOptions);
+                return result;
+            }
+            else
+            {
+                return new List<DeckReadDTO>();
+            }
         }
 
-
-        protected async Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            ProtectedBrowserStorageResult<IList<DeckCardViewModel>> storageResult = await storage.GetAsync<IList<DeckCardViewModel>>("ViewedDeck");
-            _cardsInDeck = storageResult.Success  ? storageResult.Value : new List<DeckCardViewModel>();
+            if (firstRender)
+            {
+                ProtectedBrowserStorageResult<IList<DeckCardViewModel>> storageResult = await storage.GetAsync<IList<DeckCardViewModel>>("ViewedDeck");
+                _cardsInDeck = storageResult.Success ? storageResult.Value : new List<DeckCardViewModel>();
+            }
         }
-
 
         private async Task ShowAllCards()
         {
@@ -99,7 +95,6 @@ namespace Howest.MagicCards.Web.Pages
             {
                 _cards = new List<CardReadDTO>();
             }
-
         }
 
         private async Task<IEnumerable<RarirtyReadDTO>> GetAllRarities()
@@ -113,7 +108,7 @@ namespace Howest.MagicCards.Web.Pages
                 IEnumerable<RarirtyReadDTO>? result =
                     JsonSerializer.Deserialize<IEnumerable<RarirtyReadDTO>>(apiResponse, _jsonOptions);
                 return result;
-            } 
+            }
             else
             {
                 return new List<RarirtyReadDTO>();
@@ -125,16 +120,14 @@ namespace Howest.MagicCards.Web.Pages
             string queryString = string.Empty;
 
             _cardFilterViewModel.GetType().GetProperties().ToList().ForEach(prop =>
+            {
+                string? value = prop.GetValue(_cardFilterViewModel) is string propValue ? propValue : null;
+
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    string? value = prop.GetValue(_cardFilterViewModel) is string propValue ? propValue : null;
-
-                    if(!string.IsNullOrWhiteSpace(value))
-                    {
-                        queryString += $"&{prop.Name}={value}";
-                    }
-
+                    queryString += $"&{prop.Name}={value}";
                 }
-            );
+            });
 
             return queryString;
         }
@@ -142,7 +135,6 @@ namespace Howest.MagicCards.Web.Pages
         private async void AddCardToDeck(CardReadDTO card)
         {
             DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == int.Parse(card.Id));
-
 
             if (cardViewModel is null)
             {
@@ -155,6 +147,7 @@ namespace Howest.MagicCards.Web.Pages
 
             await storage.SetAsync("ViewedDeck", _cardsInDeck);
         }
+
 
         private async void RemoveCard(DeckCardViewModel card)
         {
@@ -175,14 +168,14 @@ namespace Howest.MagicCards.Web.Pages
         private async Task AddDeck()
         {
             _deckViewModel.DeckCards = _cardsInDeck;
-            DeckCreateDTO deckCreateDTO = mapper.Map<DeckCreateDTO>(_deckViewModel);
+            DeckCreateDTO deckWriteDTO = mapper.Map<DeckCreateDTO>(_deckViewModel);
 
             HttpContent content =
-            new StringContent(JsonSerializer.Serialize(deckCreateDTO), Encoding.UTF8, "application/json");
+            new StringContent(JsonSerializer.Serialize(deckWriteDTO), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await _decksHttpClient.PostAsync("decks", content);
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 _olderDecks = await GetAllDecks();
             }
@@ -193,11 +186,10 @@ namespace Howest.MagicCards.Web.Pages
         {
             HttpResponseMessage response = await _decksHttpClient.DeleteAsync($"decks/{id}");
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 _olderDecks = await GetAllDecks();
             }
         }
-        
     }
 }

@@ -1,0 +1,34 @@
+﻿<aside class="filter">
+    <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" class="form">
+        <div class="form-group">
+            <label for="card-name">Card Name:</label>
+            <InputText id="card-name" @bind-Value="@_cardFilterViewModel.CardName" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="card-text">Card Text:</label>
+            <InputText id="card-text" @bind-Value="@_cardFilterViewModel.CardText" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="card-artist">Artist Name:</label>
+            <InputText id="card-artist" @bind-Value="@_cardFilterViewModel.ArtistName" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="card-set">Set Name:</label>
+            <InputText id="card-set" @bind-Value="@_cardFilterViewModel.SetName" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="card-rarity">Rarity:</label>
+            <InputSelect id="card-rarity" @bind-Value="@_cardFilterViewModel.RarityName" class="form-control">
+                <option value="">Not Selected</option>
+                @if (_rarties is not null)
+                {
+                    foreach (RarirtyReadDTO rarirty in _rarties)
+                    {
+                        <option value="@rarirty.RarityName">@rarirty.RarityName</option>
+                    }
+                }
+            </InputSelect>
+        </div>
+        <button type="submit" class="btn btn-info">Filter</button>
+    </EditForm>
+</aside>

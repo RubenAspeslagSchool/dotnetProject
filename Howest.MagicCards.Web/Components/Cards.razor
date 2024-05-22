@@ -1,100 +1,4 @@
-﻿@page "/"
-@using Howest.MagicCards.Shared.ViewModels
-<aside class="filter">
-    <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" class="form">
-        <div class="form-group">
-            <label for="card-name">Card Name:</label>
-            <InputText id="card-name" @bind-Value="@_cardFilterViewModel.CardName" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="card-text">Card Text:</label>
-            <InputText id="card-text" @bind-Value="@_cardFilterViewModel.CardText" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="card-artist">Artist Name:</label>
-            <InputText id="card-artist" @bind-Value="@_cardFilterViewModel.ArtistName" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="card-set">Set Name:</label>
-            <InputText id="card-set" @bind-Value="@_cardFilterViewModel.SetName" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="card-rarity">Rarity:</label>
-            <InputSelect id="card-rarity" @bind-Value="@_cardFilterViewModel.RarityName" class="form-control">
-                <option value="">Not Selected</option>
-                @if(_rarties is not null)
-                {
-                    foreach(RarirtyReadDTO rarirty in _rarties)
-                    {
-                        <option value="@rarirty.RarityName">@rarirty.RarityName</option>
-                    }
-                }
-            </InputSelect>
-        </div>
-        <button type="submit" class="btn btn-info">Filter</button>
-    </EditForm>
-</aside>
-
-<div class="cards-info">
-    <article class="cards-article">
-        <h2>Cards</h2>
-        @if (_cards == null)
-        {
-            <p>No Cards found</p>
-        }
-        else
-        {
-            <CardList Cards="_cards" OnCardClick="AddCardToDeck"></CardList>
-        }
-    </article>
-    <article class="decks">
-        <article class="old-decks">
-            <section class="header">
-                <h3>Older Decks:</h3>
-            </section>
-            <ul>
-                @if(_olderDecks is not null)
-                {
-                    foreach(DeckReadDTO deck in _olderDecks)
-                    {
-                        <li class="old-deck">
-                            <p>@deck.DeckName</p>
-                            <button class="btn btn-info" @onclick="@(() => RemoveDeck(@deck.Id))">Remove</button>
-                        </li>
-                    }
-                }
-
-            </ul>
-        </article>
-        <article class="current-deck">
-            <section class="header">
-                <section class="title">
-                    <h3>Current Deck -</h3>
-                    <p class="total-cards">1</p>
-                </section>
-                <EditForm Model="@_deckViewModel" OnValidSubmit="@AddDeck" class="deck-builder">
-                    <label for="deck-name">Deck Name:</label>
-                    <InputText id="deck-name" @bind-Value="@_deckViewModel.DeckName" class="form-control"></InputText>
-                    <button type="submit" class="btn btn-info">Save</button>
-                </EditForm>
-            </section>
-
-            <ul class="deck">
-                @if(_cardsInDeck is not null)
-                {
-                    foreach(DeckCardViewModel deckCard in _cardsInDeck)
-                    {
-                        <li class="deck-item" @onclick="@(() => RemoveCard(@deckCard))">
-                            <p class="counter">@deckCard.Amount</p>
-                            <p class="card-name">@deckCard.CardName</p>
-                        </li>
-                    }
-                }
-
-            </ul>
-        </article>
-    </article>
-</div>
+﻿@using Howest.MagicCards.Shared.ViewModels
 
 
 <!--Put style in here to style the EditForm (impossible in seperate file)-->
@@ -117,8 +21,8 @@
         margin-bottom: 1rem;
     }
 
-    .deck-builder > label {
-        text-align: center;
-        line-height: 2rem;
-    }
+        .deck-builder > label {
+            text-align: center;
+            line-height: 2rem;
+        }
 </style>
