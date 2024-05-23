@@ -1,16 +1,22 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using AutoMapper;
 using Howest.MagicCards.Shared.DTO;
-using System.Text.Json;
-using Howest.MagicCards.WebAPI.Wrappers;
 using Howest.MagicCards.Shared.ViewModels;
-using AutoMapper;
-using System.Text;
+using Howest.MagicCards.WebAPI.Wrappers;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using System.Text.Json;
+using System.Text;
+using System.Xml.Linq;
 
-namespace Howest.MagicCards.Web.Pages
+namespace Howest.MagicCards.Web.Components.Pages
 {
-    public partial class Cards : ComponentBase
+    public partial class Home : ComponentBase
     {
+      
+        public IEnumerable<CardReadDTO> CardsList { get; set; }
+
+      
+        public EventCallback<CardReadDTO> OnCardClick { get; set; }
         private IEnumerable<CardReadDTO>? _cards = null;
         private IEnumerable<RarirtyReadDTO>? _rarties = null;
         private IList<DeckCardViewModel> _cardsInDeck { get; set; } = new List<DeckCardViewModel>();
@@ -32,7 +38,7 @@ namespace Howest.MagicCards.Web.Pages
         [Inject]
         public ProtectedLocalStorage storage { get; set; }
 
-        public Cards()
+        public Home()
         {
             _jsonOptions = new JsonSerializerOptions
             {
@@ -193,3 +199,5 @@ namespace Howest.MagicCards.Web.Pages
         }
     }
 }
+
+
