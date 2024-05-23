@@ -2,7 +2,6 @@
 
 
 
-@inherits Home
 <aside class="filter">
     <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" class="form">
         <div class="form-group">
@@ -48,7 +47,7 @@
         else
         {
             <ul class="cards">
-                @foreach (CardReadDTO card in Cards)
+                @foreach (CardReadDTO card in _cards)
                 {
                     <li @onclick="@(() => OnCardClick.InvokeAsync(card))">
                         <h3>@card.Name</h3>

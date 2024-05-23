@@ -188,7 +188,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
         }
 
-        private async Task RemoveDeck(int id)
+        private async Task RemoveDeck(long id)
         {
             HttpResponseMessage response = await _decksHttpClient.DeleteAsync($"decks/{id}");
 
