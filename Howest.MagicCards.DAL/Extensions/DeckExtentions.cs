@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Howest.MagicCards.DAL.Extensions
 {
@@ -39,17 +40,15 @@ namespace Howest.MagicCards.DAL.Extensions
 
         public static void RemoveCard(this Deck deck, long cardId)
         {
-            bool found = false;
-            deck.CardDecks.ForEach(deckCard =>
+            CardDeck cardDeck = deck.CardDecks.FirstOrDefault(CardDeck => CardDeck.CardId == cardId);
+            if (cardDeck is not null) 
             {
-                if (deckCard.CardId == cardId)
-                {
-                    found = true;
-                    deckCard.Amount--;
-                }
-            });
-
-            if (!found) { throw new Exception("Card not found"); }
+                cardDeck.Amount--;
+            } 
+            else
+            { 
+                throw new Exception("Card not found"); 
+            }
         }
     }
 }
