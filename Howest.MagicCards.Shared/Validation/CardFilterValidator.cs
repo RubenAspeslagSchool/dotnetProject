@@ -16,15 +16,10 @@ namespace Howest.MagicCards.Shared.Validation
             {
                 RuleFor(x => x.PageNumber)
                 .GreaterThan(0)
-                .WithMessage("PageNumber must be greater than 0.");
-
-
-                RuleFor(x => x.PageNumber)
-                            .LessThanOrEqualTo(x => x.PageNumber)
-                            .WithMessage("PageNumber must be less than or equal to PageNumber.");
-
+                .WithMessage("PageNumber must be greater than 0.");   
             });
-            RuleSet("PageNumberValidation", () =>
+
+            RuleSet("PageSizeValidation", () =>
             {
                 RuleFor(x => x.PageSize)
                     .GreaterThan(0)

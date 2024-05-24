@@ -3,7 +3,7 @@
 
 
 <aside class="filter">
-    <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" class="form">
+    <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" FormName="CardFilterForm" class="form">
         <div class="form-group">
             <label for="card-name">Card Name:</label>
             <InputText id="card-name" @bind-Value="@_cardFilterViewModel.CardName" class="form-control"></InputText>
@@ -17,12 +17,12 @@
             <InputText id="card-artist" @bind-Value="@_cardFilterViewModel.ArtistName" class="form-control"></InputText>
         </div>
         <div class="form-group">
-            <label for="card-set">Set Name:</label>
-            <InputText id="card-set" @bind-Value="@_cardFilterViewModel.SetName" class="form-control"></InputText>
+            <label for="card-set">Set code:</label>
+            <InputText id="card-set" @bind-Value="@_cardFilterViewModel.SetCode" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="card-rarity">Rarity:</label>
-            <InputSelect id="card-rarity" @bind-Value="@_cardFilterViewModel.RarityName" class="form-control">
+            <InputSelect id="card-rarity" @bind-Value="@_cardFilterViewModel.RarityCode" class="form-control">
                 <option value="">Not Selected</option>
                 @if (_rarties is not null)
                 {
@@ -110,7 +110,7 @@
                 <h3>Current Deck -</h3>
                 <p class="total-cards">1</p>
             </section>
-            <EditForm Model="@_deckViewModel" OnValidSubmit="@AddDeck" class="deck-builder">
+            <EditForm FormName="CreateDeckForm" Model="@_deckViewModel" OnValidSubmit="@AddDeck" class="deck-builder">
                 <label for="deck-name">Deck Name:</label>
                 <InputText id="deck-name" @bind-Value="@_deckViewModel.DeckName" class="form-control"></InputText>
                 <button type="submit" class="btn btn-info">Save</button>

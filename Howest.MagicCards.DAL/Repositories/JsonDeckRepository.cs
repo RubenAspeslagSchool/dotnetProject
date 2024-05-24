@@ -4,45 +4,29 @@ using Howest.MagicCards.DAL.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace Howest.MagicCards.DAL.Repositories
 {
     public class JsonDeckRepository : IDeckRepository
     {
-        private JsonSerialiser _jsonSeriliser = new JsonSerialiser();
+        private readonly JsonSerialiser _jsonSeriliser;
 
         public List<Deck> Decks { get; set; }
 
         public JsonDeckRepository()
         {
-            Decks = getDecks();
+            _jsonSeriliser = new JsonSerialiser();
+            Decks = _jsonSeriliser.GetDecks().ToList();
         }
 
-        public List<Deck> getDecks()
+        public Deck GetDeck(long id)
         {
-            return new JsonSerialiser().getDecks().ToList();
+            return Decks.FirstOrDefault(x => x.Id == id);
         }
 
-        public Deck getDeck(long id)
+        private void SaveDecks()
         {
-            Deck deck = null;
-            Decks.ForEach(currentDeck =>
-            {
-                if (currentDeck.Id == id)
-                {
-                    deck = currentDeck;
-                }
-            });
-
-            return deck ?? throw new Exception("Deck not found");
-        }
-
-        private void saveDecks(List<Deck> decks)
-        {
-            _jsonSeriliser.SaveDecks(decks);
+            _jsonSeriliser.SaveDecks(Decks);
         }
 
         private long GenerateNewId()
@@ -53,103 +37,111 @@ namespace Howest.MagicCards.DAL.Repositories
         private void AddDeck(Deck deck)
         {
             Decks.Add(deck);
-            saveDecks(Decks);
+            SaveDecks();
         }
 
         public void RemoveDeck(long id)
         {
-            Decks.Remove(getDeck(id));
-            saveDecks(Decks);
+            Deck deck = GetDeck(id);
+            if (deck == null)
+            {
+                throw new ArgumentNullException(nameof(deck), "Deck not found");
+            }
+
+            Decks.Remove(deck);
+            SaveDecks();
         }
 
         public void Clear()
         {
-            Decks = new List<Deck>();
-            saveDecks(new List<Deck>());
+            Decks.Clear();
+            SaveDecks();
         }
 
         public long CreateDeck(string name)
         {
             long id = GenerateNewId();
-            Deck deck = new Deck() { Id = id, DeckName = name };
-            this.AddDeck(deck);
-            SaveDeck(id, deck);
+            Deck deck = new Deck { Id = id, DeckName = name };
+            AddDeck(deck);
             return id;
         }
 
         public void AddCardToDeck(long deckId, long cardId)
         {
-            Deck deck = getDeck(deckId);
-            deck.AddCard(cardId);
-            SaveDeck(deckId, deck);
+            Deck deck = GetDeck(deckId);
+            if (deck != null)
+            {
+                deck.AddCard(cardId);
+                SaveDecks();
+            }
         }
 
         public void RemoveCardFromDeck(long deckId, long cardId)
         {
-            Deck deck = getDeck(deckId);
-            deck.RemoveCard(cardId);
-            SaveDeck(deckId, deck);
-
+            Deck deck = GetDeck(deckId);
+            if (deck != null)
+            {
+                deck.RemoveCard(cardId);
+                SaveDecks();
+            }
         }
 
         public void ClearDeck(long deckId)
         {
-            Deck deck = getDeck(deckId);
-            deck.Clear();
-            SaveDeck(deckId, deck);
+            Deck deck = GetDeck(deckId);
+            if (deck != null)
+            {
+                deck.Clear();
+                SaveDecks();
+            }
         }
 
         public void ClearAllDecks()
         {
             Clear();
-            saveDecks(new List<Deck>());
         }
 
         public void UpdateCardsOfDeck(long id, Deck newDeck)
         {
-            Deck deck = getDeck(id);
-            //deck.Clear();
-
-            newDeck.CardDecks.ForEach(cardDeck =>
+            Deck deck = GetDeck(id);
+            if (deck != null)
             {
-                deck.AddCardDeck(cardDeck);
-            });
-            saveDecks(Decks);
+                deck.CardDecks.Clear();
+                newDeck.CardDecks.ForEach(deck.AddCardDeck);
+                SaveDecks();
+            }
         }
 
         public void UpdateCardAmountInDeck(long deckId, long cardId, int amount)
         {
-            Deck deck = getDeck(deckId);
-            var cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);
-            if (cardDeck != null)
+            Deck deck = GetDeck(deckId);
+            if (deck != null)
             {
-                cardDeck.Amount = amount;
-                SaveDeck(deckId, deck);
-            }
-            throw new Exception("Deck not found");
-        }
-
-        public void UbdateDeckName(long deckId, String newDeckName)
-        {
-            Deck deck = getDeck(deckId);
-            deck.DeckName = newDeckName;
-            SaveDeck(deckId, deck);
-        }
-
-        private void SaveDeck(long deckId, Deck newDeck)
-        {
-            List<Deck> decks = getDecks().ToList();
-            Deck oldDeck = decks.FindLast(deck => deck.Id == deckId);
-            if (oldDeck is Deck && oldDeck is not null)
-            {
-                oldDeck.DeckName = newDeck.DeckName;
-                oldDeck.CardDecks = newDeck.CardDecks;
+                var cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);
+                if (cardDeck != null)
+                {
+                    cardDeck.Amount = amount;
+                    SaveDecks();
+                }
+                else
+                {
+                    throw new ArgumentNullException(nameof(Card), "Card not found in deck");
+                }
             }
             else
             {
-                decks.Add(newDeck);
+                throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
-            _jsonSeriliser.SaveDecks(decks);
+        }
+
+        public void UpdateDeckName(long deckId, string newDeckName)
+        {
+            Deck deck = GetDeck(deckId);
+            if (deck != null)
+            {
+                deck.DeckName = newDeckName;
+                SaveDecks();
+            }
         }
     }
 }

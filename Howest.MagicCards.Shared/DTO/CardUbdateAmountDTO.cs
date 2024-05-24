@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.DTO
 {
-    public record CardAmountDTO
+    public record CardUbdateAmountDTO
     {
         public int Amount { get; set; } = 0;
     }

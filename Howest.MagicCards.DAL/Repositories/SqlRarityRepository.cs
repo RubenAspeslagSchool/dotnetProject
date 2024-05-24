@@ -1,8 +1,6 @@
 ﻿using Howest.MagicCards.DAL.Models;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Howest.MagicCards.DAL.Repositories
@@ -15,9 +13,14 @@ namespace Howest.MagicCards.DAL.Repositories
             _db = mtgContext;
         }
 
-        public IQueryable<Rarity> GetAllRarities()
+        public async Task<List<Rarity>> GetAllRaritiesAsync()
         {
-            return _db.Rarities.Select(a => a);
+            return await _db.Rarities.ToListAsync();
+        }
+
+        public async Task<Rarity> GetRarityAsync(string code)
+        {
+            return await _db.Rarities.FirstOrDefaultAsync(r => r.Code == code);
         }
     }
 }

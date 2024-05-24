@@ -12,7 +12,6 @@ namespace Howest.MagicCards.Web.Components.Pages
 {
     public partial class Home : ComponentBase
     {
-      
         public IEnumerable<CardReadDTO> CardsList { get; set; }
 
       
@@ -89,19 +88,18 @@ namespace Howest.MagicCards.Web.Components.Pages
         {
             HttpResponseMessage response = await _cardsHttpClient.GetAsync("cards?" + GetQueryString());
 
-            string apiResponse = await response.Content.ReadAsStringAsync();
-
             if (response.IsSuccessStatusCode)
             {
-                PagedResponse<IEnumerable<CardReadDTO>>? result =
-                        JsonSerializer.Deserialize<PagedResponse<IEnumerable<CardReadDTO>>>(apiResponse, _jsonOptions);
-                _cards = result?.Data;
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<PagedResponse<IEnumerable<CardReadDTO>>>(apiResponse, _jsonOptions);
+                _cards = result?.Data ?? new List<CardReadDTO>();
             }
             else
             {
                 _cards = new List<CardReadDTO>();
             }
         }
+
 
         private async Task<IEnumerable<RarirtyReadDTO>> GetAllRarities()
         {

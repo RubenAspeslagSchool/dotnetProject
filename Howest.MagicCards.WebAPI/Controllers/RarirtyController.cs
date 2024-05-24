@@ -20,11 +20,18 @@ namespace Howest.MagicCards.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RarirtyReadDTO>> GetArtists()
+        public async Task<ActionResult<IEnumerable<RarirtyReadDTO>>> Getrarities()
         {
-            return (_rarityRepository.GetAllRarities() is IQueryable<Rarity> allRarities) ?
-                 Ok(allRarities.Select(r => new RarirtyReadDTO() { RarityName = r.Name}))
-                 : NotFound("No artists found");
+            var allRarities = await _rarityRepository.GetAllRaritiesAsync();
+            if (allRarities.Any())
+            {
+                List<RarirtyReadDTO> rarityReadDtos = allRarities.Select(r => new RarirtyReadDTO { RarityName = r.Name }).ToList();
+                return Ok(rarityReadDtos);
+            }
+            else
+            {
+                return NotFound("No rarities found");
+            }
         }
     }
 }

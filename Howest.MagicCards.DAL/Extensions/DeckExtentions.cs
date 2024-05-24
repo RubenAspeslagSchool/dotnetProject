@@ -11,17 +11,12 @@ namespace Howest.MagicCards.DAL.Extensions
     {
         public static void AddCard(this Deck deck, long cardId)
         {
-            bool found = false;
-            deck.CardDecks.ForEach(deckCard =>
+            CardDeck? cardDeck = deck.CardDecks.FirstOrDefault(d => d.CardId == cardId);
+            if (cardDeck is not null)
             {
-                if (deckCard.CardId == cardId)
-                {
-                    found = true;
-                    deckCard.Amount++;
-                }
-            });
-
-            if (!found)
+                cardDeck.Amount++;
+            } 
+            else
             {
                 deck.CardDecks.Add(new CardDeck()
                 {

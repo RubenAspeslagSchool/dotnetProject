@@ -8,12 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Register HttpClientFactory and configure named clients
 builder.Services.AddHttpClient("CardsAPI", client =>
 {
     // Replace this with your actual Cards API base address
-    client.BaseAddress = new Uri("https://localhost:7195/V1.5/");
+    client.BaseAddress = new Uri("https://localhost:7195/api/V1.5/");
 });
 
 builder.Services.AddHttpClient("DecksAPI", client =>

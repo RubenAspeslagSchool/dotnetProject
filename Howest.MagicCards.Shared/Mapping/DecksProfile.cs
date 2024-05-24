@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.Shared.DTO;
+using Howest.MagicCards.Shared.ViewModels;
 
 namespace Howest.MagicCards.Shared.Mapping
 {
@@ -13,6 +14,11 @@ namespace Howest.MagicCards.Shared.Mapping
     {
         public DecksProfile() 
         {
+            CreateMap<DeckViewModel, DeckCreateDTO>()
+                           .ForMember(dest => dest.DeckName, opt => opt.MapFrom(src => src.DeckName));
+                           
+
+
             CreateMap<DeckCreateDTO, Deck>()
                            .ForMember(deck => deck.CardDecks,
                                        opt => 

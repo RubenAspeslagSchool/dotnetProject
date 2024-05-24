@@ -16,7 +16,7 @@ namespace Howest.MagicCards.DAL.Json;
         {
         }
 
-        public IList<Deck> getDecks()
+        public IList<Deck> GetDecks()
         {
             using (StreamReader r = new StreamReader(jsonFilePath))
             {

@@ -17,7 +17,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                     var deck = repository.getDeck(deckId);
                     ICollection<CardDeckReadDTO> cardDTO = mapper.Map<ICollection<CardDeckReadDTO>>(deck.CardDecks);
                     return Results.Ok(cardDTO);
-                } catch (Exception ex)
+                } catch (ArgumentNullException ex)
                 {
                     return Results.NotFound("Deck not found");
                 }               
@@ -46,7 +46,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                     repository.RemoveCardFromDeck(deckId, cardId);
                     return Results.Ok("Card removed from deck successfully");
                 }
-                catch (Exception)
+                catch (ArgumentNullException)
                 {
                    return Results.NotFound("Deck not found");
                 }
@@ -55,7 +55,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
 
             // Update a card within a deck by deck ID and card ID  
             
-            group.MapPatch("/{cardId}", (IDeckRepository repository, long deckId, long cardId, [FromBody] CardAmountDTO amountDTO) =>
+            group.MapPatch("/{cardId}", (IDeckRepository repository, long deckId, long cardId, [FromBody] CardUbdateAmountDTO amountDTO) =>
             {
                 try
                 {

@@ -43,12 +43,10 @@ public class CardsController : ControllerBase
                 cardFilter.SetCode,
                 cardFilter.RarityCode);
 
-            // Apply default ordering before pagination
-            allCards = allCards.OrderBy(card => card.Id);
 
-            var pagedCards = await allCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize);
-            var cardReadDtos = pagedCards.AsQueryable().ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider);
-            var result = new PagedResponse<IEnumerable<CardReadDTO>>(cardReadDtos, cardFilter.PageNumber, cardFilter.PageSize)
+            List<Card> pagedCards = await allCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize);
+            IQueryable<CardReadDTO> cardReadDtos = pagedCards.AsQueryable().ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider);
+            PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(cardReadDtos, cardFilter.PageNumber, cardFilter.PageSize)
             {
                 TotalRecords = await allCards.CountAsync()
             };
