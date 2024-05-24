@@ -61,7 +61,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                 {
                     repository.UpdateCardAmountInDeck(deckId, cardId, amountDTO.Amount);
                     return Results.Ok("Card updated successfully");
-                } catch (Exception)
+                } catch (ArgumentNullException)
                 {
                     return Results.NotFound("Deck not found in deck");
                 }
