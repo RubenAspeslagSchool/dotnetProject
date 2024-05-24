@@ -19,7 +19,7 @@ namespace Howest.MagicCards.Shared.Extensions
             string rarityCode
    )
         {
-            var filteredCards = cards.Where(card =>
+            IQueryable<Card> filteredCards = cards.Where(card =>
                  (artistName == null || card.Artist.FullName.Contains(artistName))
               && (setCode == null || card.SetCode.Contains(setCode))
               && (rarityCode == null || card.RarityCode.Contains(rarityCode))

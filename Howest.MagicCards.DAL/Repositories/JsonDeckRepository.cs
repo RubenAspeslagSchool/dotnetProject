@@ -117,7 +117,7 @@ namespace Howest.MagicCards.DAL.Repositories
             Deck deck = GetDeck(deckId);
             if (deck != null)
             {
-                var cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);
+                CardDeck cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);
                 if (cardDeck != null)
                 {
                     cardDeck.Amount = amount;

@@ -8,7 +8,7 @@ using Howest.MagicCards.DAL.Repositories;
 using Type = System.Type;
 using Howest.MagicCards.MinimalAPI.Endpoints;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -19,7 +19,7 @@ builder.Services.AddAutoMapper(new Type[] {
     typeof(Howest.MagicCards.Shared.Mapping.DecksProfile) 
 });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

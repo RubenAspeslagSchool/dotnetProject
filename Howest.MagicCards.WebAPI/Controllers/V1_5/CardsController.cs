@@ -76,13 +76,13 @@ public class CardsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<CardDetailDTO>> GetCardById(long id)
     {
-        var card = await _cardRepository.GetCardByIdAsync(id);
+        Card card = await _cardRepository.GetCardByIdAsync(id);
         if (card == null)
         {
             return NotFound();
         }
 
-        var cardDetailDto = _mapper.Map<CardDetailDTO>(card);
+        CardDetailDTO cardDetailDto = _mapper.Map<CardDetailDTO>(card);
         return Ok(cardDetailDto);
     }
 

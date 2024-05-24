@@ -69,7 +69,7 @@ builder.Services.AddVersionedApiExplorer(
 builder.Services.AddResponseCaching();
 
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
