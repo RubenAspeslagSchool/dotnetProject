@@ -14,7 +14,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
             {
                 try
                 {
-                    var deck = repository.getDeck(deckId);
+                    var deck = repository.GetDeck(deckId);
                     ICollection<CardDeckReadDTO> cardDTO = mapper.Map<ICollection<CardDeckReadDTO>>(deck.CardDecks);
                     return Results.Ok(cardDTO);
                 } catch (ArgumentNullException ex)

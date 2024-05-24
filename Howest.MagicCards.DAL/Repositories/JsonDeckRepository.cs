@@ -137,10 +137,13 @@ namespace Howest.MagicCards.DAL.Repositories
         public void UpdateDeckName(long deckId, string newDeckName)
         {
             Deck deck = GetDeck(deckId);
-            if (deck != null)
+            if (deck is not null)
             {
                 deck.DeckName = newDeckName;
                 SaveDecks();
+            } else 
+            { 
+                throw new ArgumentNullException(nameof(deck), "deck not fount"); 
             }
         }
     }
