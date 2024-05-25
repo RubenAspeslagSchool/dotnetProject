@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text;
 using System.Xml.Linq;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Howest.MagicCards.Web.Components.Pages
 {
@@ -49,7 +50,10 @@ namespace Howest.MagicCards.Web.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             _cardFilterViewModel = new CardFilterViewModel();
-            _deckViewModel = new DeckViewModel();
+            _deckViewModel = new DeckViewModel
+            {
+                DeckName = "My Deck"
+            };
             _cardsHttpClient = HttpClientFactory.CreateClient("CardsAPI");
             _decksHttpClient = HttpClientFactory.CreateClient("DecksAPI");
 
@@ -184,6 +188,21 @@ namespace Howest.MagicCards.Web.Components.Pages
             await storage.SetAsync("ViewedDeck", _cardsInDeck);
         }
 
+        private async Task HandleAddDeckSubmit(EditContext editContext)
+        {
+           
+            Console.WriteLine("Form is being submitted");
+            Console.WriteLine("DeckViewModel before mapping: " + JsonSerializer.Serialize(_deckViewModel));
+            DeckCreateDTO deckWriteDTO = mapper.Map<DeckCreateDTO>(_deckViewModel);
+            Console.WriteLine("DeckCreateDTO after mapping: " + JsonSerializer.Serialize(deckWriteDTO));
+            HttpContent content = new StringContent(JsonSerializer.Serialize(deckWriteDTO), Encoding.UTF8, "application/json");
+            Console.WriteLine("add deck request body: " + JsonSerializer.Serialize(deckWriteDTO));
+            HttpResponseMessage response = await _decksHttpClient.PostAsync("decks", content);
+            if (response.IsSuccessStatusCode)
+            {
+                _allDecks = await GetAllDecks();
+            }
+        }
 
         private async void RemoveCard(DeckCardViewModel card)
         {
