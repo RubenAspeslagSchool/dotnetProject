@@ -150,7 +150,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
         private async Task<IEnumerable<RarirtyReadDTO>> GetAllRarities()
         {
-            HttpResponseMessage response = await _cardsHttpClient.GetAsync($"rarities");
+            HttpResponseMessage response = await _cardsHttpClient.GetAsync($"Rarirty");
 
             string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -158,10 +158,12 @@ namespace Howest.MagicCards.Web.Components.Pages
             {
                 IEnumerable<RarirtyReadDTO>? result =
                     JsonSerializer.Deserialize<IEnumerable<RarirtyReadDTO>>(apiResponse, _jsonOptions);
+                Console.WriteLine(result);
                 return result;
             }
             else
             {
+                Console.WriteLine(response);
                 return new List<RarirtyReadDTO>();
             }
         }
@@ -226,5 +228,3 @@ namespace Howest.MagicCards.Web.Components.Pages
         }
     }
 }
-
-
