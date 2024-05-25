@@ -9,6 +9,6 @@ namespace Howest.MagicCards.Shared.ViewModels
     public class DeckViewModel
     {
         public string? DeckName { get; set; }
-        public IEnumerable<DeckCardViewModel>? DeckCards { get; set; }
+        //public IEnumerable<DeckCardViewModel>? DeckCards { get; set; }
     }
 }

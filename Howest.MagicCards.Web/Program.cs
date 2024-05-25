@@ -9,16 +9,22 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+        });
+
 // Register HttpClientFactory and configure named clients
 builder.Services.AddHttpClient("CardsAPI", client =>
 {
-    // Replace this with your actual Cards API base address
     client.BaseAddress = new Uri("https://localhost:7195/api/V1.5/");
 });
 
 builder.Services.AddHttpClient("DecksAPI", client =>
 {
-    // Replace this with your actual Decks API base address
     client.BaseAddress = new Uri("https://localhost:7079/");
 });
 

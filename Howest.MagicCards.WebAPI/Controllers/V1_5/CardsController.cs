@@ -28,12 +28,10 @@ public class CardsController : ControllerBase
     public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCards(
         [FromQuery] CardFilter cardFilter,
         [FromQuery] string orderBy,
-        [FromServices] IConfiguration config
-    )
+        [FromServices] IConfiguration config)
     {
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
 
-        // Get IQueryable from the database context
         IQueryable<Card> queryableCards = _cardRepository.GetAllCards().AsQueryable();
 
         queryableCards = queryableCards.Filter(
@@ -52,18 +50,16 @@ public class CardsController : ControllerBase
             queryableCards = queryableCards.OrderBy(card => card.Id);
         }
 
-        // Apply pagination
         int totalRecords = await queryableCards.CountAsync();
         List<Card> pagedCards = await queryableCards
             .Skip((cardFilter.PageNumber - 1) * cardFilter.PageSize)
             .Take(cardFilter.PageSize)
             .ToListAsync();
 
-        IQueryable<CardReadDTO> cardReadDtos = pagedCards.AsQueryable()
-            .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider);
+        List<CardReadDTO> cardReadDtos = _mapper.Map<List<CardReadDTO>>(pagedCards);
 
         PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(
-            await cardReadDtos.ToListAsync(),
+            cardReadDtos,
             cardFilter.PageNumber,
             cardFilter.PageSize)
         {
@@ -72,6 +68,8 @@ public class CardsController : ControllerBase
 
         return Ok(result);
     }
+
+
 
     [HttpGet("{id}")]
     public async Task<ActionResult<CardDetailDTO>> GetCardById(long id)

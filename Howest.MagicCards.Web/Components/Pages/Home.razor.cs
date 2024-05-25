@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Text.Json;
 using System.Text;
 using System.Xml.Linq;
+using Microsoft.Extensions.Options;
 
 namespace Howest.MagicCards.Web.Components.Pages
 {
@@ -86,21 +87,66 @@ namespace Howest.MagicCards.Web.Components.Pages
 
         private async Task ShowAllCards()
         {
-            HttpResponseMessage response = await _cardsHttpClient.GetAsync("cards?" + GetQueryString());
+            // Set default values if they are null
+            _cardFilterViewModel.MaxPageSize ??= 150;
+            _cardFilterViewModel.PageNumber ??= 1;
+            _cardFilterViewModel.PageSize ??= 150;
+
+            string queryString = GetQueryString();
+            Console.WriteLine("Query String: " + queryString); // Log the query string
+
+            HttpResponseMessage response = await _cardsHttpClient.GetAsync("cards?" + queryString);
 
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                PagedResponse<IEnumerable<CardReadDTO>> result = 
-                    JsonSerializer.Deserialize<PagedResponse<IEnumerable<CardReadDTO>>>(apiResponse, _jsonOptions);
+                Console.WriteLine("API Response: " + apiResponse); // Add logging to see the response in the console
+
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                PagedResponse<IEnumerable<CardReadDTO>> result =
+                    JsonSerializer.Deserialize<PagedResponse<IEnumerable<CardReadDTO>>>(apiResponse, options);
+
                 _cards = result?.Data ?? new List<CardReadDTO>();
+                Console.WriteLine("Cards Count: " + _cards.Count()); // Log the count of cards received
             }
             else
             {
+                Console.WriteLine("Failed to fetch cards. Status Code: " + response.StatusCode);
                 _cards = new List<CardReadDTO>();
             }
         }
 
+        private string GetQueryString()
+        {
+            StringBuilder queryStringBuilder = new StringBuilder();
+
+            // TODO: Get default values from the config file
+            _cardFilterViewModel.MaxPageSize ??= 150;
+            _cardFilterViewModel.PageNumber ??= 1;
+            _cardFilterViewModel.PageSize ??= 150;
+
+            var properties = _cardFilterViewModel.GetType().GetProperties();
+            foreach (var prop in properties)
+            {
+                var value = prop.GetValue(_cardFilterViewModel);
+                if (value != null)
+                {
+                    string stringValue = value.ToString();
+                    if (!string.IsNullOrWhiteSpace(stringValue))
+                    {
+                        queryStringBuilder.Append($"&{prop.Name}={stringValue}");
+                    }
+                }
+            }
+
+            string queryString = queryStringBuilder.ToString();
+            Console.WriteLine("Query String: " + queryString); // Log the query string
+
+            return queryString.Length > 0 ? queryString.Substring(1) : queryString; // Remove leading '&' if exists
+        }
 
         private async Task<IEnumerable<RarirtyReadDTO>> GetAllRarities()
         {
@@ -118,23 +164,6 @@ namespace Howest.MagicCards.Web.Components.Pages
             {
                 return new List<RarirtyReadDTO>();
             }
-        }
-
-        private string GetQueryString()
-        {
-            string queryString = string.Empty;
-
-            _cardFilterViewModel.GetType().GetProperties().ToList().ForEach(prop =>
-            {
-                string? value = prop.GetValue(_cardFilterViewModel) is string propValue ? propValue : null;
-
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    queryString += $"&{prop.Name}={value}";
-                }
-            });
-
-            return queryString;
         }
 
         private async void AddCardToDeck(CardReadDTO card)
@@ -172,7 +201,6 @@ namespace Howest.MagicCards.Web.Components.Pages
 
         private async Task AddDeck()
         {
-            _deckViewModel.DeckCards = _cardsInDeck;
             DeckCreateDTO deckWriteDTO = mapper.Map<DeckCreateDTO>(_deckViewModel);
 
             HttpContent content =

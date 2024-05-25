@@ -1,7 +1,4 @@
 ﻿@page "/"
-
-
-
 <aside class="filter">
     <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" FormName="CardFilterForm" class="form">
         <div class="form-group">
@@ -46,22 +43,20 @@
         }
         else
         {
+            <p>Cards Count: @_cards.Count()</p> <!-- Add this to verify cards count in the UI -->
             <ul class="cards">
                 @foreach (CardReadDTO card in _cards)
                 {
                     <li @onclick="@(() => OnCardClick.InvokeAsync(card))">
                         <h3>@card.Name</h3>
-
                         @if (String.IsNullOrEmpty(card.ImageUrl))
                         {
                             <p>No Image found</p>
-
                         }
                         else
                         {
                             <img src="@card.ImageUrl" alt="Card Image" />
                         }
-
                         <p>@card.Text</p>
                         <div class="rarity-section">
                             <h4>Rarity:</h4>
@@ -75,12 +70,12 @@
                             <h4>Set:</h4>
                             <p>@card.Set</p>
                         </div>
-
                     </li>
                 }
             </ul>
         }
     </article>
+
 
 </div>
 
