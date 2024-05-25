@@ -10,6 +10,7 @@
 
 .cardList {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .cardList li {
