@@ -114,7 +114,7 @@
                 
                 <EditForm Model="@_deckViewModel" OnValidSubmit="HandleAddDeckSubmit" FormName="DeckForm" class="deck-builder">
                     <label for="deck-name">Deck Name:</label>
-                    <InputText id="deck-name" @bind-Value="_deckViewModel.DeckName" class="form-control"></InputText>
+                    <InputText id="deck-name" @bind-Value="_deckViewModel!.DeckName" class="form-control"></InputText>
                     <button type="submit" class="btn btn-info">Save</button>
                 </EditForm>
 

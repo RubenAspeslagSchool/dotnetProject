@@ -64,7 +64,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
         private async Task<IEnumerable<DeckReadDTO>?> GetAllDecks()
         {
-            HttpResponseMessage response = await _cardsHttpClient.GetAsync($"decks");
+            HttpResponseMessage response = await _decksHttpClient.GetAsync($"decks");
 
             string apiResponse = await response.Content.ReadAsStringAsync();
 
