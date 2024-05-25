@@ -1,0 +1,21 @@
+﻿.app {
+    display: flex;
+    background-color: #f8f9fa;
+    max-width: 100%;
+    width: 100%
+}
+.cards {
+    width:70%
+}
+
+.cardList {
+    display: flex;
+}
+
+.cardList li {
+    width: 32%;
+}
+
+.decks {
+    width: 29%
+}

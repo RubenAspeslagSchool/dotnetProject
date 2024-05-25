@@ -20,7 +20,7 @@ namespace Howest.MagicCards.Web.Components.Pages
         private IEnumerable<CardReadDTO>? _cards = null;
         private IEnumerable<RarirtyReadDTO>? _rarties = null;
         private IList<DeckCardViewModel> _cardsInDeck { get; set; } = new List<DeckCardViewModel>();
-        private IEnumerable<DeckReadDTO>? _olderDecks { get; set; }
+        private IEnumerable<DeckReadDTO>? _allDecks { get; set; }
 
         private CardFilterViewModel _cardFilterViewModel;
         private DeckViewModel _deckViewModel;
@@ -55,7 +55,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             await ShowAllCards();
             _rarties = await GetAllRarities();
-            _olderDecks = await GetAllDecks();
+            _allDecks = await GetAllDecks();
         }
 
         private async Task<IEnumerable<DeckReadDTO>?> GetAllDecks()
@@ -210,7 +210,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                _olderDecks = await GetAllDecks();
+                _allDecks = await GetAllDecks();
             }
 
         }
@@ -221,7 +221,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                _olderDecks = await GetAllDecks();
+                _allDecks = await GetAllDecks();
             }
         }
     }

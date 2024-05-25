@@ -1,97 +1,103 @@
 ﻿@page "/"
-<aside class="filter">
-    <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" FormName="CardFilterForm" class="form">
-        <div class="form-group">
-            <label for="card-name">Card Name:</label>
-            <InputText id="card-name" @bind-Value="@_cardFilterViewModel.CardName" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="card-text">Card Text:</label>
-            <InputText id="card-text" @bind-Value="@_cardFilterViewModel.CardText" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="card-artist">Artist Name:</label>
-            <InputText id="card-artist" @bind-Value="@_cardFilterViewModel.ArtistName" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="card-set">Set code:</label>
-            <InputText id="card-set" @bind-Value="@_cardFilterViewModel.SetCode" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="card-rarity">Rarity:</label>
-            <InputSelect id="card-rarity" @bind-Value="@_cardFilterViewModel.RarityCode" class="form-control">
-                <option value="">Not Selected</option>
-                @if (_rarties is not null)
-                {
-                    foreach (RarirtyReadDTO rarirty in _rarties)
-                    {
-                        <option value="@rarirty.RarityName">@rarirty.RarityName</option>
-                    }
-                }
-            </InputSelect>
-        </div>
-        <button type="submit" class="btn btn-info">Filter</button>
-    </EditForm>
-</aside>
+@using Howest.MagicCards.Shared.DTO
+@using Howest.MagicCards.Shared.ViewModels
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Options
 
-<div class="cards-info">
-    <article class="cards-article">
-        <h2>Cards</h2>
-        @if (_cards == null)
-        {
-            <p>No Cards found</p>
-        }
-        else
-        {
-            <p>Cards Count: @_cards.Count()</p> <!-- Add this to verify cards count in the UI -->
-            <ul class="cards">
-                @foreach (CardReadDTO card in _cards)
-                {
-                    <li @onclick="@(() => OnCardClick.InvokeAsync(card))">
-                        <h3>@card.Name</h3>
-                        @if (String.IsNullOrEmpty(card.ImageUrl))
+<div class="app">
+    <div class="cards">
+        <aside class="filter">
+            <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" FormName="CardFilterForm" class="form">
+                <div class="form-group">
+                    <label for="card-name">Card Name:</label>
+                    <InputText id="card-name" @bind-Value="@_cardFilterViewModel.CardName" class="form-control"></InputText>
+                </div>
+                <div class="form-group">
+                    <label for="card-text">Card Text:</label>
+                    <InputText id="card-text" @bind-Value="@_cardFilterViewModel.CardText" class="form-control"></InputText>
+                </div>
+                <div class="form-group">
+                    <label for="card-artist">Artist Name:</label>
+                    <InputText id="card-artist" @bind-Value="@_cardFilterViewModel.ArtistName" class="form-control"></InputText>
+                </div>
+                <div class="form-group">
+                    <label for="card-set">Set code:</label>
+                    <InputText id="card-set" @bind-Value="@_cardFilterViewModel.SetCode" class="form-control"></InputText>
+                </div>
+                <div class="form-group">
+                    <label for="card-rarity">Rarity:</label>
+                    <InputSelect id="card-rarity" @bind-Value="@_cardFilterViewModel.RarityCode" class="form-control">
+                        <option value="">Not Selected</option>
+                        @if (_rarties is not null)
                         {
-                            <p>No Image found</p>
+                            foreach (RarirtyReadDTO rarirty in _rarties)
+                            {
+                                <option value="@rarirty.RarityName">@rarirty.RarityName</option>
+                            }
                         }
-                        else
-                        {
-                            <img src="@card.ImageUrl" alt="Card Image" />
-                        }
-                        <p>@card.Text</p>
-                        <div class="rarity-section">
-                            <h4>Rarity:</h4>
-                            <p>@card.Rarity</p>
-                        </div>
-                        <div class="artist-section">
-                            <h4>Artist:</h4>
-                            <p>@card.Artist</p>
-                        </div>
-                        <div class="set-section">
-                            <h4>Set:</h4>
-                            <p>@card.Set</p>
-                        </div>
-                    </li>
+                    </InputSelect>
+                </div>
+                <button type="submit" class="btn btn-info">Filter</button>
+            </EditForm>
+        </aside>
+
+
+        <article class="cards-article">
+            <h2>Cards</h2>
+            @if (_cards == null)
+            {
+                <p>No Cards found</p>
+            }
+            else
+            {
+                <p>Amount of cards shown: @_cards.Count()</p> 
+                <ul class="cardList">
+                    @foreach (CardReadDTO card in _cards)
+                    {
+                        <li @onclick="@(() => OnCardClick.InvokeAsync(card))">
+                            <h3>@card.Name</h3>
+                            @if (String.IsNullOrEmpty(card.ImageUrl))
+                            {
+                                <p>No Image found</p>
+                            }
+                            else
+                            {
+                                <img src="@card.ImageUrl" alt="Card Image" />
+                            }   
+                            <p>@card.Text</p>
+                            <div class="rarity-section">
+                                <h4>Rarity:</h4>
+                                <p>@card.Rarity</p>
+                            </div>
+                            <div class="artist-section">
+                                <h4>Artist:</h4>
+                                <p>@card.Artist</p>
+                            </div>
+                            <div class="set-section">
+                                <h4>Set:</h4>
+                                <p>@card.Set</p>
+                            </div>
+                        </li>
                 }
             </ul>
         }
     </article>
-
-
 </div>
 
 
 
 <article class="decks">
-    <article class="old-decks">
+    <article class="all-decks">
         <section class="header">
             <h3>Older Decks:</h3>
         </section>
         <ul>
-            @if (_olderDecks is not null)
+            @if (_allDecks is not null)
             {
-                foreach (DeckReadDTO deck in _olderDecks)
+                foreach (DeckReadDTO deck in _allDecks)
                 {
-                    <li class="old-deck">
+                    <li class="all-deck">
                         <p>@deck.DeckName</p>
                         <button class="btn btn-info" @onclick="@(() => RemoveDeck(deck.Id))">Remove</button>
                     </li>
@@ -105,7 +111,7 @@
                 <h3>Current Deck -</h3>
                 <p class="total-cards">1</p>
             </section>
-            <EditForm FormName="CreateDeckForm" Model="@_deckViewModel" OnValidSubmit="@AddDeck" class="deck-builder">
+                <EditForm FormName="CreateDeckForm" Model="@_deckViewModel" OnValidSubmit="@AddDeck" class="deck-builder">
                 <label for="deck-name">Deck Name:</label>
                 <InputText id="deck-name" @bind-Value="@_deckViewModel.DeckName" class="form-control"></InputText>
                 <button type="submit" class="btn btn-info">Save</button>
@@ -126,3 +132,4 @@
         </ul>
     </article>
 </article>
+</div>

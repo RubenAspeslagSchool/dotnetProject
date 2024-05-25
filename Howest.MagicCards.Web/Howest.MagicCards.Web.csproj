@@ -5,7 +5,21 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  
   <ItemGroup>
+    <Content Include="Components\Pages\Home.razor.cs" />
+  </ItemGroup>
+	<ItemGroup>
+		<Content Update="Components\Pages\Home.razor.css">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Compile Update="Components\Pages\Home.razor.cs">
+			<DependentUpon>Home.razor</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+
+	<ItemGroup>
     <ProjectReference Include="..\Howest.MagicCards.DAL\Howest.MagicCards.DAL.csproj" />
     <ProjectReference Include="..\Howest.MagicCards.Shared\Howest.MagicCards.Shared.csproj" />
     <ProjectReference Include="..\Howest.MagicCards.WebAPI\Howest.MagicCards.WebAPI.csproj" />
