@@ -34,9 +34,9 @@ public class CardsController : ControllerBase
     )
     {
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
-        if (await _cardRepository.GetAllCardsAsync() is IQueryable<Card> allCards)
-        {
-            allCards = allCards.Filter(
+        IQueryable<Card> queryableCards = _cardRepository.GetAllCards().AsQueryable();
+
+        queryableCards = queryableCards.Filter(
                 cardFilter.CardName,
                 cardFilter.CardText,
                 cardFilter.ArtistName,
@@ -44,18 +44,14 @@ public class CardsController : ControllerBase
                 cardFilter.RarityCode);
 
 
-            List<Card> pagedCards = await allCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize);
+            List<Card> pagedCards = await queryableCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize);
             IQueryable<CardReadDTO> cardReadDtos = pagedCards.AsQueryable().ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider);
             PagedResponse<IEnumerable<CardReadDTO>> result = new PagedResponse<IEnumerable<CardReadDTO>>(cardReadDtos, cardFilter.PageNumber, cardFilter.PageSize)
             {
-                TotalRecords = await allCards.CountAsync()
+                TotalRecords = await queryableCards.CountAsync()
             };
 
             return Ok(result);
-        }
-        else
-        {
-            return NotFound("No cards found");
-        }
+      
     }
 }
