@@ -9,6 +9,7 @@ using System.Text;
 using System.Xml.Linq;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Components.Forms;
+using Howest.MagicCards.DAL.Models;
 
 namespace Howest.MagicCards.Web.Components.Pages
 {
@@ -29,6 +30,7 @@ namespace Howest.MagicCards.Web.Components.Pages
         private readonly JsonSerializerOptions _jsonOptions;
         private HttpClient _cardsHttpClient;
         private HttpClient _decksHttpClient;
+        private Deck _currentDeck { get; set; } = new Deck();
 
         [Inject]
         public IHttpClientFactory HttpClientFactory { get; set; }
@@ -60,6 +62,8 @@ namespace Howest.MagicCards.Web.Components.Pages
             await ShowAllCards();
             _rarties = await GetAllRarities();
             _allDecks = await GetAllDecks();
+            _currentDeck = mapper.Map<Deck>(_allDecks?.OrderByDescending(deck => deck.Id).FirstOrDefault()) ;
+
         }
 
         private async Task<IEnumerable<DeckReadDTO>?> GetAllDecks()
@@ -172,13 +176,13 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
         }
 
-        private async void AddCardToDeck(CardReadDTO card)
+        private async void AddCardToDeck(long cardId)
         {
-            DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == int.Parse(card.Id));
+            DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == cardId);
 
             if (cardViewModel is null)
             {
-                _cardsInDeck.Add(new DeckCardViewModel { Amount = 1, CardId = int.Parse(card.Id), CardName = card.Name });
+                _cardsInDeck.Add(new DeckCardViewModel { Amount = 1, CardId = cardId });
             }
             else
             {
@@ -188,6 +192,20 @@ namespace Howest.MagicCards.Web.Components.Pages
             await storage.SetAsync("ViewedDeck", _cardsInDeck);
         }
 
+        public void ShowCardDetails(long cardId) 
+        {
+            
+        }
+
+        public void HideCardDetails(long cardId)
+        {
+
+        }
+
+        public void ShowCardDetailsFromApi(long cardId) 
+        {
+            
+        }
         private async Task HandleAddDeckSubmit(EditContext editContext)
         {
            
