@@ -44,6 +44,10 @@ namespace Howest.MagicCards.DAL.Extensions
             if (cardDeck is not null) 
             {
                 cardDeck.Amount--;
+                if (cardDeck.Amount <= 0)
+                {
+                    deck.CardDecks.Remove(cardDeck);
+                }
             } 
             else
             { 
