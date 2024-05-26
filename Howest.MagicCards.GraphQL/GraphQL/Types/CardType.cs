@@ -22,7 +22,7 @@ public class CardType: ObjectGraphType<Card>
         Field(c => c.RarityCode, type: typeof(StringGraphType));
         Field<ArtistType>(
             "Artist",
-            resolve: context => artistRepository.GetArtist((int) context.Source.Id)
+            resolve: context => artistRepository.GetArtistAsync((int) context.Source.Id)
             );
     }
 }

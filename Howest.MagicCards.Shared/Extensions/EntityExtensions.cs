@@ -16,5 +16,7 @@ namespace Howest.MagicCards.Shared.Extensions
                 .Take(pageSize)
                 .ToListAsync();
         }
+
+       
     }
 }

@@ -38,5 +38,9 @@ namespace Howest.MagicCards.DAL.Repositories
                 .Include(c => c.SetCodeNavigation)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
+        public List<Card> GetAllCardsByArtistId(long ArtistId)
+        {
+            return _db.Cards.Where(c => c.ArtistId == ArtistId).ToList();
+        }
     }
 }

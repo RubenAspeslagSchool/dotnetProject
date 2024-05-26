@@ -1,11 +1,10 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using GraphQLAPI.GraphQLTypes;
 using Howest.MagicCards.DAL.Repositories;
-using Howest.MagicCards.Shared.Extensions;
 using Howest.MagicCards.Shared.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-
-namespace GraphQLAPI.GraphQLTypes;
 
 public class RootQuery : ObjectGraphType
 {
@@ -17,55 +16,56 @@ public class RootQuery : ObjectGraphType
         PaginationFilter pagingOptions = pagingFilter.Value;
 
         #region Cards
-        Field<ListGraphType<CardType>>(
+        FieldAsync<ListGraphType<CardType>>(
             "Cards",
             Description = "Get all cards",
             arguments: new QueryArguments
             {
                 new QueryArgument<IntGraphType> { Name = "page", DefaultValue = pagingOptions.PageNumber },
             },
-            resolve: context =>
+            resolve: async context =>
             {
                 int page = context.GetArgument<int>("page");
-
-                return cardRepository.GetAllCards()
-                .ToPagedList(page, pagingOptions.PageSize)
-                .ToList();
+                // Assuming ToPagedListAsync is an extension method you need to implement or replace with appropriate logic
+                var cards = await cardRepository.GetAllCards()
+                    .Skip((page - 1) * pagingOptions.PageSize)
+                    .Take(pagingOptions.PageSize)
+                    .ToListAsync(); // Use EF Core's ToListAsync for async operation
+                return cards;
             }
         );
         #endregion
 
         #region Artists
-        Field<ListGraphType<ArtistType>>(
+        FieldAsync<ListGraphType<ArtistType>>(
             "Artists",
             Description = "Get All Artists",
             arguments: new QueryArguments
             {
                 new QueryArgument<IntGraphType> {Name = "limit", DefaultValue = pagingOptions.PageSize}
             },
-            resolve: context =>
+            resolve: async context =>
             {
                 int limit = context.GetArgument<int>("limit");
-
-                return artistRepository.GetAllArtists().Take(limit).ToList();
+                var artists = await artistRepository.GetAllArtistsAsync();
+                return artists.Take(limit).ToList();
             }
         );
 
-        Field<ArtistType>(
+        FieldAsync<ArtistType>(
             "Artist",
             Description = "Get Artist",
             arguments: new QueryArguments
             {
                 new QueryArgument<NonNullGraphType<IntGraphType>> {Name = "artistId"}
             },
-            resolve: context =>
+            resolve: async context =>
             {
                 int artistId = context.GetArgument<int>("artistId");
-
-                return artistRepository.GetArtist(artistId);
+                var artist = await artistRepository.GetArtistAsync(artistId);
+                return artist;
             }
         );
         #endregion
     }
 }
-

@@ -7,7 +7,7 @@ namespace GraphQLAPI.GraphQLTypes;
 
 public class ArtistType: ObjectGraphType<Artist>
 {
-    public ArtistType(ICardRepository repository)
+    public  ArtistType(ICardRepository repository)
     {
         Name = "Artist";
         Field(a => a.Id);
@@ -23,7 +23,7 @@ public class ArtistType: ObjectGraphType<Artist>
                 {
                     int limit = context.GetArgument<int>("limit");
 
-                    return repository.GetAllCardsByArtistId((int)context.Source.Id).Take(limit).ToList();
+                    return  repository.GetAllCardsByArtistId(context.Source.Id).Take(limit).ToList();
                 }
             );
     }
