@@ -21,6 +21,7 @@ namespace Howest.MagicCards.Web.Components.Pages
         private Dictionary<long, bool> cardDetailFromApiVisibility = new Dictionary<long, bool>();
 
         public EventCallback<CardReadDTO> OnCardClick { get; set; }
+        private List<CardDetailDTO> _cardDetailsFromApi { get; set; }
         private IEnumerable<CardReadDTO>? _cards = null;
         private IEnumerable<RarirtyReadDTO>? _rarties = null;
         private IList<DeckCardViewModel> _cardsInDeck { get; set; } = new List<DeckCardViewModel>();
@@ -60,6 +61,8 @@ namespace Howest.MagicCards.Web.Components.Pages
             };
             _cardsHttpClient = HttpClientFactory.CreateClient("CardsAPI");
             _decksHttpClient = HttpClientFactory.CreateClient("DecksAPI");
+
+            _cardDetailsFromApi = new List<CardDetailDTO>();
 
             await ShowAllCards();
             _rarties = await GetAllRarities();
@@ -243,7 +246,7 @@ namespace Howest.MagicCards.Web.Components.Pages
                 // Deserialize and store the extended details as needed
                 // Assuming CardDetailDTO is the extended detail DTO
                 CardDetailDTO? cardDetail = JsonSerializer.Deserialize<CardDetailDTO>(apiResponse, _jsonOptions);
-                // Store or display the cardDetail as needed
+                _cardDetailsFromApi.Add(cardDetail);
             }
             else
             {

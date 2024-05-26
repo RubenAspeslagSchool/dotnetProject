@@ -84,16 +84,14 @@
                                 <button class="btn btn-info" @onclick="@(() => HideCardDetails(long.Parse(card.Id)))">Hide Details</button>
 
                                 <div class="cardDetailFromApi" style="display: @(cardDetailFromApiVisibility.ContainsKey(long.Parse(card.Id)) && cardDetailFromApiVisibility[long.Parse(card.Id)] ? "block" : "none")">
-                                   @*  <!-- the extended detail data comes here -->
-                                    <!-- @* Assuming cardDetail is stored in a dictionary *@ -->
-                                    <!-- @if (cardDetailFromApi.ContainsKey(card.Id))  -->
-                                    <!--{-->
-                                        <!--         <div> -->
-                                    <!--   Render the extended details -->
-                                    <!-- <p>@cardDetailFromApi[card.Id].ExtendedInfo</p> -->
-                                            <!-- Add more fields as necessary -->
-                                    <!--</div> -->
-                                    <!-- } --> *
+
+                                    @if (_cardDetailsFromApi.FirstOrDefault(c => c.Id == long.Parse(card.Id)) is not null)
+                                    {
+                                     <div> 
+                                            <p> artist: @_cardDetailsFromApi.FirstOrDefault(c => c.Id == long.Parse(card.Id)).Artist</p>
+
+                                      </div> 
+                                    } 
 
                                 </div>
                             </div>
