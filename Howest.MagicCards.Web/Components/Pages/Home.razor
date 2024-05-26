@@ -146,7 +146,7 @@
                 {
                     foreach (DeckCardViewModel deckCard in _cardsInDeck)
                     {
-                        <li class="deck-item" @onclick="@(() => RemoveCard(deckCard))">
+                        <li class="deck-item" @onclick="@(() =>  RemoveCard(deckCard))">
                             <p class="counter">@deckCard.Amount</p>
                             <p class="card-name">@deckCard.CardName</p>
                         </li>

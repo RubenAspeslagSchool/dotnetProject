@@ -257,11 +257,13 @@ namespace Howest.MagicCards.Web.Components.Pages
             if (response.IsSuccessStatusCode)
             {
                 _allDecks = await GetAllDecks();
+                StateHasChanged();
             }
         }
 
         private async void RemoveCard(DeckCardViewModel card)
         {
+            Console.WriteLine("removing card" + card);
             DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == card.CardId);
 
             if (cardViewModel?.Amount > 1)
