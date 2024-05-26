@@ -197,12 +197,14 @@ namespace Howest.MagicCards.Web.Components.Pages
         // Method to show card details
         public void ShowCardDetails(long cardId)
         {
+            Console.WriteLine("showing cardDetails ...");
             if (!cardDetailVisibility.ContainsKey(cardId))
             {
                 cardDetailVisibility[cardId] = false;
             }
 
             cardDetailVisibility[cardId] = true;
+            StateHasChanged();
         }
 
         // Method to hide card details
@@ -212,6 +214,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             {
                 cardDetailVisibility[cardId] = false;
             }
+            StateHasChanged();
         }
 
         // Method to show additional card details from API
@@ -238,6 +241,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             {
                 Console.WriteLine($"Failed to fetch card details for card ID {cardId}. Status Code: {response.StatusCode}");
             }
+            StateHasChanged();
         }
 
         private async Task HandleAddDeckSubmit(EditContext editContext)
@@ -270,6 +274,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
 
             await storage.SetAsync("ViewedDeck", _cardsInDeck);
+            StateHasChanged();
         }
 
         private async Task AddDeck()
@@ -298,6 +303,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             {
                 _allDecks = await GetAllDecks();
             }
+            StateHasChanged();
         }
     }
 }
