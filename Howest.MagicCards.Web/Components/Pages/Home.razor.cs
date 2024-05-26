@@ -17,7 +17,9 @@ namespace Howest.MagicCards.Web.Components.Pages
     {
         public IEnumerable<CardReadDTO> CardsList { get; set; }
 
-      
+        private Dictionary<long, bool> cardDetailVisibility = new Dictionary<long, bool>();
+        private Dictionary<long, bool> cardDetailFromApiVisibility = new Dictionary<long, bool>();
+
         public EventCallback<CardReadDTO> OnCardClick { get; set; }
         private IEnumerable<CardReadDTO>? _cards = null;
         private IEnumerable<RarirtyReadDTO>? _rarties = null;
@@ -192,20 +194,52 @@ namespace Howest.MagicCards.Web.Components.Pages
             await storage.SetAsync("ViewedDeck", _cardsInDeck);
         }
 
-        public void ShowCardDetails(long cardId) 
+        // Method to show card details
+        public void ShowCardDetails(long cardId)
         {
-            
+            if (!cardDetailVisibility.ContainsKey(cardId))
+            {
+                cardDetailVisibility[cardId] = false;
+            }
+
+            cardDetailVisibility[cardId] = true;
         }
 
+        // Method to hide card details
         public void HideCardDetails(long cardId)
         {
-
+            if (cardDetailVisibility.ContainsKey(cardId))
+            {
+                cardDetailVisibility[cardId] = false;
+            }
         }
 
-        public void ShowCardDetailsFromApi(long cardId) 
+        // Method to show additional card details from API
+        public async void ShowCardDetailsFromApi(long cardId)
         {
-            
+            if (!cardDetailFromApiVisibility.ContainsKey(cardId))
+            {
+                cardDetailFromApiVisibility[cardId] = false;
+            }
+
+            cardDetailFromApiVisibility[cardId] = true;
+
+            // Fetch the extended details from API
+            HttpResponseMessage response = await _cardsHttpClient.GetAsync($"cards/{cardId}");
+            if (response.IsSuccessStatusCode)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                // Deserialize and store the extended details as needed
+                // Assuming CardDetailDTO is the extended detail DTO
+                CardDetailDTO? cardDetail = JsonSerializer.Deserialize<CardDetailDTO>(apiResponse, _jsonOptions);
+                // Store or display the cardDetail as needed
+            }
+            else
+            {
+                Console.WriteLine($"Failed to fetch card details for card ID {cardId}. Status Code: {response.StatusCode}");
+            }
         }
+
         private async Task HandleAddDeckSubmit(EditContext editContext)
         {
            
@@ -256,7 +290,9 @@ namespace Howest.MagicCards.Web.Components.Pages
 
         private async Task RemoveDeck(long id)
         {
+            Console.WriteLine("removing deck" +  id + "...");
             HttpResponseMessage response = await _decksHttpClient.DeleteAsync($"decks/{id}");
+            Console.WriteLine(response);
 
             if (response.IsSuccessStatusCode)
             {

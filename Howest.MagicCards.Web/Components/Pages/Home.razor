@@ -66,7 +66,7 @@
                                 <img src="@card.ImageUrl" alt="Card Image" />
                             }
 
-                            <div class="hidden cardDetail">
+                            <div class="cardDetail" style="display: @(cardDetailVisibility.ContainsKey(long.Parse(card.Id)) && cardDetailVisibility[long.Parse(card.Id)] ? "block" : "none")">
                                 <p>@card.Text</p>
                                 <div class="rarity-section">
                                     <h4>Rarity:</h4>
@@ -83,16 +83,27 @@
                                 <button class="btn btn-info" @onclick="@(() => ShowCardDetailsFromApi(long.Parse(card.Id)))">Show more Details</button>
                                 <button class="btn btn-info" @onclick="@(() => HideCardDetails(long.Parse(card.Id)))">Hide Details</button>
 
-                                <div class="hidden cardDetailFromApi">
-                                    <!-- the extended detail data comes here -->
+                                <div class="cardDetailFromApi" style="display: @(cardDetailFromApiVisibility.ContainsKey(long.Parse(card.Id)) && cardDetailFromApiVisibility[long.Parse(card.Id)] ? "block" : "none")">
+                                   @*  <!-- the extended detail data comes here -->
+                                    <!-- @* Assuming cardDetail is stored in a dictionary *@ -->
+                                    <!-- @if (cardDetailFromApi.ContainsKey(card.Id))  -->
+                                    <!--{-->
+                                        <!--         <div> -->
+                                    <!--   Render the extended details -->
+                                    <!-- <p>@cardDetailFromApi[card.Id].ExtendedInfo</p> -->
+                                            <!-- Add more fields as necessary -->
+                                    <!--</div> -->
+                                    <!-- } --> *
+
                                 </div>
                             </div>
-                           
+
                             <!-- Button for showing details -->
                             <button class="btn btn-info" @onclick="@(() => ShowCardDetails(long.Parse(card.Id)))">Show Details</button>
                             <!-- Button for adding to current deck -->
                             <button class="btn btn-primary" @onclick="@(() => AddCardToDeck(long.Parse(card.Id)))">Add to Current Deck</button>
                         </li>
+                    }
                     }
                 </ul>
             }
@@ -110,8 +121,10 @@
                 foreach (DeckReadDTO deck in _allDecks)
                 {
                     <li class="all-deck">
-                        <p>@deck.DeckName</p>
-                        <button class="btn btn-info" @onclick="@(() => RemoveDeck(deck.Id))">Remove</button>
+                            <p>
+                                @deck.DeckName 
+                                <button class="btn btn-info" @onclick="@(() => RemoveDeck(deck.Id))">Remove</button>
+                            </p>
                     </li>
                 }
             }
