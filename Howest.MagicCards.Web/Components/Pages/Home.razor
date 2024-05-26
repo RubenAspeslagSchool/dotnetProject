@@ -89,6 +89,7 @@
                                     {
                                      <div> 
                                             <p> artist: @_cardDetailsFromApi.FirstOrDefault(c => c.Id == long.Parse(card.Id)).Artist.FullName</p>
+                                            <p> created at: @_cardDetailsFromApi.FirstOrDefault(c => c.Id == long.Parse(card.Id)).CreatedAt</p>
 
                                       </div> 
                                     } 
