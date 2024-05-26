@@ -178,19 +178,27 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
         }
 
-        private async void AddCardToDeck(long cardId)
+        private async void AddCardToDeck(CardReadDTO card)
         {
-            DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == cardId);
+            DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == long.Parse( card.Id));
 
             if (cardViewModel is null)
             {
-                _cardsInDeck.Add(new DeckCardViewModel { Amount = 1, CardId = cardId });
+
+                _cardsInDeck.Add(new DeckCardViewModel { Amount = 1, CardId = long.Parse( card.Id), CardName= card.Name });
             }
             else
             {
                 cardViewModel.Amount++;
             }
 
+            await storage.SetAsync("ViewedDeck", _cardsInDeck);
+        }
+
+        private async void AddCardIdToDeck(long? cardId)
+        {
+            DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == cardId);
+           cardViewModel.Amount++;
             await storage.SetAsync("ViewedDeck", _cardsInDeck);
         }
 

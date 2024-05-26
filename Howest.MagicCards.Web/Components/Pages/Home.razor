@@ -101,7 +101,7 @@
                             <!-- Button for showing details -->
                             <button class="btn btn-info" @onclick="@(() => ShowCardDetails(long.Parse(card.Id)))">Show Details</button>
                             <!-- Button for adding to current deck -->
-                            <button class="btn btn-primary" @onclick="@(() => AddCardToDeck(long.Parse(card.Id)))">Add to Current Deck</button>
+                            <button class="btn btn-primary" @onclick="@(() => AddCardToDeck(card))">Add to Current Deck</button>
                         </li>
                     }
                     }
@@ -146,9 +146,11 @@
                 {
                     foreach (DeckCardViewModel deckCard in _cardsInDeck)
                     {
-                        <li class="deck-item" @onclick="@(() =>  RemoveCard(deckCard))">
-                            <p class="counter">@deckCard.Amount</p>
-                            <p class="card-name">@deckCard.CardName</p>
+                        <li class="deck-item" >
+                            <p class="card-name">name: @deckCard.CardName</p>
+                            <p class="counter">amount: @deckCard.Amount</p>
+                            <button @onclick="@(() =>  AddCardIdToDeck( deckCard.CardId))">+</button>
+                            <button @onclick="@(() =>  RemoveCard(deckCard))">-</button>
                         </li>
                     }
                 }
