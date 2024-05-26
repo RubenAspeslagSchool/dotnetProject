@@ -51,7 +51,7 @@ namespace Howest.MagicCards.DAL.Extensions
             } 
             else
             { 
-                throw new Exception("Card not found"); 
+                throw new ArgumentNullException("Card not found"); 
             }
         }
     }

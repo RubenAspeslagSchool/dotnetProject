@@ -28,11 +28,11 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                     repository.UpdateDeckName(id, updatedDeckDTO.DeckName);
                     return Results.Ok("Deck updated successfully");
                 }
-                catch (ArgumentNullException)
+                catch (ArgumentNullException ex)
                 {
-                    return Results.NotFound("Deck not found");
+                    return Results.NotFound(ex.Message);
                 }
-                
+
             });
 
             group.MapDelete("/{id}", (IDeckRepository repository, int id) =>
@@ -42,10 +42,10 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                     repository.RemoveDeck(id);
                     return Results.Ok("Deck deleted successfully");
                 }
-                catch (Exception)
+                catch (ArgumentNullException ex)
                 {
-                    return Results.NotFound("Deck not found");
-                }   
+                    return Results.NotFound(ex.Message);
+                }
             });
 
             return group;

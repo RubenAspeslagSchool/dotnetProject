@@ -19,7 +19,7 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                     return Results.Ok(cardDTO);
                 } catch (ArgumentNullException ex)
                 {
-                    return Results.NotFound("Deck not found");
+                    return Results.NotFound(ex.Message);
                 }               
             });
 
@@ -31,10 +31,9 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                     repository.AddCardToDeck(deckId, card.CardId);
                     return Results.Ok("card added to deck successfully");
                 }
-                catch (Exception)
+                catch (ArgumentNullException ex)
                 {
-
-                    return Results.NotFound("Deck not found");
+                    return Results.NotFound(ex.Message);
                 }
             });
 
@@ -46,9 +45,9 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                     repository.RemoveCardFromDeck(deckId, cardId);
                     return Results.Ok("Card removed from deck successfully");
                 }
-                catch (ArgumentNullException)
+                catch (ArgumentNullException ex)
                 {
-                   return Results.NotFound("Deck not found");
+                    return Results.NotFound(ex.Message);
                 }
             });
             
@@ -61,9 +60,10 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                 {
                     repository.UpdateCardAmountInDeck(deckId, cardId, amountDTO.Amount);
                     return Results.Ok("Card updated successfully");
-                } catch (ArgumentNullException)
+                }
+                catch (ArgumentNullException ex)
                 {
-                    return Results.NotFound("Deck not found in deck");
+                    return Results.NotFound(ex.Message);
                 }
             });
             return group;
