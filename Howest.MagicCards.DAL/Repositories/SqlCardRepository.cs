@@ -42,5 +42,13 @@ namespace Howest.MagicCards.DAL.Repositories
         {
             return _db.Cards.Where(c => c.ArtistId == ArtistId).ToList();
         }
+
+        public async Task<List<Card>> GetCardsByPageAsync(int page, int pageSize)
+        {
+            return await _db.Cards.Include(c => c.Artist)
+                                  .Skip((page - 1) * pageSize)
+                                  .Take(pageSize)
+                                  .ToListAsync();
+        }
     }
 }
