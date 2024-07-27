@@ -29,10 +29,6 @@ namespace Howest.MagicCards.Shared.DTO
         public string Variations { get; init; }
         public DateTime? CreatedAt { get; init; }
         public DateTime? UpdatedAt { get; init; }
-        public virtual Artist Artist { get; init; }
-        public virtual ICollection<CardColor> CardColors { get; init; } = new List<CardColor>();
-        public virtual ICollection<CardType> CardTypes { get; init; } = new List<CardType>();
-        public virtual Rarity RarityCodeNavigation { get; init; }
-        public virtual Set SetCodeNavigation { get; init; }
+       
     }
 }
