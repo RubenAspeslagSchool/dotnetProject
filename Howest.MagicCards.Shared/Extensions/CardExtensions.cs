@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Howest.MagicCards.Shared.Extensions
 {
@@ -30,5 +31,25 @@ namespace Howest.MagicCards.Shared.Extensions
             return filteredCards.OrderBy(card => card.Id);
         }
 
+        public static IQueryable<Card> ApplySorting(this IQueryable<Card> query, string orderBy)
+        {
+            if (!string.IsNullOrWhiteSpace(orderBy))
+            {
+                return orderBy.ToLower() switch
+                {
+                    "name" => query.OrderBy(card => card.Name),
+                    "artist" => query.OrderBy(card => card.Artist.FullName),
+                    _ => query,
+                };
+            } return query.OrderBy(card => card.Id);
+        }
+
+        public async static  Task<List<Card>> ApplyPaging(this  IQueryable<Card> queryableCards, CardFilter cardFilter)
+        {
+            return  await queryableCards
+            .Skip((cardFilter.PageNumber - 1) * cardFilter.PageSize)
+            .Take(cardFilter.PageSize)
+            .ToListAsync();
+        }
     }
 }

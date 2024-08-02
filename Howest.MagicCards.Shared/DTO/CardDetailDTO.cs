@@ -29,6 +29,7 @@ namespace Howest.MagicCards.Shared.DTO
         public string Variations { get; init; }
         public DateTime? CreatedAt { get; init; }
         public DateTime? UpdatedAt { get; init; }
+        public string ArtistName { get; init; }
        
     }
 }

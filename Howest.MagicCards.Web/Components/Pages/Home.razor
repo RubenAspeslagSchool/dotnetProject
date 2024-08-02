@@ -87,8 +87,8 @@
 
                                     @if (_cardDetailsFromApi.FirstOrDefault(c => c.Id == long.Parse(card.Id)) is not null)
                                     {
-                                     <div> 
-                                            <p> artist: @_cardDetailsFromApi.FirstOrDefault(c => c.Id == long.Parse(card.Id)).Artist.FullName</p>
+                                     <div>
+                                            <p> artist: @_cardDetailsFromApi.FirstOrDefault(c => c.Id == long.Parse(card.Id)).ArtistName</p>
                                             <p> created at: @_cardDetailsFromApi.FirstOrDefault(c => c.Id == long.Parse(card.Id)).CreatedAt</p>
 
                                       </div> 
