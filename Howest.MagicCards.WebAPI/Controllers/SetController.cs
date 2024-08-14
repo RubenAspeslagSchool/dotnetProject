@@ -1,4 +1,5 @@
-﻿using Howest.MagicCards.DAL.Models;
+﻿using AutoMapper;
+using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,10 @@ namespace Howest.MagicCards.WebAPI.Controllers
     public class SetController : ControllerBase
     {
         private readonly ISetReposetory _setReposetory;
+        private readonly IMapper _mapper;
 
-       public SetController(ISetReposetory setReposetory)
+
+        public SetController(ISetReposetory setReposetory)
         {
             _setReposetory = setReposetory;
         }
@@ -26,7 +29,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
             List<Set> allSets = await _setReposetory.GetAllSetsAsync();
             if (allSets.Any())
             {
-                List<SetReadDTO> setReadDtos = allSets.Select(r => new SetReadDTO { Name = r.Name, Code = r.Code }).ToList();
+                List<SetReadDTO> setReadDtos = _mapper.Map<List<SetReadDTO>>(allSets);
                 return Ok(setReadDtos);
             }
             else

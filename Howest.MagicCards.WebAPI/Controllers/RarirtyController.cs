@@ -1,4 +1,5 @@
-﻿using Howest.MagicCards.DAL.Models;
+﻿using AutoMapper;
+using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
     public class RarirtyController : ControllerBase
     {
         private readonly IRarityRepository _rarityRepository;
-
+        private readonly IMapper _mapper;
         public RarirtyController(IRarityRepository rarityRepository)
         {
             _rarityRepository = rarityRepository;
@@ -25,7 +26,8 @@ namespace Howest.MagicCards.WebAPI.Controllers
             List<Rarity> allRarities = await _rarityRepository.GetAllRaritiesAsync();
             if (allRarities.Any())
             {
-                List<RarirtyReadDTO> rarityReadDtos = allRarities.Select(r => new RarirtyReadDTO { RarityName = r.Name }).ToList();
+                
+                List<RarirtyReadDTO> rarityReadDtos = _mapper.Map<List<RarirtyReadDTO>>(allRarities);
                 return Ok(rarityReadDtos);
             }
             else
