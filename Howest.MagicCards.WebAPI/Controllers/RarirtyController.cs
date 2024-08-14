@@ -15,9 +15,10 @@ namespace Howest.MagicCards.WebAPI.Controllers
     {
         private readonly IRarityRepository _rarityRepository;
         private readonly IMapper _mapper;
-        public RarirtyController(IRarityRepository rarityRepository)
+        public RarirtyController(IRarityRepository rarityRepository, IMapper mapper)
         {
             _rarityRepository = rarityRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]

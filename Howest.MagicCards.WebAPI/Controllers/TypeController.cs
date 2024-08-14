@@ -1,4 +1,5 @@
-﻿using Howest.MagicCards.DAL.Models;
+﻿using AutoMapper;
+using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,12 @@ namespace Howest.MagicCards.WebAPI.Controllers
     public class TypeController : ControllerBase
     {
         private readonly ITypesReposetory _typesReposetory;
-        public TypeController(ITypesReposetory typesReposetory)
+        private readonly IMapper _mapper;
+
+        public TypeController(ITypesReposetory typesReposetory, IMapper mapper)
         {
             _typesReposetory = typesReposetory;
+            _mapper = mapper;
         }
 
         [HttpGet]

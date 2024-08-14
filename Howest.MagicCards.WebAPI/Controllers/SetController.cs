@@ -18,9 +18,10 @@ namespace Howest.MagicCards.WebAPI.Controllers
         private readonly IMapper _mapper;
 
 
-        public SetController(ISetReposetory setReposetory)
+        public SetController(ISetReposetory setReposetory, IMapper mapper)
         {
             _setReposetory = setReposetory;
+            _mapper = mapper;
         }
 
         [HttpGet]
