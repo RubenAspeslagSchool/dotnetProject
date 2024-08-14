@@ -15,6 +15,7 @@ namespace Howest.MagicCards.Shared.ViewModels
         public string? ArtistName { get; set; }
         public string? SetCode { get; set; }
         public string? RarityCode { get; set; }
+        public long? CardType {  get; set; }
         public int? PageNumber { get; set; } = 1;
         public int? PageSize { get; set; } = 50;
         public int? MaxPageSize { get; set;} = 150;

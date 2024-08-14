@@ -20,10 +20,33 @@
                 <div class="form-group">
                     <label for="card-artist">Artist Name:</label>
                     <InputText id="card-artist" @bind-Value="@_cardFilterViewModel.ArtistName" class="form-control"></InputText>
+
+                    <InputSelect id="card-artist" @bind-Value="@_cardFilterViewModel.ArtistName" class="form-control">
+                        <option value="">Not Selected</option>
+                        @if (_artists is not null)
+                        {
+                            foreach (ArtistReadDTO artist in _artists)
+                            {
+                                <option value="@artist.FullName">@artist.FullName</option>
+                            }
+                        }
+                    </InputSelect>
+
                 </div>
                 <div class="form-group">
                     <label for="card-set">Set code:</label>
-                    <InputText id="card-set" @bind-Value="@_cardFilterViewModel.SetCode" class="form-control"></InputText>
+
+                    <InputSelect id="card-set" @bind-Value="@_cardFilterViewModel.SetCode" class="form-control">
+                        <option value="">Not Selected</option>
+                        @if (_rarties is not null)
+                        {
+                            foreach (SetReadDTO set in _sets)
+                            {
+                                <option value="@set.Code">@set.Name</option>
+                            }
+                        }
+                    </InputSelect>
+
                 </div>
                 <div class="form-group">
                     <label for="card-rarity">Rarity:</label>
@@ -33,11 +56,25 @@
                         {
                             foreach (RarirtyReadDTO rarirty in _rarties)
                             {
-                                <option value="@rarirty.RarityName">@rarirty.RarityName</option>
+                                <option value="@rarirty.Code">@rarirty.RarityName</option>
                             }
                         }
                     </InputSelect>
                 </div>
+                <div class="form-group">
+                    <label for="card-type">Type:</label>
+                    <InputSelect id="card-type" @bind-Value="@_cardFilterViewModel.CardType" class="form-control">
+                        <option value="">Not Selected</option>
+                        @if (_types is not null)
+                        {
+                            foreach (TypeReadDTO type in _types)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+
                 <button type="submit" class="btn btn-info">Filter</button>
             </EditForm>
         </aside>

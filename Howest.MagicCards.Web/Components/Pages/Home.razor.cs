@@ -21,9 +21,12 @@ namespace Howest.MagicCards.Web.Components.Pages
         private Dictionary<long, bool> cardDetailFromApiVisibility = new Dictionary<long, bool>();
 
         public EventCallback<CardReadDTO> OnCardClick { get; set; }
-        private List<CardDetailDTO> _cardDetailsFromApi { get; set; }
+        private List<CardDetailDTO> _cardDetailsFromApi { get; set; } = new List<CardDetailDTO>();
         private IEnumerable<CardReadDTO>? _cards = null;
         private IEnumerable<RarirtyReadDTO>? _rarties = null;
+        private IEnumerable<SetReadDTO>? _sets = null;
+        private IEnumerable<ArtistReadDTO>? _artists = null;
+        private IEnumerable<TypeReadDTO>? _types = null;
         private IList<DeckCardViewModel> _cardsInDeck { get; set; } = new List<DeckCardViewModel>();
         private IEnumerable<DeckReadDTO>? _allDecks { get; set; }
 
@@ -54,20 +57,41 @@ namespace Howest.MagicCards.Web.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            initViewModels();
+            initHttpClients();
+            await ShowAllCards();
+            await getFilterFormDataFromApi();
+            await initDeck();
+        }
+
+        private void initViewModels()
+        {
             _cardFilterViewModel = new CardFilterViewModel();
             _deckViewModel = new DeckViewModel
             {
                 DeckName = "My Deck"
             };
+        }
+
+        private async Task getFilterFormDataFromApi()
+        {
+            _rarties = await GetFielterDataFromApiEndpoint<RarirtyReadDTO>("Rarirty");
+            _sets = await GetFielterDataFromApiEndpoint<SetReadDTO>("Set");
+            _artists = await GetFielterDataFromApiEndpoint<ArtistReadDTO>("Artist");
+            _types = await GetFielterDataFromApiEndpoint<TypeReadDTO>("Type");
+        }
+
+        private void initHttpClients()
+        {
             _cardsHttpClient = HttpClientFactory.CreateClient("CardsAPI");
             _decksHttpClient = HttpClientFactory.CreateClient("DecksAPI");
 
-            _cardDetailsFromApi = new List<CardDetailDTO>();
+        }
 
-            await ShowAllCards();
-            _rarties = await GetAllRarities();
+        private async Task initDeck()
+        {
             _allDecks = await GetAllDecks();
-            _currentDeck = mapper.Map<Deck>(_allDecks?.OrderByDescending(deck => deck.Id).FirstOrDefault()) ;
+            _currentDeck = mapper.Map<Deck>(_allDecks?.OrderByDescending(deck => deck.Id).FirstOrDefault());
 
         }
 
@@ -161,25 +185,25 @@ namespace Howest.MagicCards.Web.Components.Pages
             return queryString.Length > 0 ? queryString.Substring(1) : queryString; // Remove leading '&' if exists
         }
 
-        private async Task<IEnumerable<RarirtyReadDTO>> GetAllRarities()
+        private async Task<IEnumerable<T>> GetFielterDataFromApiEndpoint<T>(string apiEndpoint)
         {
-            HttpResponseMessage response = await _cardsHttpClient.GetAsync($"Rarirty");
+            HttpResponseMessage response = await _cardsHttpClient.GetAsync(apiEndpoint);
 
             string apiResponse = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
-                IEnumerable<RarirtyReadDTO>? result =
-                    JsonSerializer.Deserialize<IEnumerable<RarirtyReadDTO>>(apiResponse, _jsonOptions);
+                IEnumerable<T>? result = JsonSerializer.Deserialize<IEnumerable<T>>(apiResponse, _jsonOptions);
                 Console.WriteLine(result);
-                return result;
+                return result ?? new List<T>();
             }
             else
             {
                 Console.WriteLine(response);
-                return new List<RarirtyReadDTO>();
+                return new List<T>();
             }
         }
+
 
         private async void AddCardToDeck(CardReadDTO card)
         {

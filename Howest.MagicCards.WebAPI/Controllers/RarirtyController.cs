@@ -20,7 +20,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RarirtyReadDTO>>> Getrarities()
+        public async Task<ActionResult<IEnumerable<RarirtyReadDTO>>> GetRarities()
         {
             List<Rarity> allRarities = await _rarityRepository.GetAllRaritiesAsync();
             if (allRarities.Any())

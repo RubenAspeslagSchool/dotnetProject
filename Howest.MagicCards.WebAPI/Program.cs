@@ -47,6 +47,10 @@ builder.Services.AddDbContext<MtgV1Context>(options => options.UseSqlServer(conf
 
 builder.Services.AddScoped<ICardRepository, SqlCardRepository>();
 builder.Services.AddScoped<IRarityRepository, SqlRarityRepository>();
+builder.Services.AddScoped<IArtistRepository, SqlArtistRepository>();
+builder.Services.AddScoped<ITypesReposetory, SqlTypesReposetory>();
+builder.Services.AddScoped<ISetReposetory, SqlSetReposetory>();
+
 builder.Services.AddAutoMapper(new Type[] {
     typeof(Howest.MagicCards.Shared.Mapping.DecksProfile)
 });

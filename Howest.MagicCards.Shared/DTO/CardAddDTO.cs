@@ -8,6 +8,6 @@ namespace Howest.MagicCards.Shared.DTO
 {
     public record CardAddDTO
     {
-        public long CardId { get; set; }
+        public long CardId { get; init; }
     }
 }
