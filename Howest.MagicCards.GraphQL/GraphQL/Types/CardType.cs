@@ -2,7 +2,7 @@
 using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.DAL.Repositories;
 
-namespace GraphQLAPI.GraphQLTypes;
+namespace GraphQL.Types;
 public class CardType: ObjectGraphType<Card>
 {
     public CardType(IArtistRepository artistRepository)
