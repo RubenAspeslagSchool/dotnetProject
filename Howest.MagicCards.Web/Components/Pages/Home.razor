@@ -1,4 +1,6 @@
 ﻿@page "/"
+@namespace Howest.MagicCards.Web.Components.Pages
+@using Howest.MagicCards.Web.Components
 @using Howest.MagicCards.Shared.DTO
 @using Howest.MagicCards.Shared.ViewModels
 @using Microsoft.AspNetCore.Components
@@ -7,76 +9,14 @@
 
 <div class="app">
     <div class="cards">
-        <aside class="filter">
-            <EditForm Model="@_cardFilterViewModel" OnValidSubmit="@ShowAllCards" FormName="CardFilterForm" class="form">
-                <div class="form-group">
-                    <label for="card-name">Card Name:</label>
-                    <InputText id="card-name" @bind-Value="@_cardFilterViewModel.CardName" class="form-control"></InputText>
-                </div>
-                <div class="form-group">
-                    <label for="card-text">Card Text:</label>
-                    <InputText id="card-text" @bind-Value="@_cardFilterViewModel.CardText" class="form-control"></InputText>
-                </div>
-                <div class="form-group">
-                    <label for="card-artist">Artist Name:</label>
-
-                    <InputSelect id="card-artist" @bind-Value="@_cardFilterViewModel.ArtistName" class="form-control">
-                        <option value="">Not Selected</option>
-                        @if (_artists is not null)
-                        {
-                            foreach (ArtistReadDTO artist in _artists)
-                            {
-                                <option value="@artist.FullName">@artist.FullName</option>
-                            }
-                        }
-                    </InputSelect>
-
-                </div>
-                <div class="form-group">
-                    <label for="card-set">Set code:</label>
-
-                    <InputSelect id="card-set" @bind-Value="@_cardFilterViewModel.SetCode" class="form-control">
-                        <option value="">Not Selected</option>
-                        @if (_rarties is not null)
-                        {
-                            foreach (SetReadDTO set in _sets)
-                            {
-                                <option value="@set.Code">@set.Name</option>
-                            }
-                        }
-                    </InputSelect>
-
-                </div>
-                <div class="form-group">
-                    <label for="card-rarity">Rarity:</label>
-                    <InputSelect id="card-rarity" @bind-Value="@_cardFilterViewModel.RarityCode" class="form-control">
-                        <option value="">Not Selected</option>
-                        @if (_rarties is not null)
-                        {
-                            foreach (RarirtyReadDTO rarirty in _rarties)
-                            {
-                                <option value="@rarirty.Code">@rarirty.RarityName</option>
-                            }
-                        }
-                    </InputSelect>
-                </div>
-                <div class="form-group">
-                    <label for="card-type">Type:</label>
-                    <InputSelect id="card-type" @bind-Value="@_cardFilterViewModel.CardType" class="form-control">
-                        <option value="">Not Selected</option>
-                        @if (_types is not null)
-                        {
-                            foreach (TypeReadDTO type in _types)
-                            {
-                                <option value="@type.Id">@type.Name</option>
-                            }
-                        }
-                    </InputSelect>
-                </div>
-
-                <button type="submit" class="btn btn-info">Filter</button>
-            </EditForm>
-        </aside>
+       <FielterForm 
+        CardFilterViewModel="@_cardFilterViewModel"
+        Artists="@_artists"
+        Sets="@_sets"
+        Rarities="@_rarties"
+        Types="@_types"
+        OnSubmit="@ShowAllCards">
+    </FielterForm>
 
 
         <article class="cards-article">
