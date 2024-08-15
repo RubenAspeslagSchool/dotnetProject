@@ -12,9 +12,9 @@
         <label for="card-artist">Artist Name:</label>
         <InputSelect id="card-artist" @bind-Value="CardFilterViewModel.ArtistName" class="form-control">
             <option value="">Not Selected</option>
-            @if (Artists != null)
+            @if (_artists != null)
             {
-                foreach (var artist in Artists)
+                foreach (var artist in _artists)
                 {
                     <option value="@artist.FullName">@artist.FullName</option>
                 }
@@ -25,9 +25,9 @@
         <label for="card-set">Set code:</label>
         <InputSelect id="card-set" @bind-Value="CardFilterViewModel.SetCode" class="form-control">
             <option value="">Not Selected</option>
-            @if (Sets != null)
+            @if (_sets != null)
             {
-                foreach (var set in Sets)
+                foreach (var set in _sets)
                 {
                     <option value="@set.Code">@set.Name</option>
                 }
@@ -38,9 +38,9 @@
         <label for="card-rarity">Rarity:</label>
         <InputSelect id="card-rarity" @bind-Value="CardFilterViewModel.RarityCode" class="form-control">
             <option value="">Not Selected</option>
-            @if (Rarities != null)
+            @if (_rarties != null)
             {
-                foreach (var rarity in Rarities)
+                foreach (var rarity in _rarties)
                 {
                     <option value="@rarity.Code">@rarity.RarityName</option>
                 }
@@ -51,9 +51,9 @@
         <label for="card-type">Type:</label>
         <InputSelect id="card-type" @bind-Value="CardFilterViewModel.CardType" class="form-control">
             <option value="">Not Selected</option>
-            @if (Types != null)
+            @if (_types != null)
             {
-                foreach (var type in Types)
+                foreach (var type in _types)
                 {
                     <option value="@type.Id">@type.Name</option>
                 }
@@ -63,12 +63,3 @@
     <button type="submit" class="btn btn-info">Filter</button>
 </EditForm>
 
-@code {
-    [Parameter] public CardFilterViewModel CardFilterViewModel { get; set; }
-    [Parameter] public IEnumerable<ArtistReadDTO> Artists { get; set; }
-    [Parameter] public IEnumerable<SetReadDTO> Sets { get; set; }
-    [Parameter] public IEnumerable<RarirtyReadDTO> Rarities { get; set; }
-    [Parameter] public IEnumerable<TypeReadDTO> Types { get; set; }
-
-    [Parameter] public EventCallback OnSubmit { get; set; }
-}
