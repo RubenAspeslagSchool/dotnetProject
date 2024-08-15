@@ -1,0 +1,47 @@
+﻿
+<article class="decks">
+    <article class="all-decks">
+        <h3>all decks</h3>
+        <ul>
+            @if (_allDecks is not null)
+            {
+                foreach (DeckReadDTO deck in _allDecks)
+                {
+                    <li class="all-deck">
+                        <p>
+                            @deck.DeckName
+                            <button class="btn btn-info" @onclick="@(() => RemoveDeck(deck.Id))">Remove</button>
+                        </p>
+                    </li>
+                }
+            }
+        </ul>
+    </article>
+    <article class="newDeck">
+        <h3>create new deck:</h3>
+        <EditForm Model="@_deckViewModel" OnValidSubmit="HandleAddDeckSubmit" FormName="DeckForm" class="deck-builder">
+            <label for="deck-name">Deck Name:</label>
+            <InputText id="deck-name" @bind-Value="_deckViewModel!.DeckName" class="form-control"></InputText>
+            <button type="submit" class="btn btn-info">Save</button>
+        </EditForm>
+    </article>
+
+    <article>
+        <h3>current deck</h3>
+        <ul class="deckCards">
+            @if (_cardsInDeck is not null)
+            {
+                foreach (DeckCardViewModel deckCard in _cardsInDeck)
+                {
+                    <li class="deck-item">
+                        <p class="card-name">name: @deckCard.CardName</p>
+                        <p class="counter">amount: @deckCard.Amount</p>
+                        <button @onclick="@(() =>  AddCardIdToDeck( deckCard.CardId))">+</button>
+                        <button @onclick="@(() =>  RemoveCard(deckCard))">-</button>
+                    </li>
+                }
+            }
+        </ul>
+    </article>
+
+</article>
