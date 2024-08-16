@@ -5,6 +5,7 @@ using Howest.MagicCards.Shared.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Identity.Client.Extensions.Msal;
 using System.Net.Http;
 using System.Text;
@@ -15,17 +16,14 @@ namespace Howest.MagicCards.Web.Components.Pages
     public partial class DeckEditor : ComponentBase
     {
         private IEnumerable<DeckReadDTO>? _allDecks { get; set; }
-        private Deck _currentDeck { get; set; } = new Deck();
         private readonly JsonSerializerOptions _jsonOptions;
         private HttpClient _decksHttpClient;
         private DeckViewModel _deckViewModel;
+        private long _currentDeckId;
+        private Dictionary<long, string> _cardNames = new();
+
         [Inject]
         public IHttpClientFactory HttpClientFactory { get; set; }
-        [Inject]
-        public ProtectedLocalStorage storage { get; set; }
-        private IList<DeckCardViewModel> _cardsInDeck { get; set; } = new List<DeckCardViewModel>();
-
-
 
         [Inject]
         public IMapper mapper { get; set; }
@@ -38,6 +36,11 @@ namespace Howest.MagicCards.Web.Components.Pages
             };
         }
 
+        public void SetAsCurrentDeck(long currentDeckId)
+        {
+            _currentDeckId = currentDeckId;
+        }
+
         protected override async Task OnInitializedAsync()
         {
             _deckViewModel = new DeckViewModel
@@ -46,109 +49,128 @@ namespace Howest.MagicCards.Web.Components.Pages
             };
             _decksHttpClient = HttpClientFactory.CreateClient("DecksAPI");
             _allDecks = await GetAllDecks();
-            _currentDeck = mapper.Map<Deck>(_allDecks?.OrderByDescending(deck => deck.Id).FirstOrDefault());
+            _currentDeckId = _allDecks?.OrderByDescending(deck => deck.Id).FirstOrDefault()?.Id ?? 0;
 
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
+            if (_allDecks is not null)
             {
-                ProtectedBrowserStorageResult<IList<DeckCardViewModel>> storageResult = await storage.GetAsync<IList<DeckCardViewModel>>("ViewedDeck");
-                _cardsInDeck = storageResult.Success ? storageResult.Value : new List<DeckCardViewModel>();
+                // Load card names asynchronously
+                foreach (var deck in _allDecks)
+                {
+                    foreach (var deckCard in deck.CardDecks)
+                    {
+                        if (!_cardNames.ContainsKey(deckCard.CardId))
+                        {
+                            var cardName = await GetCardNameById(deckCard.CardId);
+                            _cardNames[deckCard.CardId] = cardName;
+                        }
+                    }
+                }
             }
         }
 
+        public async Task<string> GetCardNameById(long cardId)
+        {
+            try
+            {
+                HttpClient cardsHttpClient = HttpClientFactory.CreateClient("CardsAPI");
+                HttpResponseMessage response = await cardsHttpClient.GetAsync($"cards/{cardId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var cardDetail = await response.Content.ReadFromJsonAsync<CardDetailDTO>();
+                    return cardDetail?.Name ?? "Card name not found";
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return "Card not found";
+                }
+                else
+                {
+                    return $"Error: {response.StatusCode}";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Exception: {ex.Message}";
+            }
+        }
 
         private async Task<IEnumerable<DeckReadDTO>?> GetAllDecks()
         {
-            HttpResponseMessage response = await _decksHttpClient.GetAsync($"decks");
+            HttpResponseMessage response = await _decksHttpClient.GetAsync("decks");
 
             string apiResponse = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
-                IEnumerable<DeckReadDTO>? result =
-                    JsonSerializer.Deserialize<IEnumerable<DeckReadDTO>>(apiResponse, _jsonOptions);
-                return result;
+                return JsonSerializer.Deserialize<IEnumerable<DeckReadDTO>>(apiResponse, _jsonOptions);
             }
             else
             {
                 return new List<DeckReadDTO>();
             }
         }
-        public async void AddCardToDeck(CardReadDTO card)
+
+        public async Task AddCardToCurrentDeck(string cardId)
         {
-            DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == long.Parse(card.Id));
-
-            if (cardViewModel is null)
-            {
-
-                _cardsInDeck.Add(new DeckCardViewModel { Amount = 1, CardId = long.Parse(card.Id), CardName = card.Name });
-            }
-            else
-            {
-                cardViewModel.Amount++;
-            }
-
-            await storage.SetAsync("ViewedDeck", _cardsInDeck);
+            await AddCardToDeck(_currentDeckId, long.Parse(cardId));
         }
 
-        public async void AddCardIdToDeck(long? cardId)
+        public async Task AddCardToDeck(long deckId, long cardId)
         {
-            DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == cardId);
-            cardViewModel.Amount++;
-            await storage.SetAsync("ViewedDeck", _cardsInDeck);
-        }
-
-        private async Task HandleAddDeckSubmit(EditContext editContext)
-        {
-
-            Console.WriteLine("Form is being submitted");
-            Console.WriteLine("DeckViewModel before mapping: " + JsonSerializer.Serialize(_deckViewModel));
-            DeckCreateDTO deckWriteDTO = mapper.Map<DeckCreateDTO>(_deckViewModel);
-            Console.WriteLine("DeckCreateDTO after mapping: " + JsonSerializer.Serialize(deckWriteDTO));
-            HttpContent content = new StringContent(JsonSerializer.Serialize(deckWriteDTO), Encoding.UTF8, "application/json");
-            Console.WriteLine("add deck request body: " + JsonSerializer.Serialize(deckWriteDTO));
-            HttpResponseMessage response = await _decksHttpClient.PostAsync("decks", content);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                _allDecks = await GetAllDecks();
-                StateHasChanged();
+                HttpContent content = JsonContent.Create(new CardAddDTO { CardId = cardId });
+                HttpResponseMessage response = await _decksHttpClient.PostAsync($"decks/{deckId}/cards", content);
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine(responseBody);
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                {
+                    Console.WriteLine("Conflict: Too many cards in the deck.");
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    Console.WriteLine("Not Found: Deck or card not found.");
+                }
+                else
+                {
+                    Console.WriteLine($"Error: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
             }
         }
 
-        private async void RemoveCard(DeckCardViewModel card)
+        private async void RemoveCardFromDeck(long deckId, long cardId)
         {
-            Console.WriteLine("removing card" + card);
-            DeckCardViewModel? cardViewModel = _cardsInDeck.FirstOrDefault(c => c.CardId == card.CardId);
-
-            if (cardViewModel?.Amount > 1)
+            try
             {
-                cardViewModel.Amount--;
+                var uri = $"decks/{deckId}/cards/{cardId}";
+                HttpResponseMessage response = await _decksHttpClient.DeleteAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine(response.Content);
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    Console.WriteLine("Not Found: Deck or card not found.");
+                }
+                else
+                {
+                    Console.WriteLine($"Error: {response.StatusCode}");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _cardsInDeck.Remove(cardViewModel);
+                Console.WriteLine($"Exception: {ex.Message}");
             }
-            await storage.SetAsync("ViewedDeck", _cardsInDeck);
-            StateHasChanged();
-        }
-
-        private async Task AddDeck()
-        {
-            DeckCreateDTO deckWriteDTO = mapper.Map<DeckCreateDTO>(_deckViewModel);
-
-            HttpContent content =
-            new StringContent(JsonSerializer.Serialize(deckWriteDTO), Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await _decksHttpClient.PostAsync("decks", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                _allDecks = await GetAllDecks();
-            }
-
         }
 
         private async Task RemoveDeck(long id)
@@ -163,6 +185,12 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
             StateHasChanged();
         }
+
+        private async Task HandleAddDeckSubmit(EditContext editContext)
+        {
+            Console.WriteLine("Form is being submitted");
+            _allDecks = await GetAllDecks();
+            StateHasChanged();
+        }
     }
 }
-

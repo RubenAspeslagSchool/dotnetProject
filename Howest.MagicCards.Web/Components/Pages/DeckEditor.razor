@@ -1,5 +1,4 @@
-﻿
-<article class="decks">
+﻿<article class="decks">
     <article class="all-decks">
         <h3>all decks</h3>
         <ul>
@@ -10,8 +9,22 @@
                     <li class="all-deck">
                         <p>
                             @deck.DeckName
+                            <button class="btn btn-info" @onclick="@(() => SetAsCurrentDeck(deck.Id))">set as currentDeck</button>
                             <button class="btn btn-info" @onclick="@(() => RemoveDeck(deck.Id))">Remove</button>
                         </p>
+
+                        <ul class="deckCards">
+                            @foreach (var deckCard in deck.CardDecks)
+                            {
+                                var cardName = _cardNames.ContainsKey(deckCard.CardId) ? _cardNames[deckCard.CardId] : "Loading...";
+                                <li class="deck-item">
+                                    <p class="card-name">name: @cardName</p>
+                                    <p class="counter">amount: @deckCard.Amount</p>
+                                    <button @onclick="@(() => AddCardToDeck(deck.Id, deckCard.CardId))">+</button>
+                                    <button @onclick="@(() => RemoveCardFromDeck(deck.Id, deckCard.CardId))">-</button>
+                                </li>
+                            }
+                        </ul>
                     </li>
                 }
             }
@@ -25,23 +38,4 @@
             <button type="submit" class="btn btn-info">Save</button>
         </EditForm>
     </article>
-
-    <article>
-        <h3>current deck</h3>
-        <ul class="deckCards">
-            @if (_cardsInDeck is not null)
-            {
-                foreach (DeckCardViewModel deckCard in _cardsInDeck)
-                {
-                    <li class="deck-item">
-                        <p class="card-name">name: @deckCard.CardName</p>
-                        <p class="counter">amount: @deckCard.Amount</p>
-                        <button @onclick="@(() =>  AddCardIdToDeck( deckCard.CardId))">+</button>
-                        <button @onclick="@(() =>  RemoveCard(deckCard))">-</button>
-                    </li>
-                }
-            }
-        </ul>
-    </article>
-
 </article>

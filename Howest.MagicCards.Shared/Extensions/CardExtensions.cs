@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Howest.MagicCards.Shared.DTO;
+using Howest.MagicCards.DAL.Repositories;
 
 namespace Howest.MagicCards.Shared.Extensions
 {
@@ -51,5 +53,7 @@ namespace Howest.MagicCards.Shared.Extensions
             .Take(cardFilter.PageSize)
             .ToListAsync();
         }
+
+        
     }
 }

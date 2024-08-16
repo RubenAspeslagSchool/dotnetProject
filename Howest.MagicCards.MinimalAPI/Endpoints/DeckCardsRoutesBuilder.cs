@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Howest.MagicCards.DAL.Exceptions;
 using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
@@ -29,11 +30,15 @@ namespace Howest.MagicCards.MinimalAPI.Endpoints
                 try
                 {
                     repository.AddCardToDeck(deckId, card.CardId);
-                    return Results.Ok("card added to deck successfully");
+                    return Results.Ok($"card {card.CardId} added to deck {deckId} successfully");
                 }
                 catch (ArgumentNullException ex)
                 {
                     return Results.NotFound(ex.Message);
+                }
+                catch (ToManyCardsInDeckExeption ex )
+                {
+                    return Results.Conflict(ex.Message); // Use 409 Conflict for cases where too many cards are in the deck
                 }
             });
 

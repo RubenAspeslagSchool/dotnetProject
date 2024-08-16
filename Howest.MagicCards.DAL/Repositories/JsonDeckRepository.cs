@@ -4,6 +4,7 @@ using Howest.MagicCards.DAL.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Howest.MagicCards.DAL.Exceptions;
 
 namespace Howest.MagicCards.DAL.Repositories
 {
@@ -69,11 +70,24 @@ namespace Howest.MagicCards.DAL.Repositories
         public void AddCardToDeck(long deckId, long cardId)
         {
             Deck deck = GetDeck(deckId);
-            if (deck != null)
+            if (deck != null )
             {
-                deck.AddCard(cardId);
-                SaveDecks();
+                if (GetCardCound(deck) <= 60)
+                {
+                    deck.AddCard(cardId);
+                    SaveDecks();
+                } else
+                {
+                    throw new ToManyCardsInDeckExeption();
+                }
             }
+        }
+
+        private int GetCardCound(Deck deck)
+        {
+            int cardCound = 0;
+            deck.CardDecks.ForEach(cardDeck => { cardCound = cardCound + cardDeck.Amount; });
+            return cardCound;
         }
 
         public void RemoveCardFromDeck(long deckId, long cardId)

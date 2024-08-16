@@ -33,11 +33,11 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
         }
 
-        private void AddCardToDeck(CardReadDTO card)
+        private async Task AddCardToDeck(CardReadDTO card)
         {
             if (deckEditorRef != null)
             {
-                deckEditorRef.AddCardToDeck(card);
+              await  deckEditorRef.AddCardToCurrentDeck(card.Id);
             }
         }
     }

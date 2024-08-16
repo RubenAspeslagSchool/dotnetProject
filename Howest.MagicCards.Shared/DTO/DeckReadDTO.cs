@@ -11,6 +11,6 @@ namespace Howest.MagicCards.Shared.DTO
     {
         public long Id { get; init; }
         public string DeckName { get; init; }
-        public virtual ICollection<CardDeckReadDTO> CardDecks { get; init; }
+        public virtual List<CardDeckReadDTO> CardDecks { get; init; }
     }
 }
