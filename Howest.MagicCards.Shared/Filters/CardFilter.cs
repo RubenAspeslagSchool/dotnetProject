@@ -13,5 +13,6 @@ namespace Howest.MagicCards.Shared.Filters
         public string? RarityCode { get; set; } = "";
         public string? CardName { get; set; } = "";
         public string? CardText { get; set; } = "";
+        public string? Type { get; set; } = "";
     }
 }

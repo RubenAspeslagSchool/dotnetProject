@@ -19,13 +19,15 @@ namespace Howest.MagicCards.Shared.Extensions
             string cardText,
             string artistName,
             string setCode,
-            string rarityCode
+            string rarityCode,
+            string type
    )
         {
             IQueryable<Card> filteredCards = cards.Where(card =>
                  (artistName == null || card.Artist.FullName.Contains(artistName))
               && (setCode == null || card.SetCode.Contains(setCode))
               && (rarityCode == null || card.RarityCode.Contains(rarityCode))
+              && (type == null || card.Type.Contains(type))
               && (cardText == null || card.Text.Contains(cardText))
               && (cardName == null || card.Name.StartsWith(cardName)));
 

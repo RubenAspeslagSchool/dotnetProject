@@ -201,8 +201,17 @@ namespace Howest.MagicCards.Web.Components.Pages
         private async Task HandleAddDeckSubmit(EditContext editContext)
         {
             Console.WriteLine("Form is being submitted");
-            _allDecks = await GetAllDecks();
-            StateHasChanged();
+            Console.WriteLine("DeckViewModel before mapping: " + JsonSerializer.Serialize(_deckViewModel));
+            DeckCreateDTO deckWriteDTO = mapper.Map<DeckCreateDTO>(_deckViewModel);
+            Console.WriteLine("DeckCreateDTO after mapping: " + JsonSerializer.Serialize(deckWriteDTO));
+            HttpContent content = new StringContent(JsonSerializer.Serialize(deckWriteDTO), Encoding.UTF8, "application/json");
+            Console.WriteLine("add deck request body: " + JsonSerializer.Serialize(deckWriteDTO));
+            HttpResponseMessage response = await _decksHttpClient.PostAsync("decks", content);
+            if (response.IsSuccessStatusCode)
+            {
+                _allDecks = await GetAllDecks();
+                StateHasChanged();
+            }
         }
     }
 }
