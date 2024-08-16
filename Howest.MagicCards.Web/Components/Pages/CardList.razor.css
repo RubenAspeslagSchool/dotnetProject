@@ -1,0 +1,14 @@
+﻿
+
+.cardList {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cardList li {
+     width: 32%;
+}
+
+.hiden {
+    display: hiden;
+} 

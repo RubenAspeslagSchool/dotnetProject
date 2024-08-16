@@ -49,3 +49,40 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+.app {
+    display: flex;
+    background-color: #f8f9fa;
+    max-width: 100%;
+    width: 100%
+}
+
+.cards {
+    width: 70%
+}
+
+
+
+.hiden {
+    display: hiden;
+} 
+
+.cardList {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .cardList li {
+        width: 32%;
+    }
+
+.hiden {
+    display: hiden;
+}
+.decks {
+    width: 29%
+}
+
+.hiden {
+    display: hiden;
+} 

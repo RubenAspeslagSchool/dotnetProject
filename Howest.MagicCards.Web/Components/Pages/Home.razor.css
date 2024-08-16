@@ -6,21 +6,10 @@
 }
 
 .cards {
-    width:70%
+    width: 70%
 }
 
-.cardList {
-    display: flex;
-    flex-wrap: wrap;
-}
 
-.cardList li {
-    width: 32%;
-}
-
-.decks {
-    width: 29%
-}
 
 .hiden {
     display: hiden;
