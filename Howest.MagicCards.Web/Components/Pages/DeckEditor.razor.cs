@@ -48,25 +48,10 @@ namespace Howest.MagicCards.Web.Components.Pages
                 DeckName = "My Deck"
             };
             _decksHttpClient = HttpClientFactory.CreateClient("DecksAPI");
-            _allDecks = await GetAllDecks();
+            await RefreshDecks(); // Load initial data
             _currentDeckId = _allDecks?.OrderByDescending(deck => deck.Id).FirstOrDefault()?.Id ?? 0;
-
-            if (_allDecks is not null)
-            {
-                // Load card names asynchronously
-                foreach (var deck in _allDecks)
-                {
-                    foreach (var deckCard in deck.CardDecks)
-                    {
-                        if (!_cardNames.ContainsKey(deckCard.CardId))
-                        {
-                            var cardName = await GetCardNameById(deckCard.CardId);
-                            _cardNames[deckCard.CardId] = cardName;
-                        }
-                    }
-                }
-            }
         }
+
 
         public async Task<string> GetCardNameById(long cardId)
         {
@@ -127,6 +112,7 @@ namespace Howest.MagicCards.Web.Components.Pages
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine(responseBody);
+                    await RefreshDecks(); // Refresh decks to reflect changes
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
                 {
@@ -157,6 +143,7 @@ namespace Howest.MagicCards.Web.Components.Pages
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine(response.Content);
+                    await RefreshDecks(); // Refresh decks to reflect changes
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -181,10 +168,35 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                _allDecks = await GetAllDecks();
+                await RefreshDecks(); // Refresh decks to reflect changes
             }
             StateHasChanged();
         }
+
+
+        private async Task RefreshDecks()
+        {
+            _allDecks = await GetAllDecks();
+            _cardNames.Clear(); // Clear existing card names to reload them
+            if (_allDecks is not null)
+            {
+                foreach (var deck in _allDecks)
+                {
+                    foreach (var deckCard in deck.CardDecks)
+                    {
+                        if (!_cardNames.ContainsKey(deckCard.CardId))
+                        {
+                            var cardName = await GetCardNameById(deckCard.CardId);
+                            _cardNames[deckCard.CardId] = cardName;
+                        }
+                    }
+                }
+            }
+            StateHasChanged(); // Notify the UI to refresh
+        }
+
+
+
 
         private async Task HandleAddDeckSubmit(EditContext editContext)
         {
