@@ -22,7 +22,12 @@ namespace Howest.MagicCards.DAL.Repositories
 
         public Deck GetDeck(long id)
         {
-            return Decks.FirstOrDefault(x => x.Id == id);
+            Deck deck = Decks.FirstOrDefault(x => x.Id == id);
+            if (deck == null)
+            {
+                throw new ArgumentNullException(nameof(deck), "Deck not found");
+            }
+            return deck;
         }
 
         private void SaveDecks()
@@ -80,6 +85,9 @@ namespace Howest.MagicCards.DAL.Repositories
                 {
                     throw new ToManyCardsInDeckExeption();
                 }
+            } else
+            {
+                throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
         }
 

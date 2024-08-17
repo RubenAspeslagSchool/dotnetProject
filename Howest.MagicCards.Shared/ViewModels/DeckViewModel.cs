@@ -10,8 +10,6 @@ namespace Howest.MagicCards.Shared.ViewModels
     public class DeckViewModel : INotifyPropertyChanged
     {
         public string? DeckName { get; set; }
-        //public IEnumerable<DeckCardViewModel>? DeckCards { get; set; }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)

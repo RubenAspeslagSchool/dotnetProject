@@ -48,11 +48,11 @@ namespace Howest.MagicCards.Shared.Extensions
             } return query.OrderBy(card => card.Id);
         }
 
-        public async static  Task<List<Card>> ApplyPaging(this  IQueryable<Card> queryableCards, CardFilter cardFilter)
+        public async static  Task<List<Card>> ApplyPaging(this  IQueryable<Card> queryableCards,int pageNumber, int pageSize)
         {
             return  await queryableCards
-            .Skip((cardFilter.PageNumber - 1) * cardFilter.PageSize)
-            .Take(cardFilter.PageSize)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
         }
 

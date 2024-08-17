@@ -33,7 +33,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
             }
             else
             {
-                return NotFound("No rarities found");
+                return NotFound(new List<RarirtyReadDTO>());
             }
         }
     }

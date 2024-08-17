@@ -1,6 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.Shared.Extensions;
 using Howest.MagicCards.Shared.Filters;
 using Microsoft.Extensions.Options;
 
@@ -29,7 +30,7 @@ public class RootQuery : ObjectGraphType
                 int? power = context.GetArgument<int?>("power");
                 int? toughness = context.GetArgument<int?>("toughness");
 
-                var cards = await cardRepository.GetCardsByPageAsync(page, pagingOptions.PageSize);
+                var cards = await cardRepository.GetAllCards().ApplyPaging(page,pagingOptions.MaxPageSize);
 
                 if (power.HasValue)
                 {

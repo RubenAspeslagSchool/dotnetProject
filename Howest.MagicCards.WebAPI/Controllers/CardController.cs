@@ -15,12 +15,12 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 
 [Route("api/V{version:apiVersion}/[controller]")]
 [ApiController]
-public class CardsController : ControllerBase
+public class CardController : ControllerBase
 {
     private readonly ICardRepository _cardRepository;
     private readonly IMapper _mapper;
 
-    public CardsController(ICardRepository cardRepository, IMapper mapper)
+    public CardController(ICardRepository cardRepository, IMapper mapper)
     {
         _cardRepository = cardRepository;
         _mapper = mapper;
@@ -74,7 +74,7 @@ public class CardsController : ControllerBase
             cardFilter.CardType);
 
         int totalRecords = await queryableCards.CountAsync();
-        List<Card> pagedCards = await queryableCards.ApplySorting(orderBy).ApplyPaging(cardFilter);
+        List<Card> pagedCards = await queryableCards.ApplySorting(orderBy).ApplyPaging(cardFilter.PageNumber, cardFilter.PageSize);
 
         List<CardReadDTO> cardReadDtos = _mapper.Map<List<CardReadDTO>>(pagedCards);
 

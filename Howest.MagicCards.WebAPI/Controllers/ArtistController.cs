@@ -24,7 +24,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ArtistReadDTO>>> GetSets()
+        public async Task<ActionResult<IEnumerable<ArtistReadDTO>>> GetArtists()
         {
             List<Artist> allArtists = await _artistRepository.GetAllArtistsAsync();
             if (allArtists.Any())
@@ -34,7 +34,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
             }
             else
             {
-                return NotFound("No artists found");
+                return NotFound(new List<ArtistReadDTO>());
             }
         }
     }

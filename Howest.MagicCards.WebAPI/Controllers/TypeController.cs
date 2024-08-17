@@ -35,7 +35,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
             }
             else
             {
-                return NotFound("No types found");
+                return NotFound(new List<TypeReadDTO>());
             }
         }
     }
