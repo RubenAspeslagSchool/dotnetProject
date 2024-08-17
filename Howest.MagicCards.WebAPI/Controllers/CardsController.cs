@@ -42,7 +42,7 @@ public class CardsController : ControllerBase
                 cardFilter.ArtistName,
                 cardFilter.SetCode,
                 cardFilter.RarityCode,
-                cardFilter.Type);
+                cardFilter.CardType);
 
 
         List<Card> pagedCards = await queryableCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize);
@@ -71,7 +71,7 @@ public class CardsController : ControllerBase
             cardFilter.ArtistName,
             cardFilter.SetCode,
             cardFilter.RarityCode,
-            cardFilter.Type);
+            cardFilter.CardType);
 
         int totalRecords = await queryableCards.CountAsync();
         List<Card> pagedCards = await queryableCards.ApplySorting(orderBy).ApplyPaging(cardFilter);
