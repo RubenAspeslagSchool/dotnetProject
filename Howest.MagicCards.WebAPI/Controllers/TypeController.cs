@@ -15,19 +15,19 @@ namespace Howest.MagicCards.WebAPI.Controllers
     [ApiController]
     public class TypeController : ControllerBase
     {
-        private readonly ITypesReposetory _typesReposetory;
+        private readonly ITypesRepository _typesRepository;
         private readonly IMapper _mapper;
 
-        public TypeController(ITypesReposetory typesReposetory, IMapper mapper)
+        public TypeController(ITypesRepository typesReposetory, IMapper mapper)
         {
-            _typesReposetory = typesReposetory;
+            _typesRepository = typesReposetory;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TypeReadDTO>>> GetTypes()
         {
-            List<DAL.Models.Type> allRarities = await _typesReposetory.GetAllTypesAsync();
+            List<DAL.Models.Type> allRarities = await _typesRepository.GetAllTypesAsync();
             if (allRarities.Any())
             {
                 List<TypeReadDTO> rarityReadDtos = allRarities.Select(t => new TypeReadDTO { Id = t.Id, Name = t.Name }).ToList();

@@ -8,6 +8,7 @@ namespace Howest.MagicCards.DAL.Repositories
     public class SqlCardRepository : ICardRepository
     {
         private readonly MtgV1Context _db;
+
         public SqlCardRepository(MtgV1Context mtgContext)
         {
             _db = mtgContext;
@@ -38,6 +39,7 @@ namespace Howest.MagicCards.DAL.Repositories
                 .Include(c => c.SetCodeNavigation)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
+
         public List<Card> GetAllCardsByArtistId(long ArtistId)
         {
             return _db.Cards.Where(c => c.ArtistId == ArtistId).ToList();
