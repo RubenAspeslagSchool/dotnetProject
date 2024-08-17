@@ -53,7 +53,6 @@ public class CardsController : ControllerBase
         };
 
         return Ok(result);
-
     }
 
     [HttpGet]

@@ -16,7 +16,6 @@ namespace Howest.MagicCards.WebAPI.Controllers
         private readonly IArtistRepository _artistRepository;
         private readonly IMapper _mapper;
 
-
         public ArtistController(IArtistRepository artistReposetory, IMapper mapper)
         {
             _artistRepository = artistReposetory;

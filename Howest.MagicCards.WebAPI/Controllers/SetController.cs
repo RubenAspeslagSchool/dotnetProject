@@ -14,20 +14,19 @@ namespace Howest.MagicCards.WebAPI.Controllers
     [ApiController]
     public class SetController : ControllerBase
     {
-        private readonly ISetReposetory _setReposetory;
+        private readonly ISetRepository _setRepository;
         private readonly IMapper _mapper;
 
-
-        public SetController(ISetReposetory setReposetory, IMapper mapper)
+        public SetController(ISetRepository setReposetory, IMapper mapper)
         {
-            _setReposetory = setReposetory;
+            _setRepository = setReposetory;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SetReadDTO>>> GetSets()
         {
-            List<Set> allSets = await _setReposetory.GetAllSetsAsync();
+            List<Set> allSets = await _setRepository.GetAllSetsAsync();
             if (allSets.Any())
             {
                 List<SetReadDTO> setReadDtos = _mapper.Map<List<SetReadDTO>>(allSets);

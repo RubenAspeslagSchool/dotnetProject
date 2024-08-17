@@ -11,7 +11,7 @@ namespace Howest.MagicCards.Web.Components.Pages
     {
         [Parameter] public CardFilterViewModel CardFilterViewModel { get; set; }
         [Parameter] public EventCallback OnSubmit { get; set; }
-        private IEnumerable<RarirtyReadDTO>? _rarties = null;
+        private IEnumerable<RarityReadDTO>? _rarties = null;
         private IEnumerable<SetReadDTO>? _sets = null;
         private IEnumerable<ArtistReadDTO>? _artists = null;
         private IEnumerable<TypeReadDTO>? _types = null;
@@ -41,7 +41,7 @@ namespace Howest.MagicCards.Web.Components.Pages
        
         private async Task getFilterFormDataFromApi()
         {
-            _rarties = await GetFielterDataFromApiEndpoint<RarirtyReadDTO>("Rarirty");
+            _rarties = await GetFielterDataFromApiEndpoint<RarityReadDTO>("Rarirty");
             _sets = await GetFielterDataFromApiEndpoint<SetReadDTO>("Set");
             _artists = await GetFielterDataFromApiEndpoint<ArtistReadDTO>("Artist");
             _types = await GetFielterDataFromApiEndpoint<TypeReadDTO>("Type");

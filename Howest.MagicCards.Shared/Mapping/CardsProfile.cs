@@ -19,7 +19,7 @@ namespace Howest.MagicCards.Shared.Mapping
                 .ForMember(dto => dto.FullName, opt => opt.MapFrom(a => a.FullName));
 
             // Mapping for Rarity and RarityReadDTO
-            CreateMap<Rarity, RarirtyReadDTO>()
+            CreateMap<Rarity, RarityReadDTO>()
                 .ForMember(dto => dto.RarityName, opt => opt.MapFrom(r => r.Name));
 
             // Mapping for Set and SetReadDTO
