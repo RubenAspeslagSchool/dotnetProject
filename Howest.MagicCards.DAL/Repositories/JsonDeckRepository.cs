@@ -10,14 +10,14 @@ namespace Howest.MagicCards.DAL.Repositories
 {
     public class JsonDeckRepository : IDeckRepository
     {
-        private readonly JsonSerialiser _jsonSeriliser;
+        private readonly JsonSerialiser _jsonSerialiser;
 
         public List<Deck> Decks { get; set; }
 
         public JsonDeckRepository()
         {
-            _jsonSeriliser = new JsonSerialiser();
-            Decks = _jsonSeriliser.GetDecks().ToList();
+            _jsonSerialiser = new JsonSerialiser();
+            Decks = _jsonSerialiser.GetDecks().ToList();
         }
 
         public Deck GetDeck(long id)
@@ -27,7 +27,7 @@ namespace Howest.MagicCards.DAL.Repositories
 
         private void SaveDecks()
         {
-            _jsonSeriliser.SaveDecks(Decks);
+            _jsonSerialiser.SaveDecks(Decks);
         }
 
         private long GenerateNewId()
@@ -70,7 +70,7 @@ namespace Howest.MagicCards.DAL.Repositories
         public void AddCardToDeck(long deckId, long cardId)
         {
             Deck deck = GetDeck(deckId);
-            if (deck != null )
+            if (deck != null)
             {
                 if (GetCardCound(deck) <= 60)
                 {

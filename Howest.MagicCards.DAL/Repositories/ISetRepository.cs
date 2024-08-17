@@ -2,7 +2,7 @@
 
 namespace Howest.MagicCards.DAL.Repositories
 {
-    public interface ISetReposetory
+    public interface ISetRepository
     {
         Task<List<Set>> GetAllSetsAsync();
     }

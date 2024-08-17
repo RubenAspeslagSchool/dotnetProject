@@ -11,24 +11,23 @@ namespace Howest.MagicCards.WebAPI.Controllers
     [Route("api/V{version:apiVersion}/[controller]")]
     [ResponseCache(Duration = 20, Location = ResponseCacheLocation.Any)]
     [ApiController]
-    public class RarirtyController : ControllerBase
+    public class RarityController : ControllerBase
     {
         private readonly IRarityRepository _rarityRepository;
         private readonly IMapper _mapper;
-        public RarirtyController(IRarityRepository rarityRepository, IMapper mapper)
+        public RarityController(IRarityRepository rarityRepository, IMapper mapper)
         {
             _rarityRepository = rarityRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RarirtyReadDTO>>> GetRarities()
+        public async Task<ActionResult<IEnumerable<RarityReadDTO>>> GetRarities()
         {
             List<Rarity> allRarities = await _rarityRepository.GetAllRaritiesAsync();
             if (allRarities.Any())
-            {
-                
-                List<RarirtyReadDTO> rarityReadDtos = _mapper.Map<List<RarirtyReadDTO>>(allRarities);
+            {                
+                List<RarityReadDTO> rarityReadDtos = _mapper.Map<List<RarityReadDTO>>(allRarities);
                 return Ok(rarityReadDtos);
             }
             else
