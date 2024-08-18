@@ -77,18 +77,17 @@ namespace Howest.MagicCards.DAL.Repositories
             Deck deck = GetDeck(deckId);
             if (deck != null)
             {
-                if (GetCardCound(deck) <= 60)
-                {
-                    deck.AddCard(cardId);
-                    SaveDecks();
-                } else
-                {
-                    throw new ToManyCardsInDeckExeption();
-                }
-            } else
-            {
                 throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
+            
+            if (GetCardCound(deck) > 60)
+            {
+                throw new ToManyCardsInDeckExeption();
+                
+            }
+            deck.AddCard(cardId);
+            SaveDecks();
+
         }
 
         private int GetCardCound(Deck deck)
@@ -101,22 +100,30 @@ namespace Howest.MagicCards.DAL.Repositories
         public void RemoveCardFromDeck(long deckId, long cardId)
         {
             Deck deck = GetDeck(deckId);
-            if (deck != null)
+
+            if (deck == null)
             {
-                deck.RemoveCard(cardId);
-                SaveDecks();
+                throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
+
+            deck.RemoveCard(cardId);
+            SaveDecks();
         }
+
 
         public void ClearDeck(long deckId)
         {
             Deck deck = GetDeck(deckId);
-            if (deck != null)
+
+            if (deck == null)
             {
-                deck.Clear();
-                SaveDecks();
+                throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
+
+            deck.Clear();
+            SaveDecks();
         }
+
 
         public void ClearAllDecks()
         {
@@ -126,47 +133,50 @@ namespace Howest.MagicCards.DAL.Repositories
         public void UpdateCardsOfDeck(long id, Deck newDeck)
         {
             Deck deck = GetDeck(id);
-            if (deck != null)
+
+            if (deck == null)
             {
-                deck.CardDecks.Clear();
-                newDeck.CardDecks.ForEach(deck.AddCardDeck);
-                SaveDecks();
+                throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
+
+            deck.CardDecks.Clear();
+            newDeck.CardDecks.ForEach(deck.AddCardDeck);
+            SaveDecks();
         }
+
 
         public void UpdateCardAmountInDeck(long deckId, long cardId, int amount)
         {
             Deck deck = GetDeck(deckId);
-            if (deck != null)
-            {
-                CardDeck cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);
-                if (cardDeck != null)
-                {
-                    cardDeck.Amount = amount;
-                    SaveDecks();
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(Card), "Card not found in deck");
-                }
-            }
-            else
+
+            if (deck == null)
             {
                 throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
+
+            CardDeck cardDeck = deck.CardDecks.FirstOrDefault(cd => cd.CardId == cardId);
+
+            if (cardDeck == null)
+            {
+                throw new ArgumentNullException(nameof(cardDeck), "Card not found in deck");
+            }
+
+            cardDeck.Amount = amount;
+            SaveDecks();
         }
 
         public void UpdateDeckName(long deckId, string newDeckName)
         {
             Deck deck = GetDeck(deckId);
-            if (deck is not null)
+
+            if (deck == null)
             {
-                deck.DeckName = newDeckName;
-                SaveDecks();
-            } else 
-            { 
-                throw new ArgumentNullException(nameof(deck), "deck not fount"); 
+                throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
+
+            deck.DeckName = newDeckName;
+            SaveDecks();
         }
+
     }
 }
