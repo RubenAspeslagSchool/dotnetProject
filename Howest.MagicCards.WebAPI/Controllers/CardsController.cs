@@ -15,12 +15,12 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 
 [Route("api/V{version:apiVersion}/[controller]")]
 [ApiController]
-public class CardController : ControllerBase
+public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepository;
     private readonly IMapper _mapper;
 
-    public CardController(ICardRepository cardRepository, IMapper mapper)
+    public CardsController(ICardRepository cardRepository, IMapper mapper)
     {
         _cardRepository = cardRepository;
         _mapper = mapper;
@@ -64,16 +64,24 @@ public class CardController : ControllerBase
     {
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
 
-        IQueryable<Card> queryableCards = _cardRepository.GetAllCards().AsQueryable().Filter(
+        IQueryable<Card> queryableCards = _cardRepository
+            .GetAllCards()
+            .AsQueryable()
+            .AsNoTracking()
+            .Filter(
             cardFilter.CardName,
             cardFilter.CardText,
             cardFilter.ArtistName,
             cardFilter.SetCode,
             cardFilter.RarityCode,
             cardFilter.CardType);
+        Console.WriteLine(" cards=  " + queryableCards);
 
         int totalRecords = await queryableCards.CountAsync();
-        List<Card> pagedCards = await queryableCards.ApplySorting(orderBy).ApplyPaging(cardFilter.PageNumber, cardFilter.PageSize);
+        IQueryable<Card> sortedCards =  queryableCards.ApplySorting(orderBy);
+
+
+        List<Card> pagedCards = await sortedCards.ApplyPaging(cardFilter.PageNumber, cardFilter.PageSize);
 
         List<CardReadDTO> cardReadDtos = _mapper.Map<List<CardReadDTO>>(pagedCards);
 

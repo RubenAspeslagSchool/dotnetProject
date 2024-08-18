@@ -32,7 +32,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
             }
             else
             {
-                return NotFound(new List<RarirtyReadDTO>());
+                return NotFound(new List<RarityReadDTO>());
             }
         }
     }
