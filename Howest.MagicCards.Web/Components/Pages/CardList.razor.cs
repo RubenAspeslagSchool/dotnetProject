@@ -44,9 +44,9 @@ namespace Howest.MagicCards.Web.Components.Pages
         public async Task ShowAllCards()
         {
             // Set default values if they are null
-            CardFilterViewModel.MaxPageSize ??= 150;
+            CardFilterViewModel.MaxPageSize ??= 50;
             CardFilterViewModel.PageNumber ??= 1;
-            CardFilterViewModel.PageSize ??= 150;
+            CardFilterViewModel.PageSize ??= 50;
 
             string queryString = GetQueryString();
             Console.WriteLine("Query String: " + queryString); // Log the query string
@@ -80,9 +80,9 @@ namespace Howest.MagicCards.Web.Components.Pages
             StringBuilder queryStringBuilder = new StringBuilder();
 
             // TODO: Get default values from the config file
-            CardFilterViewModel.MaxPageSize ??= 150;
+            CardFilterViewModel.MaxPageSize ??= 50;
             CardFilterViewModel.PageNumber ??= 1;
-            CardFilterViewModel.PageSize ??= 150;
+            CardFilterViewModel.PageSize ??= 50;
 
             var properties = CardFilterViewModel.GetType().GetProperties();
             foreach (var prop in properties)

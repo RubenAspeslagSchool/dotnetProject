@@ -20,20 +20,44 @@ namespace Howest.MagicCards.Shared.Extensions
             string artistName,
             string setCode,
             string rarityCode,
-            string cardType
-   )
+            string cardType)
         {
-            IQueryable<Card> filteredCards = cards.Where(card =>
-                 (artistName == null || card.Artist.FullName.Contains(artistName))
-              && (setCode == null || card.SetCode.Contains(setCode))
-              && (rarityCode == null || card.RarityCode.Contains(rarityCode))
-              && (cardType == null || card.Type.Contains(cardType))
-              && (cardText == null || card.Text.Contains(cardText))
-              && (cardName == null || card.Name.StartsWith(cardName)));
+            IQueryable<Card> filteredCards = cards;
+
+            if (!string.IsNullOrEmpty(artistName))
+            {
+                filteredCards = filteredCards.Where(card => card.Artist.FullName.StartsWith(artistName));
+            }
+
+            if (!string.IsNullOrEmpty(setCode))
+            {
+                filteredCards = filteredCards.Where(card => card.SetCode == setCode);
+            }
+
+            if (!string.IsNullOrEmpty(rarityCode))
+            {
+                filteredCards = filteredCards.Where(card => card.RarityCode == rarityCode);
+            }
+
+            if (!string.IsNullOrEmpty(cardType))
+            {
+                filteredCards = filteredCards.Where(card => card.Type == cardType);
+            }
+
+            if (!string.IsNullOrEmpty(cardText))
+            {
+                filteredCards = filteredCards.Where(card => card.Text.StartsWith(cardText));
+            }
+
+            if (!string.IsNullOrEmpty(cardName))
+            {
+                filteredCards = filteredCards.Where(card => card.Name.StartsWith(cardName));
+            }
 
             // Apply default ordering
             return filteredCards.OrderBy(card => card.Id);
         }
+
 
         public static IQueryable<Card> ApplySorting(this IQueryable<Card> query, string orderBy)
         {
@@ -41,8 +65,8 @@ namespace Howest.MagicCards.Shared.Extensions
             {
                 return orderBy.ToLower() switch
                 {
-                    "name" => query.OrderBy(card => card.Name),
-                    "artist" => query.OrderBy(card => card.Artist.FullName),
+                    "ascending" => query.OrderBy(card => card.Name),
+                    "descending" => query.OrderByDescending(card => card.Name),
                     _ => query,
                 };
             } return query.OrderBy(card => card.Id);

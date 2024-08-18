@@ -19,7 +19,8 @@ namespace Howest.MagicCards.Shared.ViewModels
         public int? PageNumber { get; set; } = 1;
         public int? PageSize { get; set; } = 50;
         public int? MaxPageSize { get; set;} = 150;
-        public int? orderBy { get; set;}
+        public string? order { get; set;}
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
 

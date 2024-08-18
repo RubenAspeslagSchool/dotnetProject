@@ -80,7 +80,7 @@ namespace Howest.MagicCards.DAL.Repositories
                 throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
             
-            if (GetCardCound(deck) > 60)
+            if (GetCardCound(deck) >= 60)
             {
                 throw new ToManyCardsInDeckExeption();
                 
