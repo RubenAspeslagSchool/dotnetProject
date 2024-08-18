@@ -39,6 +39,7 @@ namespace Howest.MagicCards.Web.Components.Pages
         public void SetAsCurrentDeck(long currentDeckId)
         {
             _currentDeckId = currentDeckId;
+            StateHasChanged(); 
         }
 
         protected override async Task OnInitializedAsync()

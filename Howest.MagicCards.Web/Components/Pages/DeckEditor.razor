@@ -6,7 +6,10 @@
             {
                 foreach (DeckReadDTO deck in _allDecks)
                 {
-                    <li class="all-deck">
+                    // Add conditional class for the selected deck
+                    var deckClass = deck.Id == _currentDeckId ? "all-deck selectedDeck" : "all-deck";
+
+                    <li class="@deckClass">
                         <p>
                             @deck.DeckName
                             <button class="btn btn-info" @onclick="@(() => SetAsCurrentDeck(deck.Id))">set as currentDeck</button>

@@ -3,6 +3,7 @@ using GraphQL.Types;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.Extensions;
 using Howest.MagicCards.Shared.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 public class RootQuery : ObjectGraphType
@@ -30,7 +31,7 @@ public class RootQuery : ObjectGraphType
                 int? power = context.GetArgument<int?>("power");
                 int? toughness = context.GetArgument<int?>("toughness");
 
-                var cards = await cardRepository.GetAllCards().ApplyPaging(page,pagingOptions.MaxPageSize);
+                var cards = await cardRepository.GetAllCards().ToPagedListAsync(page,pagingOptions.MaxPageSize); ;
 
                 if (power.HasValue)
                 {

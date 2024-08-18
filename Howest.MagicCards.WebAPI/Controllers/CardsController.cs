@@ -15,6 +15,8 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 
 [Route("api/V{version:apiVersion}/[controller]")]
 [ApiController]
+[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
 public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepository;
@@ -35,14 +37,7 @@ public class CardsController : ControllerBase
     {
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
         IQueryable<Card> queryableCards = _cardRepository.GetAllCards().AsQueryable();
-
-        queryableCards = queryableCards.Filter(
-                cardFilter.CardName,
-                cardFilter.CardText,
-                cardFilter.ArtistName,
-                cardFilter.SetCode,
-                cardFilter.RarityCode,
-                cardFilter.CardType);
+        queryableCards = queryableCards.Filter(cardFilter.CardName,cardFilter.CardText,cardFilter.ArtistName,cardFilter.SetCode,cardFilter.RarityCode,cardFilter.CardType);
 
 
         List<Card> pagedCards = await queryableCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize);
@@ -68,20 +63,13 @@ public class CardsController : ControllerBase
             .GetAllCards()
             .AsQueryable()
             .AsNoTracking()
-            .Filter(
-            cardFilter.CardName,
-            cardFilter.CardText,
-            cardFilter.ArtistName,
-            cardFilter.SetCode,
-            cardFilter.RarityCode,
-            cardFilter.CardType);
+            .Filter(cardFilter.CardName,cardFilter.CardText,cardFilter.ArtistName,cardFilter.SetCode,cardFilter.RarityCode,cardFilter.CardType)
+            .ApplySorting(orderBy);
         Console.WriteLine(" cards=  " + queryableCards);
 
         int totalRecords = await queryableCards.CountAsync();
-        IQueryable<Card> sortedCards =  queryableCards.ApplySorting(orderBy);
-
-
-        List<Card> pagedCards = await sortedCards.ApplyPaging(cardFilter.PageNumber, cardFilter.PageSize);
+        
+        List<Card> pagedCards = await queryableCards.ToPagedListAsync(cardFilter.PageNumber, cardFilter.PageSize) ;
 
         List<CardReadDTO> cardReadDtos = _mapper.Map<List<CardReadDTO>>(pagedCards);
 
@@ -100,6 +88,7 @@ public class CardsController : ControllerBase
 
     [HttpGet("{id}")]
     [ApiVersion("1.5")]
+
     public async Task<ActionResult<CardDetailDTO>> GetCardById(long id)
     {
         Card card = await _cardRepository.GetCardByIdAsync(id);

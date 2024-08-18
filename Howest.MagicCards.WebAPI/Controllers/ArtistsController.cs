@@ -9,7 +9,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
     [ApiVersion("1.1")]
     [ApiVersion("1.5")]
     [Route("api/V{version:apiVersion}/[controller]")]
-    [ResponseCache(Duration = 20, Location = ResponseCacheLocation.Any)]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     [ApiController]
     public class ArtistsController : ControllerBase
     {

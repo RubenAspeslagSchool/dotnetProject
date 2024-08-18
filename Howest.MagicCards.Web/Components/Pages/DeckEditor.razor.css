@@ -4,4 +4,8 @@
 
 .hiden {
     display: hiden;
-} 
+}
+
+.selectedDeck {
+    background-color: aqua;
+}
