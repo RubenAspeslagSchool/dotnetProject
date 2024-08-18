@@ -4,6 +4,8 @@ using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
 namespace Howest.MagicCards.WebAPI.Controllers
 {
     [ApiVersion("1.1")]
@@ -11,28 +13,29 @@ namespace Howest.MagicCards.WebAPI.Controllers
     [Route("api/V{version:apiVersion}/[controller]")]
     [ResponseCache(Duration = 20, Location = ResponseCacheLocation.Any)]
     [ApiController]
-    public class RarityController : ControllerBase
+    public class TypesController : ControllerBase
     {
-        private readonly IRarityRepository _rarityRepository;
+        private readonly ITypesRepository _typesRepository;
         private readonly IMapper _mapper;
-        public RarityController(IRarityRepository rarityRepository, IMapper mapper)
+
+        public TypesController(ITypesRepository typesReposetory, IMapper mapper)
         {
-            _rarityRepository = rarityRepository;
+            _typesRepository = typesReposetory;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RarityReadDTO>>> GetRarities()
+        public async Task<ActionResult<IEnumerable<TypeReadDTO>>> GetTypes()
         {
-            List<Rarity> allRarities = await _rarityRepository.GetAllRaritiesAsync();
+            List<DAL.Models.Type> allRarities = await _typesRepository.GetAllTypesAsync();
             if (allRarities.Any())
-            {                
-                List<RarityReadDTO> rarityReadDtos = _mapper.Map<List<RarityReadDTO>>(allRarities);
+            {
+                List<TypeReadDTO> rarityReadDtos = allRarities.Select(t => new TypeReadDTO { Id = t.Id, Name = t.Name }).ToList();
                 return Ok(rarityReadDtos);
             }
             else
             {
-                return NotFound(new List<RarityReadDTO>());
+                return NotFound(new List<TypeReadDTO>());
             }
         }
     }

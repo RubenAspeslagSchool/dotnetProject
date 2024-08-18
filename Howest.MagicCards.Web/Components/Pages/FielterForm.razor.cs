@@ -41,10 +41,10 @@ namespace Howest.MagicCards.Web.Components.Pages
        
         private async Task getFilterFormDataFromApi()
         {
-            _rarties = await GetFielterDataFromApiEndpoint<RarityReadDTO>("Rarirty");
-            _sets = await GetFielterDataFromApiEndpoint<SetReadDTO>("Set");
-            _artists = await GetFielterDataFromApiEndpoint<ArtistReadDTO>("Artist");
-            _types = await GetFielterDataFromApiEndpoint<TypeReadDTO>("Type");
+            _rarties = await GetFielterDataFromApiEndpoint<RarityReadDTO>("Raritys");
+            _sets = await GetFielterDataFromApiEndpoint<SetReadDTO>("Sets");
+            _artists = await GetFielterDataFromApiEndpoint<ArtistReadDTO>("Artists");
+            _types = await GetFielterDataFromApiEndpoint<TypeReadDTO>("Types");
         }
 
 

@@ -4,7 +4,6 @@ using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace Howest.MagicCards.WebAPI.Controllers
 {
     [ApiVersion("1.1")]
@@ -12,29 +11,29 @@ namespace Howest.MagicCards.WebAPI.Controllers
     [Route("api/V{version:apiVersion}/[controller]")]
     [ResponseCache(Duration = 20, Location = ResponseCacheLocation.Any)]
     [ApiController]
-    public class SetController : ControllerBase
+    public class ArtistsController : ControllerBase
     {
-        private readonly ISetRepository _setRepository;
+        private readonly IArtistRepository _artistRepository;
         private readonly IMapper _mapper;
 
-        public SetController(ISetRepository setReposetory, IMapper mapper)
+        public ArtistsController(IArtistRepository artistReposetory, IMapper mapper)
         {
-            _setRepository = setReposetory;
+            _artistRepository = artistReposetory;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SetReadDTO>>> GetSets()
+        public async Task<ActionResult<IEnumerable<ArtistReadDTO>>> GetArtists()
         {
-            List<Set> allSets = await _setRepository.GetAllSetsAsync();
-            if (allSets.Any())
+            List<Artist> allArtists = await _artistRepository.GetAllArtistsAsync();
+            if (allArtists.Any())
             {
-                List<SetReadDTO> setReadDtos = _mapper.Map<List<SetReadDTO>>(allSets);
+                List<ArtistReadDTO> setReadDtos = _mapper.Map<List<ArtistReadDTO>>(allArtists);
                 return Ok(setReadDtos);
             }
             else
             {
-                return NotFound("No sets found");
+                return NotFound(new List<ArtistReadDTO>());
             }
         }
     }
