@@ -50,7 +50,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             };
             _decksHttpClient = HttpClientFactory.CreateClient("DecksAPI");
             await RefreshDecks(); // Load initial data
-            _currentDeckId = _allDecks?.OrderByDescending(deck => deck.Id).FirstOrDefault()?.Id ?? 0;
+            _currentDeckId = _allDecks?.OrderBy(deck => deck.Id).FirstOrDefault()?.Id ?? 0;
         }
 
 

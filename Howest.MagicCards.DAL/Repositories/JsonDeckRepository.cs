@@ -75,7 +75,7 @@ namespace Howest.MagicCards.DAL.Repositories
         public void AddCardToDeck(long deckId, long cardId)
         {
             Deck deck = GetDeck(deckId);
-            if (deck != null)
+            if (deck == null)
             {
                 throw new ArgumentNullException(nameof(deck), "Deck not found");
             }
