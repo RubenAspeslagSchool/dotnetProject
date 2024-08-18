@@ -54,7 +54,7 @@ public class CardsController : ControllerBase
     [ApiVersion("1.5")]
     public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCards(
         [FromQuery] CardFilter cardFilter,
-        [FromQuery] string orderBy,
+        [FromQuery] string order,
         [FromServices] IConfiguration config)
     {
         cardFilter.MaxPageSize = int.Parse(config["maxPageSize"]);
@@ -64,7 +64,7 @@ public class CardsController : ControllerBase
             .AsQueryable()
             .AsNoTracking()
             .Filter(cardFilter.CardName,cardFilter.CardText,cardFilter.ArtistName,cardFilter.SetCode,cardFilter.RarityCode,cardFilter.CardType)
-            .ApplySorting(orderBy);
+            .ApplySorting(order);
         Console.WriteLine(" cards=  " + queryableCards);
 
         int totalRecords = await queryableCards.CountAsync();
